@@ -1,0 +1,420 @@
+@import url('https://fonts.googleapis.com/css?family=Tilt+Neon');
+:root{
+    --font-style-tilt-neon: 'Tilt Neon';
+}
+html{
+    scroll-behavior: smooth;
+    user-select: none;
+}
+body{
+    margin: 0;
+    background-color: #D9D9D9;
+}
+::-webkit-scrollbar {
+    width: 0;
+    background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}
+#loading-screen {
+    position: absolute;
+    z-index: 9999;
+    transition: opacity 0.5s ease-out;
+}
+#loading-text {
+    font-family: var(--font-style-tilt-neon);
+    color: #181A20;
+    transition: opacity 0.5s ease-out;
+}
+.body-content {
+    display: none;
+    font-family: var(--font-style-tilt-neon);
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+}
+.body-content.show {
+    display: block;
+    opacity: 1;
+}
+.nav-container{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #D9D9D9;
+}
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+.logo-col {
+    flex: 0 0 26%;
+    max-width: 26%;
+    display: flex;
+    justify-content: flex-end;
+    animation: floatIn 0.5s forwards;
+}
+.nav-col {
+    flex: 0 0 74%;
+    max-width: 74%;
+    animation: floatIn 0.5s forwards;
+}
+#logo {
+    border-radius: 50%;
+}
+#name {
+    font-family: var(--font-style-tilt-neon);
+    text-decoration: none;
+    color: #181A20;
+}
+#cv, #projects, #about, #contact{
+    font-family: var(--font-style-tilt-neon);
+    color: #181A20;
+    text-decoration: none;
+}
+#name:hover{
+    color: #FCD535;
+}
+#cv:hover, #projects:hover, #about:hover, #contact:hover, #github:hover, #instagram:hover{
+    color: #FCD535;
+    text-decoration: underline;
+}
+
+#messagebox{
+    background-color: transparent;
+    font-family: var(--font-style-tilt-neon);
+    animation: floatIn 1.5s forwards;
+}
+#greetings{
+    margin: 0;
+}
+#quote{
+    margin: 0;
+    text-align: justify;
+}
+p{
+    margin: 0;
+}
+#github, #instagram{
+    color: #181A20;
+    text-decoration: none;
+}
+.occ:hover{
+    text-decoration: none;
+}
+.occ:hover span {
+    display: none;
+}
+.occ:hover:before {
+    content: "a Web Developer";
+    color: #FCD535;
+    background-color: #181A20;
+}
+#github:hover, #instagram:hover{
+    background-color: #181A20;
+}
+.bottom-img{
+    position: absolute;
+    object-fit: contain;
+    width: 100%;
+    bottom: 0;
+    mix-blend-mode: multiply;
+    animation: floatIn 2.5s forwards;
+}
+
+/*MY SKILL*/
+.myskill{
+    background: #181A20;
+}
+#skilltext{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-style-tilt-neon);
+    color: #D9D9D9;
+    visibility: hidden;
+}
+#skilltext.animate{
+    animation: floatIn 0.5s forwards;
+    visibility: visible;
+}
+.tools-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: #D9D9D9;
+}
+.column {
+    flex: 1;
+    text-align: center;
+}
+.horizontal-line{
+    display: flex;
+    flex-direction: row;
+    background-color: #181A2080;
+}
+.vertical-line{
+    display: flex;
+    flex-direction: column;
+    background-color: #181A2080;
+}
+.design-logo, .develop-logo{
+    display: inline-block;
+    background-color: #181A20;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+}
+.design-logo.animate, .develop-logo.animate{
+    animation: floatIn 0.5s forwards;
+    visibility: visible;
+}
+.design-logo .bi, .develop-logo .bi{
+    color: #D9D9D9;
+}
+#designer, #developer{
+    color: #181A20;
+    font-family: var(--font-style-tilt-neon);
+    visibility: hidden;
+}
+#designer.animate, #developer.animate{
+    animation: floatIn 0.5s forwards;
+    visibility: visible;
+}
+#designer-content, #developer-content{
+    color: #181A20;
+    font-family: var(--font-style-tilt-neon);
+    visibility: hidden;
+}
+#designer-content.animate, #developer-content.animate{
+    animation: floatIn 0.5s forwards;
+    visibility: visible;
+}
+
+/*PROJECT*/
+.project-container{
+    background-color: #D9D9D9;
+}
+#projecttext{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-style-tilt-neon);
+    visibility: hidden;
+}
+#projecttext.animate{
+    animation: floatIn 0.5s forwards;
+    visibility: visible;
+}
+#projecttext:hover{
+    color: #FCD535;
+}
+.project-card{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.card{
+    position: relative;
+    background-color: #000000;
+    visibility: hidden;
+    overflow: hidden;
+}
+.card.animate{
+    animation: floatIn 2.5s forwards;
+    visibility: visible;
+}  
+.card .image-box {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    object-fit: contain;
+    object-position: center;
+}
+.card .image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    border-radius: inherit;
+    transition: 0.5s ease-in-out;
+}
+.card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 2px solid white;
+    border-radius: inherit;
+    opacity: 0;
+    transition: 0.4s ease-in-out;
+}
+.card:hover img {
+    filter: grayscale(1) brightness(0.4) blur(5px);
+}
+.card:hover::after {
+    opacity: 1;
+    inset: 20px;
+}
+.card-content {
+    width: 80%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.card-content .card-title, .card-content .card-description{
+    opacity: 0;
+    transition: 0.4s 0.2s ease;
+}
+.card-content .card-title {
+    text-align: center;
+    color: #FCD535;
+}
+.card-content .card-description{
+    text-align: justify;
+    color: #D9D9D9;
+    transform: translateY(50%);
+}
+.card:hover .card-content .card-title {
+    scale: 1;
+    opacity: 1;
+}
+.card:hover .card-content .card-description{
+    opacity: 1;
+    transform: translateY(0);
+}
+#More{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--font-style-tilt-neon);
+    visibility: hidden;
+}
+#More.animate{
+    animation: floatIn 0.5s forwards;
+    visibility: visible;
+}
+
+/*ABOUT*/
+#about-container{
+    background-color: #181A20;
+}
+#abouttext{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #D9D9D9;
+    font-family: var(--font-style-tilt-neon);
+    visibility: hidden;
+}
+#abouttext.animate{
+    animation: floatIn 0.5s forwards;
+    visibility: visible;
+}
+#abouttext:hover{
+    color: #FCD535;
+}
+#about-msg{
+    color: #D9D9D9;
+    text-align: justify;
+    font-family: var(--font-style-tilt-neon);
+    visibility: hidden;
+}
+#about-msg.animate{
+    animation: floatIn 1s forwards;
+    visibility: visible;
+}
+#about-msg a{
+    text-decoration: none;
+    color: #FCD535;
+}
+
+/*CONTACT*/
+.contact-container{
+    background-color: #D9D9D9;
+}
+#contact-msghd{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: var(--font-style-tilt-neon);
+    visibility: hidden;
+}
+#contact-msghd.animate{
+    animation: floatIn 2.5s forwards;
+    visibility: visible;
+}
+#contact-msg{
+    font-family: var(--font-style-tilt-neon);
+    text-align: justify;
+    visibility: hidden;
+}
+#contact-msg.animate{
+    animation: floatIn 1s forwards;
+    visibility: visible;
+}
+.social-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    visibility: hidden;
+}
+.social-container.animate{
+    animation: floatIn 0.5s forwards;
+    visibility: visible;
+}
+.email, .github, .linkedin, .instagram{
+    display: inline-block;
+    background-color: #D9D9D9;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.5s;
+}
+.email:hover, .github:hover, .linkedin:hover, .instagram:hover{
+    background-color: #181A20;
+    color: #D9D9D9;
+}
+.social-media .bi{
+    color: #181A20;
+    display: inline-block;
+    transition: color 0.5s;
+}
+.email:hover .bi, .github:hover .bi, .linkedin:hover .bi, .instagram:hover .bi{
+    color: #D9D9D9;
+    animation: rotate 1s;
+}
+#Made-container{
+    background-color: #181A20;
+}
+#Made{
+    text-align: center;
+    color: #D9D9D9;
+    font-family: var(--font-style-tilt-neon);
+}
+
+/*ANIMATION*/
+@keyframes floatIn {
+    0% {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+@keyframes rotate {
+    0% {
+        transform: scaleX(1);
+    }
+    50% {
+        transform: scaleX(-1);
+    }
+    100% {
+        transform: scaleX(1);
+    }
+}

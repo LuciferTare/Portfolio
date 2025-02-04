@@ -1,0 +1,445 @@
+/*RESPONSIVENESS*/
+@media (min-width: 320px) {
+    #loading-screen {
+        bottom: -10px;
+        right: 5px;
+    }
+
+    #loading-text {
+        font-size: 145px;
+    }
+
+    #loading-screen {
+        margin: -5px 15px;
+    }
+
+    .nav-container {
+        height: 100svh;
+    }
+
+    #logo {
+        width: 175px;
+        height: 175px;
+        margin: 10px 15px 0 0;
+    }
+
+    #name {
+        font-size: 100px;
+    }
+
+    #cv,
+    #projects,
+    #about,
+    #contact {
+        font-size: 45px;
+    }
+
+    #cv {
+        margin-right: 10px;
+    }
+
+    #projects {
+        margin: 0 10px;
+    }
+
+    #about {
+        margin: 0 10px;
+    }
+
+    #contact {
+        margin-left: 10px;
+    }
+
+    #messagebox {
+        margin: 50px auto;
+        width: 85vw;
+        border-radius: 20px;
+        border: 2px solid #181A20;
+    }
+
+    #message {
+        padding: 25px;
+    }
+
+    #greetings {
+        font-size: 40px;
+    }
+
+    .line {
+        border: 2px solid #181A20;
+        border-radius: 2px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    #quote {
+        font-size: 25px;
+    }
+
+    .occ:hover:before {
+        padding: 2.5px 7.5px;
+        border-radius: 7.5px;
+    }
+
+    #github:hover,
+    #instagram:hover {
+        padding: 2.5px 5px;
+        border-radius: 5px;
+    }
+
+    .bottom-img {
+        height: 18vh;
+    }
+
+    #skilltext {
+        font-size: 100px;
+        padding: 50px 0 35px 0;
+    }
+
+    .tools-container {
+        margin: 0 10vw;
+        border: 2px solid #181A20;
+        border-radius: 25px;
+    }
+
+    .horizontal-line {
+        height: 4px;
+        margin: 0 0 20px 0;
+    }
+
+    .vertical-line {
+        width: 3px;
+    }
+
+    .design-logo,
+    .develop-logo {
+        height: 120px;
+        width: 120px;
+        margin: 25px auto 10px;
+    }
+
+    .design-logo .bi,
+    .develop-logo .bi {
+        font-size: 60px;
+    }
+
+    #designer,
+    #developer {
+        font-size: 40px;
+        font-weight: 600;
+    }
+
+    #designer-content,
+    #developer-content {
+        font-size: 20px;
+        line-height: 40px;
+    }
+
+    #projecttext {
+        font-size: 100px;
+        padding: 50px 0 35px 0;
+    }
+
+    .card {
+        height: 85dvh;
+        width: 90vw;
+        border-radius: 25px;
+        box-shadow: 3px 3px 10px rgba(63.75, 63.75, 63.75, 0.75);
+    }
+
+    .card-title {
+        font-size: 100px;
+    }
+
+    .card-description {
+        font-size: 40px;
+    }
+
+    #More {
+        font-size: 30px;
+        margin: 20px 0;
+    }
+
+    #about-container {
+        height: 100dvh;
+    }
+
+    #abouttext {
+        font-size: 100px;
+        padding: 50px 0 35px 0;
+    }
+
+    #about-msg {
+        font-size: 35px;
+        margin: 0 auto;
+        width: 85vw;
+    }
+
+    #contact-msghd {
+        font-size: 150px;
+        margin: 0 auto;
+        height: 100dvh;
+        width: 85vw;
+    }
+
+    #contact-msg {
+        font-size: 25px;
+        margin: 0 auto;
+        width: 85vw;
+    }
+
+    .social-container {
+        margin: 0 20vw;
+    }
+
+    .email,
+    .github,
+    .linkedin,
+    .instagram {
+        height: 100px;
+        width: 100px;
+        border: 3px solid #181A20;
+        margin: 0 auto;
+    }
+
+    .email:hover,
+    .github:hover,
+    .linkedin:hover,
+    .instagram:hover {
+        border: 3px solid #D9D9D9;
+    }
+
+    .social-media .bi {
+        font-size: 50px;
+    }
+
+    #Made {
+        font-size: 12px;
+        padding: 20px 0;
+    }
+}
+
+@media (min-width: 768px) {}
+
+@media (min-width: 1024px) {}
+
+@media (min-width: 1440px) {
+    #loading-screen {
+        bottom: 0;
+        right: 0;
+    }
+
+    #loading-text {
+        font-size: 80px;
+    }
+
+    .nav-container {
+        height: 100vh;
+    }
+
+    #logo {
+        width: 130px;
+        height: 130px;
+        margin: 5px 25px 0 0;
+    }
+
+    #name {
+        font-size: 80px;
+    }
+
+    #cv,
+    #projects,
+    #about,
+    #contact {
+        font-size: 30px;
+    }
+
+    #cv {
+        margin-right: 10px;
+    }
+
+    #projects {
+        margin: 0 10px;
+    }
+
+    #about {
+        margin: 0 10px;
+    }
+
+    #contact {
+        margin-left: 10px;
+    }
+
+    #messagebox {
+        margin: 50px auto;
+        width: 70vw;
+        border-radius: 20px;
+        border: 2px solid #181A20;
+    }
+
+    #message {
+        padding: 25px;
+    }
+
+    #greetings {
+        font-size: 30px;
+    }
+
+    .line {
+        border: 2px solid #181A20;
+        border-radius: 2px;
+        margin: 15px 0;
+    }
+
+    #quote {
+        font-size: 20px;
+    }
+
+    .occ:hover:before {
+        padding: 5px 7.5px;
+        border-radius: 7.5px;
+    }
+
+    #github:hover,
+    #instagram:hover {
+        padding: 2.5px 5px;
+        border-radius: 5px;
+    }
+
+    .bottom-img {
+        height: 24vh;
+    }
+
+    #skilltext {
+        font-size: 80px;
+        padding: 15px 0;
+    }
+
+    .tools-container {
+        margin: 0 10vw;
+        border: 2px solid #181A20;
+        border-radius: 25px;
+    }
+
+    .horizontal-line {
+        height: 4px;
+        margin: 0 0 20px 0;
+    }
+
+    .vertical-line {
+        width: 3px;
+    }
+
+    .design-logo,
+    .develop-logo {
+        height: 100px;
+        width: 100px;
+        margin: 25px auto 10px;
+    }
+
+    .design-logo .bi,
+    .develop-logo .bi {
+        font-size: 50px;
+    }
+
+    #designer,
+    #developer {
+        font-size: 30px;
+        font-weight: 600;
+    }
+
+    #designer-content,
+    #developer-content {
+        font-size: 20px;
+        line-height: 35px;
+    }
+
+    #projecttext {
+        font-size: 80px;
+        padding: 10px 0;
+    }
+
+    .card {
+        height: 75vh;
+        width: 90vw;
+        border-radius: 8px;
+        box-shadow: 3px 3px 10px rgba(63.75, 63.75, 63.75, 0.75);
+        margin: 10px 0;
+    }
+
+    .card-title {
+        font-size: 50px;
+    }
+
+    .card-description {
+        font-size: 30px;
+    }
+
+    #More {
+        font-size: 20px;
+        margin: 5px 0;
+    }
+
+    #about-container {
+        height: 100vh;
+    }
+
+    #abouttext {
+        font-size: 80px;
+        padding: 50px 0;
+    }
+
+    #about-msg {
+        font-size: 20px;
+        margin: 0 auto;
+        width: 80vw;
+    }
+
+    #contact-msghd {
+        font-size: 130px;
+        margin: 0 auto;
+        height: 100vh;
+        width: 80vw;
+    }
+
+    #contact-msg {
+        font-size: 20px;
+        margin: 0 auto;
+        width: 80vw;
+    }
+
+    .social-container {
+        margin: 0 40vw;
+    }
+
+    .email,
+    .github,
+    .linkedin,
+    .instagram {
+        height: 50px;
+        width: 50px;
+        border: 2px solid #181A20;
+        margin: 0 auto;
+    }
+
+    .email:hover,
+    .github:hover,
+    .linkedin:hover,
+    .instagram:hover {
+        border: 2px solid #D9D9D9;
+    }
+
+    .social-media .bi {
+        font-size: 25px;
+    }
+
+    #Made {
+        font-size: 20px;
+        padding: 15px 0;
+    }
+}
+
+@media (min-width: 2560px) {
+    /*Base size:*/
+
+}
