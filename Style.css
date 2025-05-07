@@ -1,6 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Tilt+Neon');
 :root{
     --font-style-tilt-neon: 'Tilt Neon';
+    --light: #D9D9D9;
+    --dark : #181A20;
+}
+body.dark-mode {
+    --light: #181A20;
+    --dark : #D9D9D9;
 }
 html{
     scroll-behavior: smooth;
@@ -8,7 +14,7 @@ html{
 }
 body{
     margin: 0;
-    background-color: #D9D9D9;
+    background-color: var(--light);
 }
 ::-webkit-scrollbar {
     width: 0;
@@ -24,26 +30,29 @@ body{
 }
 #loading-text {
     font-family: var(--font-style-tilt-neon);
-    color: #181A20;
+    color: var(--dark);
     transition: opacity 0.5s ease-out;
-}#overlay-layer {
+}
+#overlay-layer {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%;
     pointer-events: none;
     z-index: 1000;
-  }
+}
 #fixed-btn {
     pointer-events: auto;
     position: fixed;
-    top: 15px;
-    right: 15px;
+    top: 25px;
+    right: 25px;
     width: 40px;
     height: 40px;
     border: none;
     background: transparent;
     color: #FCD535;   
-    font-size: 2.5rem;   
+    font-size: 2rem;   
     cursor: pointer;
     z-index: 1001;
     display: flex;
@@ -66,7 +75,7 @@ body{
     display: flex;
     justify-content: center;
     flex-direction: column;
-    background-color: #D9D9D9;
+    background-color: var(--light);
 }
 .row {
     display: flex;
@@ -90,11 +99,11 @@ body{
 #name {
     font-family: var(--font-style-tilt-neon);
     text-decoration: none;
-    color: #181A20;
+    color: var(--dark);
 }
 #cv, #projects, #about, #contact{
     font-family: var(--font-style-tilt-neon);
-    color: #181A20;
+    color: var(--dark);
     text-decoration: none;
 }
 #name:hover{
@@ -121,7 +130,7 @@ p{
     margin: 0;
 }
 #github, #instagram{
-    color: #181A20;
+    color: var(--dark);
     text-decoration: none;
 }
 .occ:hover{
@@ -133,10 +142,10 @@ p{
 .occ:hover:before {
     content: "a Web Developer";
     color: #FCD535;
-    background-color: #181A20;
+    background-color: var(--dark);
 }
 #github:hover, #instagram:hover{
-    background-color: #181A20;
+    background-color: var(--dark);
     text-decoration: none;
 }
 .bottom-img{
@@ -150,14 +159,14 @@ p{
 
 /*MY SKILL*/
 .myskill{
-    background: #181A20;
+    background: var(--dark);
 }
 #skilltext{
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: var(--font-style-tilt-neon);
-    color: #D9D9D9;
+    color: var(--light);
     visibility: hidden;
 }
 #skilltext.animate{
@@ -168,7 +177,7 @@ p{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    background-color: #D9D9D9;
+    background-color: var(--light);
 }
 .column {
     flex: 1;
@@ -177,16 +186,16 @@ p{
 .horizontal-line{
     display: flex;
     flex-direction: row;
-    background-color: #181A2080;
+    background-color: var(--dark)80;
 }
 .vertical-line{
     display: flex;
     flex-direction: column;
-    background-color: #181A2080;
+    background-color: var(--dark)80;
 }
 .design-logo, .develop-logo{
     display: inline-block;
-    background-color: #181A20;
+    background-color: var(--dark);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -198,10 +207,10 @@ p{
     visibility: visible;
 }
 .design-logo .bi, .develop-logo .bi{
-    color: #D9D9D9;
+    color: var(--light);
 }
 #designer, #developer{
-    color: #181A20;
+    color: var(--dark);
     font-family: var(--font-style-tilt-neon);
     visibility: hidden;
 }
@@ -210,7 +219,7 @@ p{
     visibility: visible;
 }
 #designer-content, #developer-content{
-    color: #181A20;
+    color: var(--dark);
     font-family: var(--font-style-tilt-neon);
     visibility: hidden;
 }
@@ -221,7 +230,7 @@ p{
 
 /*PROJECT*/
 .project-container{
-    background-color: #D9D9D9;
+    background-color: var(--light);
 }
 #projecttext{
     display: flex;
@@ -300,7 +309,7 @@ p{
 }
 .card-content .card-description{
     text-align: justify;
-    color: #D9D9D9;
+    color: var(--light);
     transform: translateY(50%);
 }
 .card:hover .card-content .card-title {
@@ -325,13 +334,13 @@ p{
 
 /*ABOUT*/
 #about-container{
-    background-color: #181A20;
+    background-color: var(--dark);
 }
 #abouttext{
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #D9D9D9;
+    color: var(--light);
     font-family: var(--font-style-tilt-neon);
     visibility: hidden;
 }
@@ -343,7 +352,7 @@ p{
     color: #FCD535;
 }
 #about-msg{
-    color: #D9D9D9;
+    color: var(--light);
     text-align: justify;
     font-family: var(--font-style-tilt-neon);
     visibility: hidden;
@@ -359,7 +368,7 @@ p{
 
 /*CONTACT*/
 .contact-container{
-    background-color: #D9D9D9;
+    background-color: var(--light);
 }
 #contact-msghd{
     display: flex;
@@ -393,7 +402,7 @@ p{
 }
 .email, .github, .linkedin, .instagram{
     display: inline-block;
-    background-color: #D9D9D9;
+    background-color: var(--light);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -401,24 +410,24 @@ p{
     transition: background-color 0.5s;
 }
 .email:hover, .github:hover, .linkedin:hover, .instagram:hover{
-    background-color: #181A20;
-    color: #D9D9D9;
+    background-color: var(--dark);
+    color: var(--light);
 }
 .social-media .bi{
-    color: #181A20;
+    color: var(--dark);
     display: inline-block;
     transition: color 0.5s;
 }
 .email:hover .bi, .github:hover .bi, .linkedin:hover .bi, .instagram:hover .bi{
-    color: #D9D9D9;
+    color: var(--light);
     animation: rotate 1s;
 }
 #Made-container{
-    background-color: #181A20;
+    background-color: var(--dark);
 }
 #Made{
     text-align: center;
-    color: #D9D9D9;
+    color: var(--light);
     font-family: var(--font-style-tilt-neon);
 }
 
