@@ -47,9 +47,7 @@ body{
     position: fixed;
     top: 25px;
     right: 25px;
-    /* width: 40px;
-    height: 40px; */
-    padding: 10px;
+    padding: 7.5px;
     border: none;
     background: var(--dark);
     color: #FCD535;   
@@ -63,6 +61,7 @@ body{
     user-select: none;
 }  
 .body-content {
+    color: var(--dark);
     display: none;
     font-family: var(--font-style-tilt-neon);
     opacity: 0;
