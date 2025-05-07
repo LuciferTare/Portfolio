@@ -13,7 +13,9 @@
         <div id="loading-text">0%</div>
     </div>
     <div id="overlay-layer">
-        <button id="fixed-btn">☰</button>
+        <button id="fixed-btn">
+            <i id="theme-icon" class="bi bi-sun-fill"></i>
+        </button>
     </div>
     <div class="body-content">
         <div class="nav-container">
@@ -219,6 +221,21 @@
             observer.observe(element);
         });
     });
+
+    
+    (() => {
+        const btn  = document.getElementById('fixed-btn');
+        const icon = document.getElementById('theme-icon');
+
+        btn.addEventListener('click', () => {
+            const isSun = icon.classList.contains('bi-sun-fill');
+
+            icon.classList.toggle('bi-sun-fill', !isSun);
+            icon.classList.toggle('bi-moon-fill',  isSun);
+
+            btn.style.color = isSun ? '#D9D9D9' : '#FCD535';
+        });
+    })();
 </script>
 
 </html>
