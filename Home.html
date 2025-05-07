@@ -12,6 +12,9 @@
     <div id="loading-screen">
         <div id="loading-text">0%</div>
     </div>
+    <div id="overlay-layer">
+        <button id="fixed-btn">☰</button>
+    </div>
     <div class="body-content">
         <div class="nav-container">
             <div id="nav">
@@ -24,9 +27,7 @@
                             <a id="name" href="Home.html">Sushant Tare</a>
                         </div>
                         <div class="row">
-                            <a id="cv"
-                                href="https://drive.google.com/file/d/1Tz9DKQVCFZStubtFYmP74BXIb1DYSEuP/view?usp=sharing"
-                                target="_blank">CV</a>
+                            <a id="cv"href="https://drive.google.com/file/d/1Tz9DKQVCFZStubtFYmP74BXIb1DYSEuP/view?usp=sharing" target="_blank">CV</a>
                             <a id="projects" href="#projecttext">Projects</a>
                             <a id="about" href="#abouttext">About</a>
                             <a id="contact" href="#contact-msghd">Contact</a>
@@ -41,14 +42,7 @@
                     </div>
                     <div class="line"></div>
                     <div class="row" id="quote">
-                        <p>
-                            I'm a web developer from Maharashtra, INDIA. Currently a fresher developer. In my spare
-                            time, I enjoy DIY, gaming and building my own projects. My preferred languages are FLUTTER, HTML,
-                            CSS, and JS.
-                            <br><br>
-                            I'm on <a id="github" href="https://github.com/LuciferTare">GitHub</a> and <a id="instagram"
-                                href="https://www.instagram.com/lucifer_code_with_ease/">Instagram</a>.
-                        </p>
+                        <p>I'm a web developer from Maharashtra, INDIA. Currently a fresher developer. In my spare time, I enjoy DIY, gaming and building my own projects. My preferred languages are FLUTTER, HTML, CSS, and JS. <br><br> I'm on <a id="github" href="https://github.com/LuciferTare">GitHub</a> and <a id="instagram" href="https://www.instagram.com/lucifer_code_with_ease/">Instagram</a>.</p>
                     </div>
                 </div>
             </div>
@@ -205,18 +199,9 @@
     });
 
     const observerOptions = [
-        {
-            threshold: 1,
-            elements: document.querySelectorAll('#skilltext,.design-logo,.develop-logo, #designer, #developer, #designer-content, #developer-content, #projecttext, #More, #abouttext,.social-container'),
-        },
-        {
-            threshold: 0.5,
-            elements: document.querySelectorAll('#about-msg, #contact-msghd, #contact-msg'),
-        },
-        {
-            threshold: 0.25,
-            elements: document.querySelectorAll('.card'),
-        },
+        {threshold: 1, elements: document.querySelectorAll('#skilltext,.design-logo,.develop-logo, #designer, #developer, #designer-content, #developer-content, #projecttext, #More, #abouttext,.social-container')},
+        {threshold: 0.5, elements: document.querySelectorAll('#about-msg, #contact-msghd, #contact-msg')},
+        {threshold: 0.25, elements: document.querySelectorAll('.card')},
     ];
 
     const observer = new IntersectionObserver((entries) => {

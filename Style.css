@@ -27,6 +27,36 @@ body{
     color: #181A20;
     transition: opacity 0.5s ease-out;
 }
+#overlay-layer {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;    
+    background: rgba(0,0,0,0.2);  
+    z-index: 1000;
+}
+#fixed-btn {
+    position: fixed;
+    top: 15px; 
+    right: 15px;
+    width: 40px;   
+    height: 40px;
+    border: none;
+    background: #181A20;
+    color: #FCD535;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 1001;  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    user-select: none;
+}
+#fixed-btn:hover {
+    background: #FCD535;
+    color: #181A20;
+}  
 .body-content {
     display: none;
     font-family: var(--font-style-tilt-neon);
