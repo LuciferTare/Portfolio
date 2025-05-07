@@ -47,8 +47,9 @@ body{
     position: fixed;
     top: 25px;
     right: 25px;
-    width: 40px;
-    height: 40px;
+    /* width: 40px;
+    height: 40px; */
+    padding: 5px;
     border: none;
     background: var(--dark);
     color: #FCD535;   
