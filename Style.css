@@ -112,6 +112,7 @@ p{
 }
 #github:hover, #instagram:hover{
     background-color: #181A20;
+    text-decoration: none;
 }
 .bottom-img{
     position: absolute;
