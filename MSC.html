@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>MSC IT</title>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css?family=Tilt+Neon');
+
+    :root {
+        --font-style-tilt-neon: 'Tilt Neon';
+    }
+
+    html {
+        scroll-behavior: smooth;
+        user-select: none;
+    }
+
+    ::-webkit-scrollbar {
+        width: 0;
+        background-color: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: transparent;
+    }
+
+    body {
+        margin: 0;
+        background-color: #181A20;
+        display: block;
+        font-family: var(--font-style-tilt-neon);
+        opacity: 1;
+    }
+
+    #pw-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        z-index: 9999;
+    }
+
+    #name-container {
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .ds,
+    .sc {
+        font-size: 50px;
+        font-family: var(--font-style-tilt-neon);
+        text-decoration: none;
+        color: #D9D9D9;
+    }
+
+    .ds:hover,
+    .sc:hover {
+        color: #FCD535;
+    }
+
+    #card-container {
+        display: flex;
+        padding: 10px;
+        overflow-x: auto;
+    }
+
+    .card {
+        height: 40vh;
+        width: 15vw;
+        border-radius: 8px;
+        margin: 0px 5px;
+        padding: 5px;
+        background-color: #D9D9D9;
+        border: #D9D9D9 1px solid;
+        color: #D9D9D9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 20px;
+        position: relative;
+        cursor: pointer;
+        flex: 0 0 auto;
+        scroll-snap-align: start;
+    }
+
+    .text {
+        font-size: 28px;
+        color: #181A20;
+    }
+
+    .download {
+        display: none;
+        position: absolute;
+        background-color: #FCD535;
+        border: #D9D9D9 1px solid;
+        color: #181A20;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 20px;
+    }
+
+    .card:hover .text {
+        display: none;
+    }
+
+    .card:hover .download {
+        display: block;
+        border: #181A20 1px solid;
+    }
+
+    p {
+        display: none;
+    }
+</style>
+
+<body>
+    <div id="pw-overlay">
+    </div>
+    <div id="protected-content">
+        <div id="name-container">
+            <span class="ds">Practicals</span>
+        </div>
+        <div id="card-container">
+            <div class="card">
+                <span class="text">Modern Networking</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/file/d/1ssopfVxtHdpwsE5JQhYJOZQkrCUQQcy-/view', '_blank', 'noopener')">Open</button>
+            </div>
+            <div class="card">
+                <span class="text">Big Data Analytics</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/file/d/1XxfNc5a-8zeasIAxk1nmP4HAuu0s-qog/view', '_blank', 'noopener')">Open</button>
+            </div>
+            <div class="card">
+                <span class="text">Computer Vision</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/file/d/1cT8gSgsn63zEBWlS30BzSSKV0fMUJqqb/view', '_blank', 'noopener')">Open</button>
+            </div>
+        </div>
+        <div id="name-container">
+            <span class="sc">Software</span>
+        </div>
+        <div id="card-container">
+            <div class="card">
+                <span class="text">7z</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=1OQzf5Gj5IK026LS8vFUrcZVVGTn4dEzc', '_blank')">Download</button>
+
+            </div>
+            <div class="card">
+                <span class="text">Hadoop</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=16CACrWbSDwzAnTRvfQeawcox03z9epI8', '_blank')">Download</button>
+            </div>
+            <div class="card">
+                <span class="text">Hadoop winutlis</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=1f88eJlR0AvG3XTid-LClShV5W10g0osP', '_blank')">Download</button>
+            </div>
+            <div class="card">
+                <span class="text">GNS3</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=1FYghSi-OXL1n2sGb17IE5VOzB5K9HbEM', '_blank')">Download</button>
+
+            </div>
+            <div class="card">
+                <span class="text">Matlab</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=1IBTzPkgfs2FQNxbRJNyLbHKdkbL9AZEe', '_blank')">Download</button>
+
+            </div>
+            <div class="card">
+                <span class="text">Cisco Packet Tracer</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=1vQeQwy6GW0nzLzye6LlVltKgS8S184yD', '_blank')">Download</button>
+
+            </div>
+            <div class="card">
+                <span class="text">R Programming</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=1q8hfTTKgwkDExXgs5rIIcMKNzcUHImYY', '_blank')">Download</button>
+
+            </div>
+            <div class="card">
+                <span class="text">Python 10</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=1rrW2RjoOcsExiwg5omh4_TMJPyPQOIKi', '_blank')">Download</button>
+
+            </div>
+            <div class="card">
+                <span class="text">Tesseract</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=1Izv8NotvJLa9XHnadP3oSRIjCaD0SjBp', '_blank')">Download</button>
+            </div>
+            <div class="card">
+                <span class="text">Cisco c7200</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=11zfQoKEMG9BFB-1-8dkY2iji5BCxXGcu', '_blank')">Download</button>
+            </div>
+            <div class="card">
+                <span class="text">Java</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=1SiQsS82G9wJ9tKaSFk_2dIWeyrRqoiOp', '_blank')">Download</button>
+            </div>
+            <div class="card">
+                <span class="text">Virtual Box</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=18aTAW_zY0gspu46itiwHtZSzuRnkqKxc', '_blank')">Download</button>
+            </div>
+            <div class="card">
+                <span class="text">Mininet</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=1BRCrpXKwj5ZgCGx9HfSexaRaTq0JaBbe', '_blank')">Download</button>
+            </div>
+            <div class="card">
+                <span class="text">VC_redist</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=14pVyrAcRRqEp5rx5DKGBQ7H3c3eXh_b9', '_blank')">Download</button>
+            </div>
+        </div>
+        <div id="name-container">
+            <span class="sc">Datasets</span>
+        </div>
+        <div id="card-container">
+            <div class="card">
+                <span class="text">Social Network Ads</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=15oE1S6bOu0VBS0bntUKXysdM8eUHO0zt', '_blank')">Download</button>
+            </div>
+            <div class="card">
+                <span class="text">Binary</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=13Nnczfx-48n3-uIaFBpnG7OTqaP_cN8X', '_blank')">Download</button>
+            </div>
+            <div class="card">
+                <span class="text">Restaurant</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=1849K1ABo8tnlHuIGFaV1LbKkaGl0cdKM', '_blank')">Download</button>
+            </div>
+            <div class="card">
+                <span class="text">image</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=1RkpuPB30l9kFM3U1RP-VScg0ZMrTBbFz', '_blank')">Download</button>
+            </div>
+            <div class="card">
+                <span class="text">checkboard</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=1PZwaAFVwJD3oNYqqR_dah_OPbT2ltA5E', '_blank')">Download</button>
+            </div>
+            <div class="card">
+                <span class="text">background</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=1V2_K2cYKSZ9gnruSRbuivq7ZicB85RYy', '_blank')">Download</button>
+            </div>
+            <div class="card">
+                <span class="text">bw_rose</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=1q9wGDh2yg6dCswg0iJBeoEl8hkRk3PUv', '_blank')">Download</button>
+            </div>
+            <div class="card">
+                <span class="text">text-image</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=14MscQ2LnzbPCa7PJZ75qD__8qADj_yXF', '_blank')">Download</button>
+            </div>
+            <div class="card">
+                <span class="text">pedestrian</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=1YSGDwlFnUSqqo7j_Jg1hzIqR0awzs-p_', '_blank')">Download</button>
+            </div>
+            <div class="card">
+                <span class="text">video</span>
+                <button class="download"
+                    onclick="window.open('https://drive.google.com/uc?export=download&id=1OArMFfCwpy4qlMz2ejIeFoLCL6t6VqCU', '_blank')">Download</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function () {
+        const correctPassword = "msc2025";
+        const content = document.getElementById("protected-content");
+        const overlay = document.getElementById("pw-overlay");
+        let attempts = 0, maxAttempts = 3;
+
+        function askPassword() {
+            const input = prompt("Enter the password to view the content:");
+            if (input === correctPassword) {
+                content.style.display = "block";
+                overlay.style.display = "none";
+            } else {
+                attempts++;
+                if (attempts >= maxAttempts) {
+                    alert("Maximum attempts exceeded.");
+                    document.body.innerHTML =
+                        "<h1 style='color:white;text-align:center;'>Access Denied</h1>";
+                } else {
+                    alert("Incorrect password. Try again.");
+                    askPassword();
+                }
+            }
+        }
+
+        content.style.display = "none";
+        askPassword();
+    };  
+</script>
+
+</html>
