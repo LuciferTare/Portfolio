@@ -1,4 +1,26 @@
 /* ─────────────────────────────────────────
+   RESPONSIVE — LAPTOP  (1024px – 1440px)
+───────────────────────────────────────── */
+@media (min-width: 1024px) and (max-width: 1440px) {
+
+  .section {
+    padding: 72px 0 56px;
+  }
+
+  .hero-content {
+    max-width: 820px;
+  }
+
+  .projects-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  .contact-cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ─────────────────────────────────────────
    RESPONSIVE — TABLET  (≤ 900px)
 ───────────────────────────────────────── */
 @media (max-width: 900px) {
