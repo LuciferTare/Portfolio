@@ -1,0 +1,85 @@
+/* ─────────────────────────────────────────
+   RESPONSIVE — TABLET  (≤ 900px)
+───────────────────────────────────────── */
+@media (max-width: 900px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-skills { padding: 0; }
+
+  .navbar { padding: 1rem 0; }
+
+  .hamburger { display: flex; }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 260px;
+    height: 100vh;
+    background: #181a20;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    padding: 2rem;
+    border-left: 1px solid var(--glass-border);
+    transition: right var(--transition);
+    z-index: 9998;
+  }
+  .nav-links.open { right: 0; }
+  .nav-links a { font-size: 1.1rem; }
+}
+
+/* ─────────────────────────────────────────
+   RESPONSIVE — MOBILE  (≤ 600px)
+───────────────────────────────────────── */
+@media (max-width: 600px) {
+  #contact {
+    min-height: 100svh;
+  }
+
+  .section { padding: 75px 0 15px; }
+
+  .hero { padding: 7rem 5% 5rem; }
+
+  .about-skills {
+    padding: 0 5px;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .timeline-header {
+    flex-direction: column;
+  }
+
+  .edu-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .papers-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─────────────────────────────────────────
+   RESPONSIVE — SMALL MOBILE  (≤ 400px)
+───────────────────────────────────────── */
+@media (max-width: 400px) {
+  .contact-cards {
+    grid-template-columns: 1fr;
+  }
+  .edu-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-cta {
+    flex-direction: column;
+    align-items: center;
+  }
+}

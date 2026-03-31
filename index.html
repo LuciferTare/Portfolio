@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sushant Tare — Flutter Developer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="responsive.css" />
+  </head>
+  <body>
+    <!-- ───────────── NAVIGATION ───────────── -->
+    <nav class="navbar" id="navbar">
+      <div class="nav-container">
+        <a class="nav-logo" href="#hero">ST</a>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#about">About</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#education">Education</a></li>
+          <li><a href="#papers">Papers</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li>
+            <a
+              class="btn-nav"
+              href="https://drive.google.com/file/d/1Tz9DKQVCFZStubtFYmP74BXIb1DYSEuP/view?usp=sharing"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Resume</a
+            >
+          </li>
+        </ul>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- ───────────── HERO ───────────── -->
+    <section class="hero" id="hero">
+      <div class="hero-bg-glow glow-1"></div>
+      <div class="hero-bg-glow glow-2"></div>
+      <div class="hero-content" data-animate="fade-up">
+        <p class="hero-eyebrow">Hello, I'm</p>
+        <h1 class="hero-name">Sushant Tare</h1>
+        <h2 class="hero-title">
+          Mobile Developer <strong class="accent">(Flutter)</strong>
+        </h2>
+        <p class="hero-tagline">
+          · Shipping production apps · Modular architecture · Real-time
+          integrations · Play Store deployments
+        </p>
+        <div class="hero-cta">
+          <a class="btn-primary" href="#contact">Get in Touch</a>
+          <a class="btn-outline" href="#projects">View Projects</a>
+        </div>
+        <div class="hero-socials">
+          <a
+            href="https://github.com/LuciferTare"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577v-2.165c-3.338.726-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.085 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.108-.775.418-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.468-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.3 1.23A11.51 11.51 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.29-1.552 3.297-1.23 3.297-1.23.653 1.652.242 2.873.12 3.176.77.84 1.235 1.911 1.235 3.221 0 4.61-2.804 5.625-5.475 5.921.43.372.823 1.102.823 2.222v3.293c0 .322.216.694.825.576C20.565 21.796 24 17.298 24 12c0-6.63-5.37-12-12-12z"
+              />
+            </svg>
+          </a>
+          <a
+            href="https://www.linkedin.com/in/sushant-tare-8857b2290/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+              />
+            </svg>
+          </a>
+          <a
+            href="https://www.instagram.com/lucifer_code_with_ease/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"
+              />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── ABOUT ───────────── -->
+    <section class="section" id="about">
+      <div class="container">
+        <h2 class="section-title" data-animate="fade-up">
+          About <span class="accent">Me</span>
+        </h2>
+        <div class="about-grid">
+          <div class="about-text glass-card" data-animate="fade-up">
+            <p>
+              I'm a <strong>Mobile Application Developer</strong> specializing
+              in Flutter and Dart, focused on building production-ready mobile
+              applications with modular architecture, real-time data
+              integration, and strong performance optimization.
+            </p>
+            <p>
+              I have led end-to-end development of Play Store applications,
+              onboarding international clients while improving delivery
+              efficiency through scalable code structures and structured
+              engineering workflows.
+            </p>
+            <p>
+              Alongside professional work, I actively develop personal projects
+              implementing crypto market analytics, predictive logic, device
+              telemetry, and real-time monitoring systems. I have also authored
+              multiple research papers and reached the
+              <strong>Avishkar final round</strong> through data-driven product
+              research.
+            </p>
+          </div>
+          <div
+            class="about-skills"
+            data-animate="fade-up"
+            style="--delay: 0.15s"
+          >
+            <h3 class="skills-heading">Core Skills</h3>
+            <div class="skills-grid">
+              <span class="skill-chip">Flutter</span>
+              <span class="skill-chip">Dart</span>
+              <span class="skill-chip">Android</span>
+              <span class="skill-chip">REST APIs</span>
+              <span class="skill-chip">WebSockets</span>
+              <span class="skill-chip">Method Channels</span>
+              <span class="skill-chip">Modular Architecture</span>
+              <span class="skill-chip">CI/CD</span>
+              <span class="skill-chip">Play Store</span>
+              <span class="skill-chip">Real-time Data</span>
+              <span class="skill-chip">Push Notifications</span>
+            </div>
+
+            <h3 class="skills-heading" style="margin-top: 2.5rem">
+              Certifications
+            </h3>
+            <ul class="cert-list">
+              <li>Squad Infotech — Data Science</li>
+              <li>Infosys — Time Management</li>
+              <li>Accenture NA — Data Analytics & Visualization</li>
+              <li>Infosys — Creative Thinking</li>
+              <li>Infosys — Basics of Python</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── EXPERIENCE ───────────── -->
+    <section class="section" id="experience">
+      <div class="container">
+        <h2 class="section-title" data-animate="fade-up">
+          Work <span class="accent">Experience</span>
+        </h2>
+        <div class="timeline" data-animate="fade-up">
+          <div class="timeline-item glass-card">
+            <div class="timeline-header">
+              <div>
+                <h3 class="timeline-role">App Developer</h3>
+                <p class="timeline-company">OctaNet Tech</p>
+              </div>
+              <span class="timeline-date">Sep 2024 — Present</span>
+            </div>
+            <ul class="timeline-bullets">
+              <li>
+                Led end-to-end development of the OctaNet Flutter app from
+                design to Play Store release, onboarding
+                <strong>9 international clients</strong> within 4 months.
+              </li>
+              <li>
+                Sole app developer; reduced feature-delivery cycle time by
+                <strong>40%</strong> through a modular, reusable codebase and
+                component library.
+              </li>
+              <li>
+                Implemented real-time WebSocket integrations and reliable
+                background processes, improving stability for international
+                users.
+              </li>
+              <li>
+                Instituted structured code reviews with Product & QA; reduced
+                quality defects by <strong>25%</strong> via retrospective-driven
+                improvements.
+              </li>
+              <li>
+                Owned CI/CD pipelines and Play Store deployments ensuring
+                timely, low-risk releases.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── EDUCATION ───────────── -->
+    <section class="section" id="education">
+      <div class="container">
+        <h2 class="section-title" data-animate="fade-up">
+          My <span class="accent">Education</span>
+        </h2>
+        <div class="edu-grid">
+          <div class="edu-card glass-card" data-animate="fade-up">
+            <div class="edu-header">
+              <span class="edu-degree">MSc IT</span>
+              <span class="edu-period">Jul 2024 — May 2026</span>
+            </div>
+            <span class="edu-school">Sonopant Dandekar College, Palghar</span>
+            <span class="edu-mark">8.27 CGPA · Ongoing</span>
+          </div>
+          <div
+            class="edu-card glass-card"
+            data-animate="fade-up"
+            style="--delay: 0.1s"
+          >
+            <div class="edu-header">
+              <span class="edu-degree">BSc IT</span>
+              <span class="edu-period">Jan 2021 — Jun 2024</span>
+            </div>
+            <span class="edu-school">Sonapant Dandekar College, Palghar</span>
+            <span class="edu-mark">7.65 CGPA</span>
+          </div>
+          <div
+            class="edu-card glass-card"
+            data-animate="fade-up"
+            style="--delay: 0.2s"
+          >
+            <div class="edu-header">
+              <span class="edu-degree">HSC</span>
+              <span class="edu-period">Jun 2021</span>
+            </div>
+            <span class="edu-school">Sonapant Dandekar College, Palghar</span>
+            <span class="edu-mark">77.50%</span>
+          </div>
+          <div
+            class="edu-card glass-card"
+            data-animate="fade-up"
+            style="--delay: 0.3s"
+          >
+            <div class="edu-header">
+              <span class="edu-degree">SSC</span>
+              <span class="edu-period">Jun 2019</span>
+            </div>
+            <span class="edu-school"
+              >Anand Ashram English High School, Palghar</span
+            >
+            <span class="edu-mark">78.20%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── PAPERS ───────────── -->
+    <section class="section" id="papers">
+      <div class="container">
+        <h2 class="section-title" data-animate="fade-up">
+          Published <span class="accent">Papers</span>
+        </h2>
+        <div class="papers-grid">
+          <div class="paper-card glass-card" data-animate="fade-up">
+            <div class="paper-header">
+              <h3 class="paper-title">Cravecoin</h3>
+              <span class="paper-date">Feb 2025</span>
+            </div>
+            <p class="paper-subtitle">The Crypto Tracker</p>
+            <p class="paper-publisher">
+              Thakur Ramnarayan College of Arts &amp; Commerce (TRCAC)
+            </p>
+          </div>
+
+          <div
+            class="paper-card glass-card"
+            data-animate="fade-up"
+            style="--delay: 0.1s"
+          >
+            <div class="paper-header">
+              <h3 class="paper-title">Fiberflow</h3>
+              <span class="paper-date">Jun 2025</span>
+            </div>
+            <p class="paper-subtitle">Network Management System</p>
+            <p class="paper-publisher">IJIRT</p>
+            <a
+              class="paper-link"
+              href="https://ijirt.org/Article?manuscript=181711"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View Paper
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </a>
+          </div>
+
+          <div
+            class="paper-card glass-card"
+            data-animate="fade-up"
+            style="--delay: 0.2s"
+          >
+            <div class="paper-header">
+              <h3 class="paper-title">Towzer</h3>
+              <span class="paper-date">Oct 2025</span>
+            </div>
+            <p class="paper-subtitle">Connecting Breakdowns to Solutions</p>
+            <p class="paper-publisher">Myresearchgo</p>
+          </div>
+
+          <div
+            class="paper-card glass-card"
+            data-animate="fade-up"
+            style="--delay: 0.3s"
+          >
+            <div class="paper-header">
+              <h3 class="paper-title">Quantaview</h3>
+              <span class="paper-date">Nov 2025</span>
+            </div>
+            <p class="paper-subtitle">The Crypto Analyser</p>
+            <p class="paper-publisher">Myresearchgo</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── PROJECTS ───────────── -->
+    <section class="section" id="projects">
+      <div class="container">
+        <h2 class="section-title" data-animate="fade-up">
+          Featured <span class="accent">Projects</span>
+        </h2>
+        <div class="projects-grid">
+          <div class="project-card glass-card" data-animate="fade-up">
+            <div class="project-icon">
+              <img src="cravecoin.png" alt="Cravecoin" />
+            </div>
+            <h3 class="project-title">Cravecoin — The Crypto Tracker</h3>
+            <p class="project-desc">
+              A personal crypto tracking application featuring real-time market
+              data, portfolio management, and crypto analytics with predictive
+              logic for trend monitoring.
+            </p>
+            <div class="project-tags">
+              <span>WebSockets</span><span>REST API</span
+              ><span>Real-time Data</span>
+            </div>
+          </div>
+
+          <div
+            class="project-card glass-card project-card--featured"
+            data-animate="fade-up"
+            style="--delay: 0.5s"
+          >
+            <div class="project-icon">
+              <img src="octanet.png" alt="OctaNet App" />
+            </div>
+            <h3 class="project-title">
+              OctaNet App — Network Management System
+            </h3>
+            <p class="project-desc">
+              End-to-end production Flutter application taken from design to
+              Play Store. Onboarded 9 international clients in 4 months. Modular
+              architecture reduced delivery cycle time by 40%.
+            </p>
+            <div class="project-tags">
+              <span>CI/CD</span><span>Play Store</span><span>Modular Arch</span>
+            </div>
+            <span class="project-badge">Production</span>
+          </div>
+          <div
+            class="project-card glass-card"
+            data-animate="fade-up"
+            style="--delay: 0.4s"
+          >
+            <div class="project-icon">
+              <img src="powergauge.png" alt="Power Gauge" />
+            </div>
+            <h3 class="project-title">Power Gauge — Battery Telemetry</h3>
+            <p class="project-desc">
+              A real-time battery telemetry monitoring app using Flutter Method
+              Channels for native Android integration, delivering live
+              performance metrics and health analytics.
+            </p>
+            <div class="project-tags">
+              <span>Method Channels</span><span>Android Native</span
+              ><span>Telemetry</span><span>Push Notifications</span>
+            </div>
+          </div>
+          <div
+            class="project-card glass-card"
+            data-animate="fade-up"
+            style="--delay: 0.3s"
+          >
+            <div class="project-icon">
+              <img src="fit&fuel.png" alt="Fit&Fuel" />
+            </div>
+            <h3 class="project-title">Fit&Fuel — Your Personal Trainer</h3>
+            <p class="project-desc">
+              A fully offline app delivering guided workout videos, healthy
+              recipes, curated gym playlists, and an integrated calorie
+              calculator.
+            </p>
+            <div class="project-tags">
+              <span>Geolocation</span><span>Firebase</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── CONTACT ───────────── -->
+    <section class="section" id="contact">
+      <div class="container">
+        <h2 class="section-title" data-animate="fade-up">
+          Get In <span class="accent">Touch</span>
+        </h2>
+        <p class="contact-subtitle" data-animate="fade-up">
+          Have a project in mind, want to collaborate, or just want to say
+          hello? My inbox is always open.
+        </p>
+        <div class="contact-cards" data-animate="fade-up">
+          <a
+            class="contact-card glass-card"
+            href="mailto:sushanttare20022004@gmail.com?subject=Hello%20Sushant&body=I'm%20interested%20in%20your%20projects."
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div class="contact-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>
+            </div>
+            <span class="contact-label">Email Me</span>
+            <span class="contact-value">sushanttare20022004@gmail.com</span>
+          </a>
+          <a
+            class="contact-card glass-card"
+            href="https://github.com/LuciferTare"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577v-2.165c-3.338.726-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.085 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.108-.775.418-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.468-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.3 1.23A11.51 11.51 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.29-1.552 3.297-1.23 3.297-1.23.653 1.652.242 2.873.12 3.176.77.84 1.235 1.911 1.235 3.221 0 4.61-2.804 5.625-5.475 5.921.43.372.823 1.102.823 2.222v3.293c0 .322.216.694.825.576C20.565 21.796 24 17.298 24 12c0-6.63-5.37-12-12-12z"
+                />
+              </svg>
+            </div>
+            <span class="contact-label">GitHub</span>
+            <span class="contact-value">LuciferTare</span>
+          </a>
+          <a
+            class="contact-card glass-card"
+            href="https://www.linkedin.com/in/sushant-tare-8857b2290/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+                />
+              </svg>
+            </div>
+            <span class="contact-label">LinkedIn</span>
+            <span class="contact-value">sushant-tare-8857b2290</span>
+          </a>
+          <a
+            class="contact-card glass-card"
+            href="https://www.instagram.com/lucifer_code_with_ease/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"
+                />
+              </svg>
+            </div>
+            <span class="contact-label">Instagram</span>
+            <span class="contact-value">lucifer_code_with_ease</span>
+          </a>
+        </div>
+        <div class="cta-resume" data-animate="fade-up">
+          <a
+            class="btn-primary"
+            href="https://drive.google.com/file/d/1Tz9DKQVCFZStubtFYmP74BXIb1DYSEuP/view?usp=sharing"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Download Resume</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <script src="script.js"></script>
+  </body>
+</html>
