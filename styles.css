@@ -520,21 +520,21 @@ img { display: block; max-width: 100%; }
 .papers-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.2rem;
+  gap: 1rem;
 }
 
 .paper-card {
-  padding: 1.4rem 1.6rem;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.5rem;
 }
 
 .paper-header {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 0.6rem;
+  gap: 0.5rem;
 }
 
 .paper-date {
@@ -553,6 +553,7 @@ img { display: block; max-width: 100%; }
   font-size: 1rem;
   color: var(--text);
   font-weight: 500;
+  margin-top: -0.5rem;
 }
 
 .paper-publisher {
@@ -587,7 +588,7 @@ img { display: block; max-width: 100%; }
   padding: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 0.5rem;
   position: relative;
   overflow: hidden;
 }
@@ -622,27 +623,32 @@ img { display: block; max-width: 100%; }
 
 .project-title {
   font-family: var(--font-heading);
-  font-size: 1.05rem;
+  font-size: 1rem;
+  color: var(--accent);
+}
+
+.project-subtitle {
+  font-size: 1rem;
   color: var(--text);
-  line-height: 1.3;
+  font-weight: 500;
+  margin-top: -0.5rem;
 }
 
 .project-desc {
   font-size: 1rem;
   color: var(--text-muted);
-  line-height: 1.7;
   flex: 1;
 }
 
 .project-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
+  gap: 0.25rem;
 }
 .project-tags span {
-  font-size: 0.76rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  padding: 0.2rem 0.65rem;
+  padding: 0.25rem 0.5rem;
   border-radius: 5px;
   background: var(--accent-dim);
   color: var(--accent);
