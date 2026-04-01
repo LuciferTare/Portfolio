@@ -40,12 +40,22 @@
     right: -100%;
     width: 260px;
     height: 100vh;
-    background: #181a20;
+    background: linear-gradient(
+      155deg,
+      #1A1A1A1a 0%,
+      #1A1A1Ad9 25%,
+      #1A1A1Af2 100%
+    );
+    backdrop-filter: blur(32px) saturate(180%) brightness(1.06);
+    -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.06);
     flex-direction: column;
     justify-content: center;
     gap: 2rem;
     padding: 2rem;
-    border-left: 1px solid var(--glass-border);
+    border-left: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow:
+      -8px 0 40px rgba(0, 0, 0, 0.50),
+      inset 1px 0 0 rgba(255, 255, 255, 0.08);
     transition: right var(--transition);
     z-index: 9998;
   }
@@ -59,6 +69,10 @@
 @media (max-width: 600px) {
   #contact {
     min-height: 100svh;
+  }
+
+  .hero-bg-glow {
+    filter: blur(300px);
   }
 
   .section { padding: 75px 0 15px; }
@@ -94,6 +108,9 @@
    RESPONSIVE — SMALL MOBILE  (≤ 400px)
 ───────────────────────────────────────── */
 @media (max-width: 400px) {
+  .hero-bg-glow {
+    filter: blur(300px);
+  }
   .contact-cards {
     grid-template-columns: 1fr;
   }
