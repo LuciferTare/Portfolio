@@ -250,7 +250,7 @@ img { display: block; max-width: 100%; }
 .hero-bg-glow {
   position: fixed;
   border-radius: 50%;
-  filter: blur(100px);
+  filter: blur(150px);
   pointer-events: none;
   z-index: 0;
 }
