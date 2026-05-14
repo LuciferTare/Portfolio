@@ -98,6 +98,50 @@ window.addEventListener('mousemove', (e) => {
 });
 
 /* ─────────────────────────────────────────
+   HERO TYPEWRITER
+───────────────────────────────────────── */
+(function () {
+  const el = document.getElementById('heroTypewriter');
+  if (!el) return;
+
+  const phrases = [
+    'Flutter Developer',
+    'Mobile App Engineer',
+    'Play Store Publisher',
+    'Real-time Architect',
+    'UI/UX Craftsman',
+  ];
+
+  let phraseIndex = 0;
+  let charIndex   = 0;
+  let deleting    = false;
+  let pausing     = false;
+
+  function tick() {
+    const current = phrases[phraseIndex];
+
+    if (pausing) { pausing = false; setTimeout(tick, deleting ? 500 : 1800); return; }
+
+    if (!deleting) {
+      el.textContent = current.slice(0, ++charIndex);
+      if (charIndex === current.length) { deleting = true; pausing = true; }
+    } else {
+      el.textContent = current.slice(0, --charIndex);
+      if (charIndex === 0) {
+        deleting = false;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+        pausing = true;
+      }
+    }
+
+    setTimeout(tick, deleting ? 45 : 85);
+  }
+
+  setTimeout(tick, 1400);
+})();
+
+
+/* ─────────────────────────────────────────
    SKILL CHIPS — staggered entrance
 ───────────────────────────────────────── */
 const skillChips = document.querySelectorAll('.skill-chip');

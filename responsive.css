@@ -79,6 +79,9 @@
 
   .hero { padding: 7rem 5% 5rem; }
 
+  .ring-1 { width: 320px; height: 320px; }
+  .ring-2 { width: 500px; height: 500px; }
+
   .about-skills {
     padding: 0 5px;
   }
