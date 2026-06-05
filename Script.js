@@ -60,6 +60,34 @@ const observer = new IntersectionObserver(
 animatedEls.forEach(el => observer.observe(el));
 
 /* ─────────────────────────────────────────
+   LINK NAVIGATION (suppresses status-bar preview)
+───────────────────────────────────────── */
+document.querySelectorAll('a[data-scroll]').forEach(el => {
+  el.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(el.dataset.scroll);
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Enter') el.click();
+  });
+});
+
+document.querySelectorAll('a[data-href]').forEach(el => {
+  el.addEventListener('click', e => {
+    e.preventDefault();
+    if (el.dataset.target === '_blank') {
+      window.open(el.dataset.href, '_blank', 'noopener,noreferrer');
+    } else {
+      window.location.href = el.dataset.href;
+    }
+  });
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Enter') el.click();
+  });
+});
+
+/* ─────────────────────────────────────────
    SMOOTH ACTIVE NAV LINK HIGHLIGHTING
 ───────────────────────────────────────── */
 const sections = document.querySelectorAll('section[id]');
