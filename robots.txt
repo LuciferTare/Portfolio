@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /MSC.html
+
+Sitemap: https://sushanttare.netlify.app/sitemap.xml

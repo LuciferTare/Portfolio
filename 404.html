@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Page Not Found — Sushant Tare</title>
+    <meta name="robots" content="noindex, follow" />
+    <meta
+      name="description"
+      content="The page you're looking for doesn't exist. Return to Sushant Tare's portfolio home page."
+    />
+
+    <link rel="icon" href="favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <meta name="theme-color" content="#0A0908" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="responsive.css" />
+    <style>
+      .error-page {
+        min-height: 100vh;
+        min-height: 100svh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+        padding: 5rem 5%;
+        overflow: hidden;
+      }
+      .error-content {
+        position: relative;
+        z-index: 1;
+        max-width: 560px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-bottom: 2rem;
+      }
+      .breadcrumb a {
+        color: var(--text-muted);
+        transition: color var(--transition);
+      }
+      .breadcrumb a:hover {
+        color: var(--accent);
+      }
+      .breadcrumb [aria-current="page"] {
+        color: var(--accent);
+      }
+      .error-code {
+        font-family: var(--font-heading);
+        font-size: clamp(4rem, 14vw, 8rem);
+        line-height: 1;
+        background: linear-gradient(
+          110deg,
+          var(--text) 20%,
+          var(--accent) 42%,
+          #fff8d6 52%,
+          var(--accent) 62%,
+          var(--text) 80%
+        );
+        background-size: 250% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: name-shimmer 5s linear infinite;
+      }
+      .error-title {
+        font-family: var(--font-heading);
+        font-size: clamp(1.3rem, 3vw, 1.8rem);
+        color: var(--text);
+        margin: 0.5rem 0 0.75rem;
+      }
+      .error-desc {
+        color: var(--text-muted);
+        margin-bottom: 2rem;
+      }
+      .error-actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="error-page">
+      <div class="hero-bg-glow glow-1"></div>
+      <div class="hero-bg-glow glow-2"></div>
+      <div class="hero-grid-bg"></div>
+      <div class="error-content">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Home</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">404</span>
+        </nav>
+        <p class="error-code">404</p>
+        <h1 class="error-title">Page Not Found</h1>
+        <p class="error-desc">
+          The page you're looking for doesn't exist or may have moved. Let's get
+          you back on track.
+        </p>
+        <div class="error-actions">
+          <a class="btn-primary" href="/">Back to Home</a>
+          <a class="btn-outline" href="/#projects">View Projects</a>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

@@ -1,0 +1,21 @@
+# Sushant Tare
+
+> Portfolio site for Sushant Tare, a Mobile Application Developer specializing in Flutter and Dart. Builds production Play Store apps with real-time data integration, modular architecture, and offline-first design.
+
+## Profile
+
+- [About](https://sushanttare.netlify.app/#about): Mobile Application Developer summary, core skills (Flutter, Dart, GetX, Firebase, REST/WebSockets), certifications (AWS CLF-C02, Azure DP-203), and job simulations.
+- [Work Experience](https://sushanttare.netlify.app/#experience): Mobile Application Developer at TrustLink Technologies Pvt. Ltd. (Sep 2024–Present), sole mobile developer on the OctaNet broadband network management platform.
+- [Education](https://sushanttare.netlify.app/#education): MSc IT and BSc IT, Sonopant Dandekar College, Palghar.
+- [Published Papers](https://sushanttare.netlify.app/#papers): Research papers including Cravecoin, Fiberflow (IJIRT), Towzer, Quantaview, and Fit&Fuel.
+- [Projects](https://sushanttare.netlify.app/#projects): OctaNet (production Flutter app), Cravecoin, Fit&Fuel, Power Gauge, Quantaview, Stoxium.
+- [Contact](https://sushanttare.netlify.app/#contact): Email, GitHub, LinkedIn, Instagram, and resume download.
+
+## Resume
+
+- [Resume (PDF)](https://sushanttare.netlify.app/Sushant_Tare_CV.pdf)
+
+## Notes
+
+- This is a single-page portfolio site; all sections above are anchors on the same page.
+- /MSC.html is a private, password-protected coursework page and is not part of the public portfolio.
