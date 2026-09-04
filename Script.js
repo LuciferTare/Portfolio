@@ -5,10 +5,17 @@ const navbar    = document.getElementById('navbar');
 const hamburger = document.getElementById('hamburger');
 const navLinks  = document.getElementById('navLinks');
 
-// Add scrolled class once the user scrolls past 60px
-window.addEventListener('scroll', () => {
-  navbar.classList.toggle('scrolled', window.scrollY > 60);
-});
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Add scrolled class once the hero leaves the viewport
+const heroEl = document.getElementById('hero');
+if (heroEl) {
+  const navObserver = new IntersectionObserver(
+    ([entry]) => navbar.classList.toggle('scrolled', !entry.isIntersecting),
+    { rootMargin: '-60px 0px 0px 0px', threshold: 0 }
+  );
+  navObserver.observe(heroEl);
+}
 
 // Toggle mobile menu
 hamburger.addEventListener('click', () => {
@@ -114,16 +121,24 @@ sections.forEach(s => sectionObserver.observe(s));
 ───────────────────────────────────────── */
 const heroBgGlows = document.querySelectorAll('.hero-bg-glow');
 
-window.addEventListener('mousemove', (e) => {
-  const { innerWidth: w, innerHeight: h } = window;
-  const x = (e.clientX / w - 0.5) * 2;  // -1 to 1
-  const y = (e.clientY / h - 0.5) * 2;
+if (!prefersReducedMotion) {
+  let rafId = null, px = 0, py = 0;
 
-  heroBgGlows.forEach((glow, i) => {
-    const factor = i === 0 ? 20 : -15;
-    glow.style.transform = `translate(${x * factor}px, ${y * factor}px)`;
-  });
-});
+  function applyParallax() {
+    heroBgGlows.forEach((glow, i) => {
+      const factor = i === 0 ? 20 : -15;
+      glow.style.transform = `translate(${px * factor}px, ${py * factor}px)`;
+    });
+    rafId = null;
+  }
+
+  window.addEventListener('mousemove', (e) => {
+    const { innerWidth: w, innerHeight: h } = window;
+    px = (e.clientX / w - 0.5) * 2;  // -1 to 1
+    py = (e.clientY / h - 0.5) * 2;
+    if (rafId === null) rafId = requestAnimationFrame(applyParallax);
+  }, { passive: true });
+}
 
 /* ─────────────────────────────────────────
    HERO TYPEWRITER
@@ -139,6 +154,11 @@ window.addEventListener('mousemove', (e) => {
     'Real-time Architect',
     'UI/UX Craftsman',
   ];
+
+  if (prefersReducedMotion) {
+    el.textContent = phrases[0];
+    return;
+  }
 
   let phraseIndex = 0;
   let charIndex   = 0;
