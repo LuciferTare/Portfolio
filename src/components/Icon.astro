@@ -1,0 +1,57 @@
+---
+import githubLogo from '@phosphor-icons/core/assets/regular/github-logo.svg?raw';
+import linkedinLogo from '@phosphor-icons/core/assets/regular/linkedin-logo.svg?raw';
+import instagramLogo from '@phosphor-icons/core/assets/regular/instagram-logo.svg?raw';
+import arrowUpRight from '@phosphor-icons/core/assets/regular/arrow-up-right.svg?raw';
+import arrowRight from '@phosphor-icons/core/assets/regular/arrow-right.svg?raw';
+import arrowDown from '@phosphor-icons/core/assets/regular/arrow-down.svg?raw';
+import arrowUp from '@phosphor-icons/core/assets/regular/arrow-up.svg?raw';
+import envelope from '@phosphor-icons/core/assets/regular/envelope-simple.svg?raw';
+import copy from '@phosphor-icons/core/assets/regular/copy.svg?raw';
+import check from '@phosphor-icons/core/assets/regular/check.svg?raw';
+import list from '@phosphor-icons/core/assets/regular/list.svg?raw';
+import x from '@phosphor-icons/core/assets/regular/x.svg?raw';
+import mapPin from '@phosphor-icons/core/assets/regular/map-pin.svg?raw';
+import googlePlay from '@phosphor-icons/core/assets/regular/google-play-logo.svg?raw';
+import pause from '@phosphor-icons/core/assets/regular/pause.svg?raw';
+import play from '@phosphor-icons/core/assets/regular/play.svg?raw';
+import filePdf from '@phosphor-icons/core/assets/regular/file-pdf.svg?raw';
+import quotes from '@phosphor-icons/core/assets/regular/quotes.svg?raw';
+import sealCheck from '@phosphor-icons/core/assets/regular/seal-check.svg?raw';
+
+const icons = {
+  github: githubLogo,
+  linkedin: linkedinLogo,
+  instagram: instagramLogo,
+  'arrow-up-right': arrowUpRight,
+  'arrow-right': arrowRight,
+  'arrow-down': arrowDown,
+  'arrow-up': arrowUp,
+  envelope,
+  copy,
+  check,
+  list,
+  x,
+  'map-pin': mapPin,
+  'google-play': googlePlay,
+  pause,
+  play,
+  pdf: filePdf,
+  quotes,
+  seal: sealCheck,
+} as const;
+
+export type IconName = keyof typeof icons;
+
+interface Props {
+  name: IconName;
+  class?: string;
+  size?: number | string;
+}
+
+const { name, class: className, size = '1em' } = Astro.props;
+const svg = icons[name]
+  .replace('<svg ', `<svg width="${size}" height="${size}" aria-hidden="true" focusable="false" ${className ? `class="${className}" ` : ''}`);
+---
+
+<Fragment set:html={svg} />

@@ -1,0 +1,606 @@
+---
+import { Image } from "astro:assets";
+import Icon from "./Icon.astro";
+import { featured, inProgress, moreWork, recognition } from "../data/portfolio";
+
+const [octanet, cravecoin] = featured;
+const lineage = [
+  cravecoin,
+  ...["quantaview", "stoxium"].flatMap((id) =>
+    moreWork.filter((p) => p.id === id),
+  ),
+];
+
+const count = moreWork.length;
+const columnsFor = (max: number) => {
+  if (count <= max) return Math.max(count, 1);
+  const empty = (c: number) => (c - (count % c)) % c;
+  return [max, max - 1].reduce((best, c) =>
+    empty(c) < empty(best) ? c : best,
+  );
+};
+const moreCols = {
+  md: count <= 3 ? Math.max(count, 1) : count % 3 === 0 ? 3 : 2,
+  lg: columnsFor(4),
+};
+const tone = (s: string) =>
+  s === "Live on Google Play" || s === "Built" ? "live" : "progress";
+const isExternal = (href: string) => href.startsWith("http");
+---
+
+<section id="work" class="section" aria-labelledby="work-title">
+  <div class="container-x">
+    <h2 id="work-title" class="h-section" data-reveal>Featured Projects</h2>
+
+    <article
+      class="lead-case"
+      id="project-octanet"
+      aria-labelledby="octanet-title"
+    >
+      <header class="lead-head">
+        <div class="lead-id" data-reveal>
+          <Image
+            src={octanet.icon}
+            alt="OctaNet app icon"
+            width={72}
+            height={72}
+            densities={[1, 2]}
+            class="icon-app"
+          />
+          <div>
+            <h3 id="octanet-title" class="lead-name">{octanet.name}</h3>
+            <p class="lead-tag">{octanet.tagline}</p>
+          </div>
+        </div>
+        <div class="lead-status" data-reveal>
+          <p class="status" data-tone={tone(octanet.status)}>
+            {octanet.status}
+          </p>
+          <p class="meta">{octanet.period}</p>
+        </div>
+      </header>
+
+      <p class="lead lead-summary" data-reveal>{octanet.summary}</p>
+
+      <div class="lead-cols">
+        <section class="col" aria-labelledby="octanet-problem" data-reveal>
+          <h4 class="col-title" id="octanet-problem">The Problem</h4>
+          <p class="col-text">{octanet.problem}</p>
+        </section>
+        <section class="col" aria-labelledby="octanet-role" data-reveal>
+          <h4 class="col-title" id="octanet-role">What I Did</h4>
+          <ul class="col-list">
+            {octanet.contributions?.map((c) => <li>{c}</li>)}
+          </ul>
+        </section>
+        <section class="col" aria-labelledby="octanet-does" data-reveal>
+          <h4 class="col-title" id="octanet-does">What It Does</h4>
+          <ul class="col-list">
+            {octanet.features?.map((f) => <li>{f}</li>)}
+          </ul>
+        </section>
+      </div>
+
+      <footer class="lead-foot" data-reveal>
+        <ul class="stack" aria-label="Technologies">
+          {octanet.stack.map((t) => <li class="chip">{t}</li>)}
+        </ul>
+        <div class="lead-links">
+          {
+            octanet.links.map((l, i) => (
+              <a
+                href={l.href}
+                target="_blank"
+                rel={isExternal(l.href) ? "noopener noreferrer" : "noopener"}
+                class={i === 0 ? "btn btn-primary" : "btn"}
+                data-magnetic={i === 0 ? "" : undefined}
+              >
+                <Icon name={i === 0 ? "google-play" : "pdf"} />
+                {l.label}
+                <span class="sr-only">
+                  {l.description ? `, ${l.description}` : ""} (opens in a new
+                  tab)
+                </span>
+              </a>
+            ))
+          }
+        </div>
+      </footer>
+      {octanet.note && <p class="meta lead-note">{octanet.note}</p>}
+    </article>
+
+    <article
+      class="second"
+      id="project-cravecoin"
+      aria-labelledby="cravecoin-title"
+    >
+      <div class="second-main">
+        <div class="lead-id" data-reveal>
+          <Image
+            src={cravecoin.icon}
+            alt="Cravecoin app icon"
+            width={64}
+            height={64}
+            densities={[1, 2]}
+            class="icon-app"
+          />
+          <div>
+            <h3 id="cravecoin-title" class="second-name">{cravecoin.name}</h3>
+            <p class="lead-tag">{cravecoin.tagline}</p>
+          </div>
+        </div>
+        <p class="meta second-period" data-reveal>{cravecoin.period}</p>
+        <p class="second-summary" data-reveal>{cravecoin.summary}</p>
+        <ul class="feature-grid" data-reveal>
+          {cravecoin.features?.map((f) => <li>{f}</li>)}
+        </ul>
+        <ul class="stack" aria-label="Technologies" data-reveal>
+          {cravecoin.stack.map((t) => <li class="chip">{t}</li>)}
+        </ul>
+      </div>
+
+      <div class="second-side">
+        <div class="side-block" data-reveal>
+          <p class="meta">Recognition</p>
+          <p class="side-big">
+            <span class="accent">Aavishkar 2023</span> finalist
+          </p>
+          <p class="side-text">
+            One of {recognition.finalists} finalists from more than {
+              recognition.entries.toLocaleString("en-IN")
+            } entries. Published in the Shodh Samiksha national conference proceedings,
+            Feb 2025.
+          </p>
+          {
+            cravecoin.links.map((l) => (
+              <a
+                href={l.href}
+                target="_blank"
+                rel="noopener"
+                class="link link-rest side-link"
+              >
+                {l.label}
+                <span class="sr-only">
+                  , {l.description} (opens in a new tab)
+                </span>
+              </a>
+            ))
+          }
+        </div>
+
+        {
+          lineage.length > 1 && (
+            <div class="side-block" data-reveal>
+              <p class="meta">What It Led To</p>
+              <ol
+                class="lineage"
+                aria-label={lineage.map((p) => p.name).join(", then ")}
+              >
+                {lineage.map((p) => (
+                  <li class="lineage-step">
+                    <Image
+                      src={p.icon}
+                      alt=""
+                      width={40}
+                      height={40}
+                      densities={[1, 2]}
+                      class="icon-app"
+                    />
+                    <span class="lineage-name">{p.name}</span>
+                    <span class="meta">{p.tagline}</span>
+                  </li>
+                ))}
+              </ol>
+              <p class="side-text">{cravecoin.note}</p>
+            </div>
+          )
+        }
+      </div>
+    </article>
+
+    <article
+      class="wip"
+      id="project-fitfuel"
+      aria-labelledby="fitfuel-title"
+      data-reveal
+    >
+      <div class="lead-id">
+        <Image
+          src={inProgress.icon}
+          alt="Fit&Fuel app icon"
+          width={56}
+          height={56}
+          densities={[1, 2]}
+          class="icon-app"
+        />
+        <div>
+          <h3 id="fitfuel-title" class="wip-name">{inProgress.name}</h3>
+          <p class="lead-tag">{inProgress.tagline}</p>
+        </div>
+      </div>
+      <div class="wip-body">
+        <ol class="versions" aria-label="Versions">
+          <li class="version done">
+            <Icon name="check" size="14" />
+            <span>Version 1 complete</span>
+          </li>
+          <li class="version now">
+            <span class="version-dot" aria-hidden="true"></span>
+            <span>Version 2 in progress</span>
+          </li>
+        </ol>
+        <p class="wip-summary">{inProgress.summary}</p>
+        <p class="wip-features">{inProgress.features?.join(", ")}.</p>
+        <p class="meta">{inProgress.period} / {inProgress.note}</p>
+      </div>
+    </article>
+
+    {
+      count > 0 && (
+        <>
+          <h3 class="more-title" data-reveal>
+            More Work
+          </h3>
+          <div class="more-wrap">
+            <ul
+              class="more"
+              style={`--cols-md:${moreCols.md};--cols-lg:${moreCols.lg}`}
+            >
+              {moreWork.map((p) => (
+                <li class="more-item" id={`project-${p.id}`} data-reveal>
+                  <div class="more-top">
+                    <Image
+                      src={p.icon}
+                      alt=""
+                      width={48}
+                      height={48}
+                      densities={[1, 2]}
+                      class="icon-app"
+                    />
+                    <p class="status" data-tone={tone(p.status)}>
+                      {p.status}
+                    </p>
+                  </div>
+                  <h4 class="more-name">{p.name}</h4>
+                  <p class="meta">
+                    {p.tagline}
+                    {p.period && ` / ${p.period}`}
+                  </p>
+                  <p class="more-summary">{p.summary}</p>
+                  <p class="more-stack mono">{p.stack.join(" + ")}</p>
+                  {p.links.map((l) => (
+                    <a
+                      href={l.href}
+                      target="_blank"
+                      rel="noopener"
+                      class="link link-rest more-link"
+                    >
+                      {l.label}
+                      <span class="sr-only">
+                        , {l.description} (opens in a new tab)
+                      </span>
+                    </a>
+                  ))}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .lead-id {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .lead-tag {
+    color: var(--color-fg-2);
+    font-size: 0.975rem;
+    line-height: 1.4;
+  }
+  .stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .lead-case {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    padding: clamp(1.5rem, 4vw, 3.5rem);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-ui);
+    background: var(--color-bg-2);
+  }
+  .lead-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.25rem;
+  }
+  .lead-name {
+    font-size: clamp(2rem, 4.4vw, 3.25rem);
+    letter-spacing: -0.045em;
+    line-height: 1;
+  }
+  .lead-status {
+    display: grid;
+    gap: 0.35rem;
+    justify-items: start;
+  }
+  .lead-summary {
+    margin-top: 2rem;
+    max-width: 44ch;
+  }
+  .lead-cols {
+    margin-top: 2.5rem;
+    display: grid;
+    gap: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-line);
+  }
+  .col-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--color-accent);
+  }
+  .col-text,
+  .col-list {
+    margin-top: 0.75rem;
+    color: var(--color-fg-2);
+    font-size: 0.975rem;
+  }
+  .col-list {
+    display: grid;
+    gap: 0.6rem;
+  }
+  .col-list li {
+    padding-left: 1rem;
+    position: relative;
+  }
+  .col-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.75em;
+    width: 0.45rem;
+    height: 1px;
+    background: var(--color-fg-3);
+  }
+  .lead-foot {
+    margin-top: 2.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+  .lead-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .lead-note {
+    margin-top: 1.5rem;
+  }
+
+  .second {
+    margin-top: clamp(3.5rem, 7vw, 6rem);
+    display: grid;
+    gap: 2.5rem;
+  }
+  .second-name {
+    font-size: clamp(1.75rem, 3.6vw, 2.5rem);
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .second-period {
+    margin-top: 1.25rem;
+  }
+  .second-summary {
+    margin-top: 0.75rem;
+    font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+    line-height: 1.5;
+    max-width: 46ch;
+  }
+  .feature-grid {
+    margin-top: 1.75rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: 1px solid var(--color-line);
+    border-left: 1px solid var(--color-line);
+  }
+  .feature-grid li {
+    padding: 1rem;
+    border-right: 1px solid var(--color-line);
+    border-bottom: 1px solid var(--color-line);
+    font-size: 0.925rem;
+    color: var(--color-fg-2);
+  }
+  .second-main .stack {
+    margin-top: 1.5rem;
+  }
+  .second-side {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+  }
+  .side-block {
+    padding: 1.5rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-ui);
+  }
+  .side-big {
+    margin-top: 0.6rem;
+    font-size: 1.35rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .accent {
+    color: var(--color-accent);
+  }
+  .side-text {
+    margin-top: 0.6rem;
+    font-size: 0.925rem;
+    color: var(--color-fg-2);
+  }
+  .side-link {
+    display: inline-block;
+    margin-top: 0.9rem;
+    font-size: 0.9rem;
+  }
+  .lineage {
+    margin-top: 1rem;
+    display: grid;
+    gap: 0.9rem;
+    position: relative;
+  }
+  .lineage::before {
+    content: "";
+    position: absolute;
+    left: 19.5px;
+    top: 20px;
+    bottom: 20px;
+    width: 1px;
+    background: var(--color-line-2);
+  }
+  .lineage-step {
+    position: relative;
+    display: grid;
+    grid-template-columns: 40px auto 1fr;
+    align-items: center;
+    gap: 0.9rem;
+  }
+  .lineage-name {
+    font-weight: 600;
+  }
+
+  .wip {
+    margin-top: clamp(3.5rem, 7vw, 6rem);
+    display: grid;
+    gap: 1.75rem;
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    border: 1px dashed var(--color-line-2);
+    border-radius: var(--radius-ui);
+  }
+  .wip-name {
+    font-size: 1.5rem;
+    letter-spacing: -0.03em;
+  }
+  .versions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+  }
+  .version {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--color-fg-2);
+  }
+  .version.done :global(svg) {
+    color: var(--color-ok);
+  }
+  .version.now {
+    color: var(--color-fg);
+  }
+  .version-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1.5px solid var(--color-accent);
+  }
+  .wip-summary {
+    margin-top: 0.9rem;
+    max-width: 62ch;
+  }
+  .wip-features {
+    margin-top: 0.5rem;
+    color: var(--color-fg-2);
+    font-size: 0.95rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .more-title {
+    margin-top: clamp(4rem, 8vw, 6.5rem);
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    letter-spacing: -0.03em;
+  }
+  .more-wrap {
+    --col-gap: 1.5rem;
+    margin-top: 1.75rem;
+    overflow: hidden;
+  }
+  .more {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    margin-left: calc(-1 * var(--col-gap) - 1px);
+  }
+  .more-item {
+    padding: 1.75rem var(--col-gap);
+    border-top: 1px solid var(--color-line);
+    border-left: 1px solid var(--color-line);
+    display: grid;
+    align-content: start;
+    gap: 0.35rem;
+  }
+  .more-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+  .more-name {
+    font-size: 1.25rem;
+    letter-spacing: -0.02em;
+  }
+  .more-summary {
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+    color: var(--color-fg-2);
+  }
+  .more-stack {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--color-fg-3);
+  }
+  .more-link {
+    justify-self: start;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  @media (min-width: 768px) {
+    .lead-cols {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2.5rem;
+    }
+    .more {
+      grid-template-columns: repeat(var(--cols-md), minmax(0, 1fr));
+    }
+    .more-item {
+      padding-block: 2rem;
+    }
+    .wip {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+      align-items: start;
+      gap: 2.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .second {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: 4rem;
+    }
+    .more {
+      grid-template-columns: repeat(var(--cols-lg), minmax(0, 1fr));
+    }
+  }
+</style>

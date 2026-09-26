@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Experience from '../components/Experience.astro';
+import Education from '../components/Education.astro';
+import Research from '../components/Research.astro';
+import Projects from '../components/Projects.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Base>
+  <Nav />
+  <main id="main" tabindex="-1">
+    <Hero />
+    <About />
+    <Experience />
+    <Education />
+    <Research />
+    <Projects />
+    <Contact />
+  </main>
+  <Footer />
+  <p class="sr-only" aria-live="polite" data-live></p>
+</Base>
+
+<script>
+  import { initUI } from '../scripts/ui';
+  import { initMotion } from '../scripts/motion';
+
+  const stopUI = initUI();
+  const stopMotion = initMotion();
+
+  window.addEventListener('pagehide', (e) => {
+    if (e.persisted) return;
+    stopMotion();
+    stopUI();
+  });
+</script>

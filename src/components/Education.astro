@@ -1,0 +1,223 @@
+---
+import Icon from './Icon.astro';
+import { education, credentials } from '../data/portfolio';
+
+const major = education.filter((e) => e.major);
+const school = education.filter((e) => !e.major);
+---
+
+<section id="education" class="section" aria-labelledby="education-title">
+  <div class="container-x">
+    <h2 id="education-title" class="h-section" data-reveal>My Education</h2>
+
+    <ol class="degrees">
+      {
+        major.map((e) => (
+          <li class="degree" data-reveal>
+            <p class="degree-short" aria-hidden="true">
+              {e.short}
+            </p>
+            <div class="degree-body">
+              <h3 class="degree-name">{e.qualification}</h3>
+              <p class="degree-inst">
+                {e.institution}
+                {e.affiliation && <span class="degree-aff">{e.affiliation}</span>}
+              </p>
+              {e.note && <p class="degree-note">{e.note}</p>}
+            </div>
+            <dl class="degree-figs mono">
+              <div>
+                <dt class="meta">Year</dt>
+                <dd>{e.year}</dd>
+              </div>
+              <div>
+                <dt class="meta">{e.note ? 'Avg. so far' : 'Score'}</dt>
+                <dd class="degree-score">{e.score}</dd>
+              </div>
+            </dl>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="lower">
+      <ul class="school" aria-label="School">
+        {
+          school.map((e) => (
+            <li class="school-item" data-reveal>
+              <p class="meta">
+                {e.short} <span aria-hidden="true">/</span> {e.year}
+              </p>
+              <h3 class="school-name">{e.qualification}</h3>
+              <p class="school-inst">
+                {e.institution}
+                {e.affiliation && `, ${e.affiliation}`}
+              </p>
+              <p class="mono school-score">{e.score}</p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="creds" data-reveal>
+        <h3 class="creds-title">Certifications</h3>
+        <ul class="cred-list">
+          {
+            credentials.map((c) => (
+              <li class="cred">
+                <Icon name="seal" size="18" class="cred-icon" />
+                <span>
+                  <span class="cred-name">{c.name}</span>
+                  <span class="meta cred-meta">
+                    {c.issuer}, {c.code}
+                  </span>
+                  {c.verifyUrl && (
+                    <a href={c.verifyUrl} target="_blank" rel="noopener noreferrer" class="link link-rest cred-link">
+                      Verify <span class="sr-only">{c.name} (opens in a new tab)</span>
+                    </a>
+                  )}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .degrees {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    border-top: 1px solid var(--color-line);
+  }
+  .degree {
+    display: grid;
+    gap: 1rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .degree-short {
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: 600;
+    letter-spacing: -0.05em;
+    line-height: 0.9;
+    color: var(--color-fg);
+  }
+  .degree:nth-child(2) .degree-short {
+    color: var(--color-fg-3);
+  }
+  .degree-name {
+    font-size: 1.25rem;
+    letter-spacing: -0.02em;
+  }
+  .degree-inst {
+    margin-top: 0.35rem;
+    color: var(--color-fg-2);
+  }
+  .degree-aff {
+    display: block;
+    font-size: 0.925rem;
+    color: var(--color-fg-3);
+  }
+  .degree-note {
+    margin-top: 0.9rem;
+    font-size: 0.925rem;
+    color: var(--color-fg-2);
+    max-width: 44ch;
+  }
+  .degree-figs {
+    display: flex;
+    gap: 2rem;
+  }
+  .degree-figs dd {
+    margin: 0.25rem 0 0;
+    font-size: 1.125rem;
+  }
+  .degree-score {
+    color: var(--color-accent);
+  }
+
+  .lower {
+    margin-top: 3rem;
+    display: grid;
+    gap: 3rem;
+  }
+  .school {
+    display: grid;
+    gap: 2rem;
+  }
+  .school-name {
+    margin-top: 0.5rem;
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+  }
+  .school-inst {
+    margin-top: 0.2rem;
+    font-size: 0.925rem;
+    color: var(--color-fg-2);
+  }
+  .school-score {
+    margin-top: 0.5rem;
+    font-size: 0.925rem;
+    color: var(--color-fg);
+  }
+
+  .creds {
+    padding: 1.5rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-ui);
+    background: var(--color-bg-2);
+    align-self: start;
+  }
+  .creds-title {
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+  }
+  .cred-list {
+    margin-top: 1.25rem;
+    display: grid;
+    gap: 1.1rem;
+  }
+  .cred {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.75rem;
+    line-height: 1.4;
+  }
+  .cred :global(.cred-icon) {
+    color: var(--color-accent);
+    margin-top: 0.1rem;
+  }
+  .cred-name {
+    display: block;
+    font-weight: 500;
+  }
+  .cred-meta {
+    display: block;
+    margin-top: 0.2rem;
+  }
+  .cred-link {
+    display: inline-block;
+    margin-top: 0.35rem;
+    font-size: 0.875rem;
+  }
+
+  @media (min-width: 768px) {
+    .degree {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 6fr) auto;
+      gap: 2rem;
+      align-items: start;
+      padding: 2.5rem 0;
+    }
+    .school {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1024px) {
+    .lower {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: 4rem;
+    }
+  }
+</style>

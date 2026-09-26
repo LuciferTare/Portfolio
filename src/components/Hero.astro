@@ -1,0 +1,358 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { profile, homeScreen, inProgress, publications } from '../data/portfolio';
+
+const titles = [...profile.titles];
+const width = Math.max(...titles.map((t) => t.length));
+const first = titles[0].padEnd(width, ' ');
+const [firstName, ...rest] = profile.name.split(' ');
+---
+
+<section class="hero container-x" id="top" aria-labelledby="hero-name">
+  <div class="hero-copy">
+    <h1 id="hero-name" class="hero-name" translate="no">
+      <span class="line" data-hero-line><span data-hero-word>{firstName}</span></span>
+      <span class="line" data-hero-line><span data-hero-word>{rest.join(' ')}</span></span>
+    </h1>
+
+    <div class="role" data-hero>
+      <p class="sr-only">{titles[0]}</p>
+      <div
+        class="flap mono"
+        data-flap
+        data-titles={JSON.stringify(titles)}
+        style={`--cells:${width}`}
+        aria-hidden="true"
+      >
+        {first.split('').map((ch) => <span class="cell" data-cell>{ch === ' ' ? ' ' : ch}</span>)}
+      </div>
+      <button type="button" class="flap-toggle" data-flap-toggle aria-pressed="false" hidden>
+        <span data-flap-icon="pause"><Icon name="pause" size="14" /></span>
+        <span data-flap-icon="play" hidden><Icon name="play" size="14" /></span>
+        <span class="sr-only" data-flap-label>Pause title animation</span>
+      </button>
+    </div>
+
+    <p class="hero-intro" data-hero>{profile.intro}</p>
+
+    <div class="hero-ctas" data-hero>
+      <a href="#work" class="btn btn-primary" data-magnetic>
+        View Work <Icon name="arrow-down" />
+      </a>
+      <a href="#contact" class="btn" data-magnetic>Get In Touch</a>
+    </div>
+  </div>
+
+  <div class="hero-device" data-hero-device>
+    <div class="phone" data-phone>
+      <div class="phone-screen">
+        <div class="phone-status" aria-hidden="true">
+          <span class="camera"></span>
+        </div>
+
+        <div class="widget" data-app>
+          <span class="meta widget-live">Now building</span>
+          <p class="widget-title">{inProgress.name}, Version 2.0</p>
+          <p class="widget-sub">Gym management</p>
+        </div>
+
+        <nav aria-label="App shortcuts" class="apps">
+          <ul class="app-grid">
+            {
+              homeScreen.map((app) => {
+                const id = app.name.toLowerCase().replace(/[^a-z]/g, '');
+                return (
+                  <li data-app>
+                    <a href={`#project-${id}`} class="app">
+                      <Image
+                        src={app.icon}
+                        alt=""
+                        width={52}
+                        height={52}
+                        densities={[1, 2]}
+                        class="icon-app app-icon"
+                        loading="eager"
+                      />
+                      <span class="app-name">{app.name}</span>
+                    </a>
+                  </li>
+                );
+              })
+            }
+          </ul>
+        </nav>
+
+        <div class="widget widget-bottom" data-app>
+          <span class="meta">Published</span>
+          <p class="widget-title"><span class="widget-num">{publications.length}</span> research papers</p>
+          <p class="widget-sub">Latest: {publications[0].title}, {publications[0].date}</p>
+        </div>
+
+        <span class="home-pill" aria-hidden="true"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    display: grid;
+    gap: 3.5rem;
+    padding-top: clamp(2.5rem, 7vw, 5.5rem);
+    padding-bottom: clamp(4rem, 8vw, 6rem);
+    min-height: calc(100dvh - var(--nav-h));
+    align-content: center;
+  }
+  @media (min-width: 1024px) {
+    .hero {
+      --hero-pad: clamp(1.5rem, 4dvh, 3rem);
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      align-items: center;
+      gap: 2rem;
+      height: calc(100dvh - var(--nav-h));
+      min-height: 560px;
+      padding-block: var(--hero-pad);
+    }
+    .hero .hero-name {
+      font-size: min(9.75rem, 12.5vw, 16dvh);
+    }
+    .hero .role {
+      margin-top: clamp(1rem, 3dvh, 2.25rem);
+    }
+    .hero .flap {
+      font-size: min(1.55rem, 3.4dvh);
+    }
+    .hero .hero-intro {
+      margin-top: clamp(0.75rem, 2.5dvh, 1.5rem);
+      font-size: min(1.25rem, 1.6vw, 2.6dvh);
+    }
+    .hero .hero-ctas {
+      margin-top: clamp(1rem, 3.5dvh, 2rem);
+    }
+    .hero .phone {
+      height: min(calc(100dvh - var(--nav-h) - 2 * var(--hero-pad)), 680px);
+      width: auto;
+    }
+    .hero .phone-screen {
+      padding-top: clamp(2rem, 5dvh, 2.75rem);
+      gap: clamp(0.75rem, 2dvh, 1.25rem);
+    }
+  }
+
+  .hero-name {
+    display: grid;
+    font-size: clamp(3.9rem, 12.5vw, 9.75rem);
+    font-weight: 620;
+    letter-spacing: -0.055em;
+    line-height: 0.9;
+    margin-left: -0.04em;
+  }
+  .line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.04em;
+  }
+  .line > span {
+    display: inline-block;
+  }
+  .line:last-child > span {
+    color: var(--color-fg-2);
+  }
+
+  .role {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: clamp(1.5rem, 3vw, 2.25rem);
+  }
+  .flap {
+    --cell-w: 0.82em;
+    display: grid;
+    grid-template-columns: repeat(var(--cells), var(--cell-w));
+    gap: 2px;
+    font-size: clamp(0.9rem, 3.9vw, 1.55rem);
+    font-weight: 500;
+    line-height: 1;
+    perspective: 400px;
+  }
+  .cell {
+    position: relative;
+    display: grid;
+    place-items: center;
+    height: 1.55em;
+    border-radius: 2px;
+    background: linear-gradient(180deg, #2b2f39 0 50%, #262a33 50% 100%);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05);
+    color: var(--color-accent);
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+  }
+  .cell::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 auto;
+    height: 1px;
+    background: rgb(12 13 16 / 0.7);
+  }
+  .flap-toggle {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--color-line-2);
+    border-radius: var(--radius-ui);
+    background: transparent;
+    color: var(--color-fg-2);
+    cursor: pointer;
+    flex: none;
+  }
+  .flap-toggle:hover {
+    color: var(--color-fg);
+  }
+  .flap-toggle[hidden],
+  .flap-toggle [hidden] {
+    display: none;
+  }
+
+  .hero-intro {
+    margin-top: 1.5rem;
+    max-width: 34rem;
+    font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
+    line-height: 1.55;
+    color: var(--color-fg-2);
+  }
+
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .hero-device {
+    display: flex;
+    justify-content: center;
+  }
+  @media (min-width: 1024px) {
+    .hero-device {
+      justify-content: flex-end;
+    }
+  }
+  .phone {
+    width: clamp(248px, 25vw, 318px);
+    aspect-ratio: 9 / 19;
+    padding: 10px;
+    border: 1px solid var(--color-line-2);
+    border-radius: 44px;
+    background: var(--color-sunk);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.04),
+      0 40px 80px -30px rgb(6 7 9 / 0.8);
+  }
+  .phone-screen {
+    position: relative;
+    height: 100%;
+    border-radius: 34px;
+    background: var(--color-bg);
+    border: 1px solid var(--color-line);
+    padding: 2.75rem 1.1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    overflow: hidden;
+  }
+  .phone-status {
+    position: absolute;
+    top: 12px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+  }
+  .camera {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--color-sunk);
+    border: 1px solid var(--color-line-2);
+  }
+
+  .widget {
+    padding: 0.85rem 0.9rem;
+    border-radius: 16px;
+    background: var(--color-bg-2);
+    border: 1px solid var(--color-line);
+  }
+  .widget-title {
+    margin-top: 0.35rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+  .widget-sub {
+    font-size: 0.8rem;
+    color: var(--color-fg-2);
+    line-height: 1.4;
+  }
+
+  .app-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    row-gap: 1rem;
+    column-gap: 0.25rem;
+  }
+  .app {
+    display: grid;
+    justify-items: center;
+    gap: 0.4rem;
+    text-decoration: none;
+    color: var(--color-fg-2);
+    border-radius: 10px;
+  }
+  .app-icon {
+    width: clamp(42px, 4vw, 52px);
+    height: auto;
+    transition: translate 0.3s var(--ease-out);
+  }
+  .app:hover .app-icon,
+  .app:focus-visible .app-icon {
+    translate: 0 -3px;
+  }
+  .app:hover .app-name {
+    color: var(--color-fg);
+  }
+  .app-name {
+    font-size: 0.65rem;
+    line-height: 1.2;
+    text-align: center;
+    max-width: 100%;
+    letter-spacing: -0.01em;
+  }
+
+  .widget-live {
+    color: var(--color-accent);
+  }
+  .widget-bottom {
+    margin-top: auto;
+  }
+  .widget-num {
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-weight: 500;
+  }
+  .home-pill {
+    align-self: center;
+    width: 36%;
+    height: 4px;
+    border-radius: 4px;
+    background: var(--color-line-2);
+  }
+
+  @media (max-width: 1023px) {
+    .phone {
+      width: min(300px, 82vw);
+    }
+  }
+</style>

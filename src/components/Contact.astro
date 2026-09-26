@@ -1,0 +1,362 @@
+---
+import Icon from './Icon.astro';
+import { contact, profile, socials } from '../data/portfolio';
+
+const netlify = contact.formProvider === 'netlify';
+const formAttrs = netlify
+  ? { method: 'post', action: '/', 'data-netlify': 'true', 'netlify-honeypot': 'bot-field' }
+  : { method: 'post', action: `mailto:${profile.email}`, enctype: 'text/plain' };
+---
+
+<section id="contact" class="section contact-section" aria-labelledby="contact-title">
+  <div class="container-x contact">
+    <div class="contact-intro">
+      <h2 id="contact-title" class="h-section" data-reveal>{contact.heading}</h2>
+      <p class="lead contact-body" data-reveal>{contact.body}</p>
+
+      <div class="email-row" data-reveal>
+        <a href={`mailto:${profile.email}`} class="email link">{profile.email}</a>
+        <button type="button" class="copy-btn" data-copy={profile.email} data-copy-label="Email address copied">
+          <Icon name="copy" size="16" />
+          <span data-copy-text>Copy</span>
+          <span class="sr-only">email address</span>
+        </button>
+      </div>
+
+      <dl class="facts" data-reveal>
+        <div class="fact">
+          <dt class="meta">Based in</dt>
+          <dd><Icon name="map-pin" size="16" class="fact-icon" /> {profile.location}</dd>
+        </div>
+        <div class="fact">
+          <dt class="meta">Availability</dt>
+          <dd><span class="status" data-tone="live">{profile.availability}</span></dd>
+        </div>
+      </dl>
+
+      <ul class="socials" data-reveal>
+        {
+          socials.map((s) => (
+            <li>
+              <a href={s.href} target="_blank" rel="noopener noreferrer" class="social">
+                <Icon name={s.kind} size="20" />
+                <span class="social-text">
+                  <span class="social-label">{s.label}</span>
+                  <span class="meta">{s.handle}</span>
+                </span>
+                <Icon name="arrow-up-right" size="14" class="social-arrow" />
+                <span class="sr-only">(opens in a new tab)</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <form
+      class="form"
+      name={contact.formName}
+      data-contact-form
+      data-provider={contact.formProvider}
+      data-email={profile.email}
+      novalidate
+      {...formAttrs}
+      data-reveal
+    >
+      {netlify && <input type="hidden" name="form-name" value={contact.formName} />}
+      <p class="honeypot" aria-hidden="true">
+        <label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+      </p>
+
+      <fieldset class="field">
+        <legend class="label">What is it about?</legend>
+        <div class="topics">
+          {
+            contact.topics.map((t, i) => (
+              <label class="topic">
+                <input type="radio" name="topic" value={t} checked={i === 0} />
+                <span>{t}</span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+
+      <div class="field">
+        <label class="label" for="cf-name">Your name</label>
+        <input class="input" id="cf-name" name="name" type="text" autocomplete="name" required aria-describedby="cf-name-err" />
+        <p class="error" id="cf-name-err" data-error-for="name" hidden>Please tell me your name.</p>
+      </div>
+
+      <div class="field">
+        <label class="label" for="cf-email">Your email</label>
+        <input
+          class="input"
+          id="cf-email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          spellcheck="false"
+          inputmode="email"
+          required
+          aria-describedby="cf-email-err"
+        />
+        <p class="error" id="cf-email-err" data-error-for="email" hidden>Please enter a valid email address.</p>
+      </div>
+
+      <div class="field">
+        <label class="label" for="cf-message">Message</label>
+        <textarea
+          class="input textarea"
+          id="cf-message"
+          name="message"
+          rows="5"
+          required
+          minlength="10"
+          aria-describedby="cf-message-hint cf-message-err"></textarea>
+        <p class="hint" id="cf-message-hint">
+          {netlify ? 'Sent straight to my inbox.' :'Sending opens your email app with this message ready to go.'}
+        </p>
+        <p class="error" id="cf-message-err" data-error-for="message" hidden>A few more words, please (10 characters or more).</p>
+      </div>
+
+      <div class="form-foot">
+        <button type="submit" class="btn btn-primary" data-submit>
+          <span data-submit-label>{netlify ? 'Send Message' : 'Compose Email'}</span>
+          <Icon name="arrow-right" />
+        </button>
+      </div>
+
+      <div class="form-status" role="status" aria-live="polite" data-form-status></div>
+    </form>
+  </div>
+</section>
+
+<style>
+  .contact-section {
+    padding-bottom: clamp(5rem, 10vw, 8rem);
+  }
+  .contact {
+    display: grid;
+    gap: 3.5rem;
+  }
+  .contact-body {
+    margin-top: 1.25rem;
+    max-width: 30ch;
+    color: var(--color-fg-2);
+  }
+
+  .email-row {
+    margin-top: 2.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+  }
+  .email {
+    font-size: clamp(1.15rem, 2.6vw, 1.9rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    word-break: break-all;
+    background-size: 100% 1px;
+  }
+  .copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    height: 2.25rem;
+    padding-inline: 0.75rem;
+    border: 1px solid var(--color-line-2);
+    border-radius: var(--radius-ui);
+    background: transparent;
+    color: var(--color-fg-2);
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  .copy-btn:hover {
+    color: var(--color-fg);
+    border-color: var(--color-fg-3);
+  }
+
+  .facts {
+    margin-top: 2.5rem;
+    display: grid;
+    gap: 1.25rem;
+  }
+  .fact dd {
+    margin: 0.35rem 0 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .fact :global(.fact-icon) {
+    color: var(--color-fg-3);
+  }
+
+  .socials {
+    margin-top: 2.5rem;
+    display: grid;
+    border-top: 1px solid var(--color-line);
+  }
+  .social {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--color-line);
+    color: var(--color-fg);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .social-text {
+    display: grid;
+  }
+  .social-label {
+    font-weight: 500;
+  }
+  .social :global(.social-arrow) {
+    color: var(--color-fg-3);
+    transition: translate 0.3s var(--ease-out);
+  }
+  .social:hover {
+    color: var(--color-accent);
+  }
+  .social:hover :global(.social-arrow) {
+    translate: 2px -2px;
+    color: var(--color-accent);
+  }
+
+  .form {
+    display: grid;
+    gap: 1.5rem;
+    align-content: start;
+    padding: clamp(1.25rem, 3vw, 2.25rem);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-ui);
+    background: var(--color-bg-2);
+  }
+  .honeypot {
+    position: absolute;
+    left: -9999px;
+  }
+  .field {
+    display: grid;
+    gap: 0.5rem;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+  }
+  .label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-fg);
+    padding: 0;
+  }
+  .input {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--color-control);
+    border-radius: var(--radius-ui);
+    background: var(--color-sunk);
+    color: var(--color-fg);
+    font: inherit;
+    font-size: 1rem;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+  .input:hover {
+    border-color: var(--color-fg-3);
+  }
+  .input:focus-visible {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgb(252 213 53 / 0.25);
+  }
+  .input[aria-invalid='true'] {
+    border-color: var(--color-error);
+  }
+  .textarea {
+    resize: vertical;
+    min-height: 8.5rem;
+  }
+  .hint {
+    font-size: 0.8125rem;
+    color: var(--color-fg-3);
+  }
+  .error {
+    font-size: 0.8125rem;
+    color: var(--color-error);
+  }
+  .error[hidden] {
+    display: none;
+  }
+
+  .topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  .topic {
+    position: relative;
+  }
+  .topic input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+  .topic span {
+    display: inline-flex;
+    align-items: center;
+    height: 2.5rem;
+    padding-inline: 0.9rem;
+    border: 1px solid var(--color-control);
+    border-radius: var(--radius-ui);
+    font-size: 0.9rem;
+    color: var(--color-fg-2);
+    transition:
+      border-color 0.2s,
+      color 0.2s,
+      background-color 0.2s;
+  }
+  .topic input:checked + span {
+    border-color: var(--color-accent);
+    color: var(--color-fg);
+    background: rgb(252 213 53 / 0.08);
+  }
+  .topic input:focus-visible + span {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .form-status:empty {
+    display: none;
+  }
+  .form-status {
+    padding: 1rem;
+    border-radius: var(--radius-ui);
+    border: 1px solid var(--color-line-2);
+    font-size: 0.925rem;
+    color: var(--color-fg);
+  }
+  .form-status[data-tone='ok'] {
+    border-color: var(--color-ok);
+  }
+  .form-status[data-tone='error'] {
+    border-color: var(--color-error);
+  }
+
+  @media (min-width: 1024px) {
+    .contact {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+      gap: 5rem;
+    }
+  }
+</style>

@@ -1,0 +1,99 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { profile } from '../data/portfolio';
+
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Page not found', path: '/404' },
+];
+---
+
+<Base
+  title={`Page not found | ${profile.name}`}
+  description={`This page doesn’t exist. Everything ${profile.name} has built is on the home page.`}
+  noindex
+  bare
+  breadcrumbs={crumbs}
+>
+  <main class="nf container-x">
+    <nav aria-label="Breadcrumb" class="crumbs mono">
+      <ol>
+        <li><a href="/" class="link">{crumbs[0].name}</a></li>
+        <li aria-current="page">{crumbs[1].name}</li>
+      </ol>
+    </nav>
+    <p class="nf-code mono" aria-hidden="true">
+      {'404'.split('').map((c) => <span class="nf-cell">{c}</span>)}
+    </p>
+    <h1 class="nf-title">This page doesn’t exist.</h1>
+    <p class="nf-text">The link may be old, or the address may have a typo. Everything I’ve built is on the home page.</p>
+    <a href="/" class="btn btn-primary">
+      <Icon name="arrow-up" class="nf-arrow" /> Back to the Home Page
+    </a>
+  </main>
+</Base>
+
+<style>
+  .nf {
+    min-height: 100dvh;
+    display: grid;
+    align-content: center;
+    justify-items: start;
+    gap: 1.25rem;
+    padding-block: 4rem;
+  }
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--color-fg-3);
+    list-style: none;
+    padding: 0;
+  }
+  .crumbs li + li::before {
+    content: '/';
+    margin-right: 0.5rem;
+    color: var(--color-line-2);
+  }
+  .crumbs [aria-current] {
+    color: var(--color-fg-2);
+  }
+  .nf-code {
+    display: flex;
+    gap: 3px;
+    font-size: clamp(3rem, 10vw, 6rem);
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+  .nf-cell {
+    display: grid;
+    place-items: center;
+    width: 0.9em;
+    height: 1.4em;
+    border-radius: 3px;
+    background: var(--color-bg-3);
+    color: var(--color-accent);
+    position: relative;
+  }
+  .nf-cell::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 auto;
+    height: 1px;
+    background: rgb(12 13 16 / 0.7);
+  }
+  .nf-title {
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    letter-spacing: -0.04em;
+  }
+  .nf-text {
+    color: var(--color-fg-2);
+    max-width: 46ch;
+    margin-bottom: 1rem;
+  }
+  .nf :global(.nf-arrow) {
+    rotate: -90deg;
+  }
+</style>

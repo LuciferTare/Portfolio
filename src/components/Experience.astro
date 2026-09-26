@@ -1,0 +1,178 @@
+---
+import { experience } from '../data/portfolio';
+---
+
+<section id="experience" class="section" aria-labelledby="experience-title">
+  <div class="container-x">
+    <h2 id="experience-title" class="h-section" data-reveal>Work Experience</h2>
+
+    {
+      experience.map((job, i) => (
+        <article class="job" aria-labelledby={`job-${i}`}>
+          <header class="job-meta">
+            <p class="meta job-dates" data-reveal>
+              <time>{job.start}</time> - <time>{job.end}</time>
+            </p>
+            <h3 class="job-role" id={`job-${i}`} data-reveal>
+              {job.role}
+            </h3>
+            <p class="job-company" data-reveal>{job.company}</p>
+            <p class="prose-body job-summary" data-reveal>
+              {job.summary}
+            </p>
+            <ul class="job-stack" aria-label="Technologies" data-reveal>
+              {job.stack.map((t) => (
+                <li class="chip">{t}</li>
+              ))}
+            </ul>
+          </header>
+
+          <div class="job-body">
+            <dl class="readouts">
+              {job.readouts.map((r) => (
+                <div class="readout" data-reveal>
+                  <dt class="sr-only">{r.label}</dt>
+                  <dd class="readout-value mono" aria-hidden="true">
+                    <span data-count={r.value}>{r.value}</span>
+                    {r.suffix && <span class="readout-suffix">{r.suffix}</span>}
+                  </dd>
+                  <dd class="readout-label">
+                    <span class="sr-only">
+                      {r.value}
+                      {r.suffix}{' '}
+                    </span>
+                    {r.label}
+                  </dd>
+                  <dd class="readout-context">{r.context}</dd>
+                </div>
+              ))}
+            </dl>
+
+            <ul class="highlights">
+              {job.highlights.map((h) => (
+                <li data-reveal>{h}</li>
+              ))}
+            </ul>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .job {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    display: grid;
+    gap: 3rem;
+  }
+  .job-dates {
+    color: var(--color-accent);
+  }
+  .job-role {
+    margin-top: 0.9rem;
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    letter-spacing: -0.03em;
+  }
+  .job-company {
+    margin-top: 0.35rem;
+    color: var(--color-fg-2);
+  }
+  .job-summary {
+    margin-top: 1.25rem;
+  }
+  .job-stack {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .readouts {
+    display: grid;
+    border-top: 1px solid var(--color-line);
+    border-bottom: 1px solid var(--color-line);
+  }
+  .readout {
+    padding: 1.5rem 0;
+    display: grid;
+    align-content: start;
+  }
+  .readout + .readout {
+    border-top: 1px solid var(--color-line);
+  }
+  .readout dd {
+    margin: 0;
+  }
+  .readout-value {
+    font-size: clamp(3rem, 6vw, 4.5rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    color: var(--color-accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .readout-suffix {
+    font-size: 0.55em;
+    margin-left: 0.05em;
+    letter-spacing: 0;
+  }
+  .readout-label {
+    margin-top: 0.75rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .readout-context {
+    margin-top: 0.25rem;
+    font-size: 0.925rem;
+    color: var(--color-fg-2);
+    line-height: 1.55;
+  }
+
+  .highlights {
+    margin-top: 2.5rem;
+    display: grid;
+    gap: 1.1rem;
+    max-width: 68ch;
+  }
+  .highlights li {
+    position: relative;
+    padding-left: 1.5rem;
+    color: var(--color-fg-2);
+  }
+  .highlights li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.8em;
+    width: 0.6rem;
+    height: 1px;
+    background: var(--color-fg-3);
+  }
+
+  @media (min-width: 768px) {
+    .readouts {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .readout {
+      padding: 1.75rem 1.5rem 1.75rem 0;
+    }
+    .readout + .readout {
+      border-top: 0;
+      border-left: 1px solid var(--color-line);
+      padding-left: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .job {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+      gap: 4rem;
+    }
+    .job-meta {
+      position: sticky;
+      top: calc(var(--nav-h) + 2rem);
+      align-self: start;
+    }
+  }
+</style>

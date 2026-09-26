@@ -1,0 +1,124 @@
+---
+import Icon from './Icon.astro';
+import { nav, profile, socials } from '../data/portfolio';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container-x">
+    <div class="footer-top">
+      <div>
+        <p class="footer-name">{profile.name}</p>
+        <p class="footer-line">Flutter developer in {profile.location}.</p>
+      </div>
+      <nav aria-label="Footer">
+        <ul class="footer-nav">
+          {nav.map((n) => (
+            <li>
+              <a href={n.href} class="link">{n.label}</a>
+            </li>
+          ))}
+          <li>
+            <a href={profile.cv.href} target="_blank" rel="noopener" class="link">
+              CV<span class="sr-only"> (PDF, opens in a new tab)</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="meta">&copy; {year} {profile.fullName}. Built with Astro and Anime.js.</p>
+      <div class="footer-right">
+        <ul class="footer-socials">
+          {socials.map((s) => (
+            <li>
+              <a href={s.href} target="_blank" rel="noopener noreferrer" class="footer-social">
+                <Icon name={s.kind} size="18" />
+                <span class="sr-only">{s.label} (opens in a new tab)</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <a href="#top" class="footer-top-link">
+          <Icon name="arrow-up" size="16" />
+          <span>Back to top</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--color-line);
+    padding-block: 3.5rem 2rem;
+  }
+  .footer-top {
+    display: grid;
+    gap: 2rem;
+  }
+  .footer-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+  }
+  .footer-line {
+    margin-top: 0.25rem;
+    color: var(--color-fg-2);
+  }
+  .footer-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+  }
+  .footer-bottom {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-line);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .footer-right {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .footer-socials {
+    display: flex;
+    gap: 0.25rem;
+  }
+  .footer-social {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--color-fg-2);
+    border-radius: var(--radius-ui);
+  }
+  .footer-social:hover {
+    color: var(--color-accent);
+  }
+  .footer-top-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.875rem;
+    color: var(--color-fg-2);
+    text-decoration: none;
+  }
+  .footer-top-link:hover {
+    color: var(--color-fg);
+  }
+  @media (min-width: 768px) {
+    .footer-top {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+  }
+</style>

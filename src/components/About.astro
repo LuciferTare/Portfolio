@@ -1,0 +1,174 @@
+---
+import { Picture } from 'astro:assets';
+import { about, profile } from '../data/portfolio';
+---
+
+<section id="about" class="section" aria-labelledby="about-title">
+  <div class="container-x about">
+    <h2 id="about-title" class="h-section about-title" data-reveal>About Me</h2>
+
+    <div class="about-main">
+    <div class="about-text">
+      <p class="lead" data-reveal>{about.lead}</p>
+      {
+        about.paragraphs.map((p) => (
+          <p class="prose-body about-p" data-reveal>
+            {p}
+          </p>
+        ))
+      }
+      <p class="status about-status" data-tone="live" data-reveal>{profile.availability}</p>
+    </div>
+
+    <figure class="portrait" data-reveal="image">
+      <Picture
+        src={profile.portrait}
+        alt={profile.portraitAlt}
+        formats={['avif', 'webp']}
+        width={800}
+        widths={[360, 560, 800]}
+        sizes="(min-width: 1024px) 30vw, (min-width: 640px) 50vw, 90vw"
+        class="portrait-img"
+      />
+    </figure>
+    </div>
+
+    <div class="skills" aria-labelledby="skills-title">
+      <h3 id="skills-title" class="skills-title" data-reveal>What I Work With</h3>
+      <dl class="skills-grid">
+        {
+          about.skills.map((s) => (
+            <div class="skill" data-reveal>
+              <dt class="meta">{s.group}</dt>
+              <dd>
+                <ul>
+                  {s.items.map((i) => (
+                    <li>{i}</li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+      <p class="meta langs" data-reveal>Languages: {about.languages.join(', ')}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about {
+    display: grid;
+    gap: 2.5rem;
+  }
+  .about-main {
+    display: grid;
+    gap: 2.5rem;
+  }
+  .about-text {
+    display: grid;
+    gap: 1.25rem;
+  }
+  .about-p:first-of-type {
+    margin-top: 0.75rem;
+  }
+  .about-status {
+    margin-top: 0.75rem;
+  }
+
+  .portrait {
+    position: relative;
+    margin: 0;
+    border-radius: var(--radius-ui);
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    background: var(--color-bg-2);
+    max-width: 440px;
+  }
+  .portrait :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.62) contrast(1.04) brightness(0.9);
+  }
+  .portrait::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06);
+    border-radius: inherit;
+    background: linear-gradient(180deg, transparent 55%, rgb(24 26 32 / 0.55));
+  }
+
+  .skills {
+    border-top: 1px solid var(--color-line);
+    padding-top: 2.5rem;
+    margin-top: 1rem;
+  }
+  .skills-title {
+    font-size: 1.25rem;
+    letter-spacing: -0.02em;
+  }
+  .skills-grid {
+    margin-top: 1.75rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem 1.5rem;
+  }
+  .skill dd {
+    margin: 0.65rem 0 0;
+  }
+  .skill li {
+    font-size: 0.975rem;
+    line-height: 1.75;
+    color: var(--color-fg);
+  }
+  .langs {
+    margin-top: 2rem;
+  }
+
+  @media (min-width: 768px) {
+    .skills-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .about {
+      gap: 0;
+    }
+    .about-title {
+      margin-bottom: 3rem;
+    }
+    .about-main {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: 2rem;
+      row-gap: 0;
+      padding-bottom: 2rem;
+    }
+    .about-main::after {
+      content: '';
+      grid-column: 1 / -1;
+      height: 2rem;
+    }
+    .about-text {
+      grid-column: 1 / span 7;
+      align-content: start;
+    }
+    .portrait {
+      grid-column: 9 / span 4;
+      grid-row: 1;
+      align-self: start;
+      position: sticky;
+      top: calc(var(--nav-h) + 2rem);
+      max-width: none;
+    }
+    .skills {
+      margin-top: 0;
+    }
+    .skills-grid {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+  }
+</style>

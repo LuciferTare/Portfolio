@@ -1,0 +1,20 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "astro: dev",
+            "type": "npm",
+            "script": "dev",
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "astro",
+                "pattern": { "regexp": "^x^" },
+                "background": {
+                    "activesBegin": true,
+                    "beginsPattern": "astro",
+                    "endsPattern": "(ready in|Local\\s+http)"
+                }
+            }
+        }
+    ]
+}

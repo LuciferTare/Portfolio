@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome on LAN",
+            "url": "http://192.168.1.2:4321",
+            "webRoot": "${workspaceFolder}",
+            "preLaunchTask": "astro: dev"
+        }
+    ]
+}
