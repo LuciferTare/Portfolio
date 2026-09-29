@@ -314,6 +314,22 @@ html.motion:not(.motion-ready-fallback) [data-hero-word] {
   transform: translateY(105%);
 }
 
+/* CSS-driven so the LCP paragraph paints on its own timer instead of
+   waiting on the anime.js bundle to fetch, parse, and execute. */
+@keyframes hero-intro-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+html.motion:not(.motion-ready-fallback) .hero-intro {
+  animation: hero-intro-in 900ms var(--ease-out) 480ms both;
+}
+
 main:focus {
   outline: none;
 }
