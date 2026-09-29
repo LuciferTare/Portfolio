@@ -5,7 +5,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome on LAN",
-            "url": "http://192.168.1.2:4321",
+            "url": "http://localhost:4321",
             "webRoot": "${workspaceFolder}",
             "preLaunchTask": "astro: dev"
         }

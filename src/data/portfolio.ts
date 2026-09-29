@@ -284,7 +284,10 @@ export const publications: Publication[] = [
     date: 'Apr 27, 2026',
     year: 2026,
     project: 'fitfuel',
-    links: [],
+    links: [
+      { label: 'Read Paper', href: '/papers/fitfuel-paper.pdf', description: 'PDF' },
+      { label: 'Certificate', href: '/papers/fitfuel-certificate.pdf', description: 'Certificate of publication, PDF' },
+    ],
     citation:
       "Tare, S. A. (2026, April 27). Fit&Fuel: The fitness tracker [Conference presentation]. Multidisciplinary International Conference on Environmental Sustainability, Social Progress and Good Governance: India's Vision 2047 (ESSG-2047), S.D.S.M. College, Palghar, India.",
   },
@@ -299,7 +302,10 @@ export const publications: Publication[] = [
     date: 'Nov 2025',
     year: 2025,
     project: 'quantaview',
-    links: [{ label: 'Read Paper', href: '/papers/quantaview-myresearchgo-2025.pdf', description: 'PDF' }],
+    links: [
+      { label: 'Read Paper', href: '/papers/quantaview-paper.pdf', description: 'PDF' },
+      { label: 'Certificate', href: '/papers/quantaview-certificate.pdf', description: 'Certificate of publication, PDF' },
+    ],
     citation:
       'Tare, S. A., & Raut, J. T. (2025). Quantaview: The crypto analyser. MyResearchGo, 1(8). ISSN 3107-3816.',
   },
@@ -314,7 +320,10 @@ export const publications: Publication[] = [
     date: 'Oct 2025',
     year: 2025,
     // project: 'towzer',
-    links: [{ label: 'Certificate', href: '/papers/towzer-certificate.pdf', description: 'Certificate of publication, PDF' }],
+    links: [
+      { label: 'Read Paper', href: '/papers/towzer-paper.pdf', description: 'PDF' },
+      { label: 'Certificate', href: '/papers/towzer-certificate.pdf', description: 'Certificate of publication, PDF' },
+    ],
     citation: 'Tare, S. A. (2025). Towzer: Connecting breakdowns to solutions. MyResearchGo, 1(7). ISSN 3107-3816.',
   },
   {
@@ -330,7 +339,8 @@ export const publications: Publication[] = [
     project: 'octanet',
     links: [
       { label: 'IJIRT Article', href: 'https://ijirt.org/Article?manuscript=181711', description: 'on ijirt.org' },
-      { label: 'Read Paper', href: '/papers/fiberflow-ijirt-2025.pdf', description: 'PDF' },
+      { label: 'Read Paper', href: '/papers/fiberflow-paper.pdf', description: 'PDF' },
+      { label: 'Certificate', href: '/papers/fiberflow-certificate.pdf', description: 'Certificate of publication, PDF' },
     ],
     note: "FiberFlow is the research name for OctaNet. UGC is India's University Grants Commission, which maintains the list of approved journals.",
     citation:
@@ -350,7 +360,10 @@ export const publications: Publication[] = [
     date: 'Feb 8, 2025',
     year: 2025,
     project: 'cravecoin',
-    links: [{ label: 'Certificate', href: '/papers/cravecoin-certificate.pdf', description: 'Certificate of publication, PDF' }],
+    links: [
+      { label: 'Read Paper', href: '/papers/cravecoin-paper.pdf', description: 'PDF' },
+      { label: 'Certificate', href: '/papers/cravecoin-certificate.pdf', description: 'Certificate of publication, PDF' },
+    ],
     citation:
       'Tare, S. A. (2025, February 8). Cravecoin: The crypto tracker. In Shodh Samiksha: One Day National Level Multidisciplinary Conference proceedings. Thakur Ramnarayan College of Arts & Commerce. ISBN 978-81-985429-6-0.',
   },
@@ -384,7 +397,7 @@ export const featured: Project[] = [
     stack: ['Flutter', 'Dart', 'Google Maps', 'FCM', 'Payment gateways', 'REST APIs'],
     links: [
       { label: 'Google Play', href: 'https://play.google.com/store/apps/details?id=octanet.tech', description: 'OctaNet on Google Play' },
-      { label: 'FiberFlow Paper', href: '/papers/fiberflow-ijirt-2025.pdf', description: 'Research paper on OctaNet, PDF' },
+      { label: 'FiberFlow Paper', href: '/papers/fiberflow-paper.pdf', description: 'Research paper on OctaNet, PDF' },
     ],
     note: 'Published as FiberFlow in IJIRT, a UGC-approved journal.',
   },
@@ -404,7 +417,10 @@ export const featured: Project[] = [
       'Predictive logic for trend monitoring',
     ],
     stack: ['Flutter', 'Dart', 'Market data APIs'],
-    links: [{ label: 'Publication Certificate', href: '/papers/cravecoin-certificate.pdf', description: 'PDF' }],
+    links: [
+      { label: 'Read Paper', href: '/papers/cravecoin-paper.pdf', description: 'PDF' },
+      { label: 'Publication Certificate', href: '/papers/cravecoin-certificate.pdf', description: 'PDF' },
+    ],
     note: 'Quantaview later distilled Cravecoin into a focused analyser, and Stoxium carried the same model to stocks.',
   },
 ];
@@ -426,7 +442,10 @@ export const inProgress: Project = {
     'Dashboard-based performance monitoring',
   ],
   stack: ['Flutter', 'Dart', 'Local storage'],
-  links: [],
+  links: [
+    { label: 'Read Paper', href: '/papers/fitfuel-paper.pdf', description: 'PDF' },
+    { label: 'Certificate', href: '/papers/fitfuel-certificate.pdf', description: 'Certificate of publication, PDF' },
+  ],
   note: 'Presented at the ESSG-2047 International Conference, Apr 2026.',
 };
 
@@ -451,7 +470,10 @@ export const moreWork: Project[] = [
   //   status: 'In progress',
   //   summary: 'Connects stranded drivers with tow trucks and mechanics.',
   //   stack: ['Flutter', 'Dart'],
-  //   links: [{ label: 'Certificate', href: '/papers/towzer-certificate.pdf', description: 'Towzer publication certificate, PDF' }],
+  //   links: [
+  //     { label: 'Paper', href: '/papers/towzer-paper.pdf', description: 'Towzer paper, PDF' },
+  //     { label: 'Certificate', href: '/papers/towzer-certificate.pdf', description: 'Towzer publication certificate, PDF' },
+  //   ],
   // },
   {
     id: 'quantaview',
@@ -462,7 +484,10 @@ export const moreWork: Project[] = [
     summary:
       'Tracks 20 cryptocurrencies live through the CoinGecko API and a Binance WebSocket, scores fundamentals, market activity, and valuation, models ROI scenarios, and maps market cap as a heatmap.',
     stack: ['Flutter', 'Firebase', 'Binance WebSocket', 'CoinGecko API'],
-    links: [{ label: 'Paper', href: '/papers/quantaview-myresearchgo-2025.pdf', description: 'Quantaview paper, PDF' }],
+    links: [
+      { label: 'Paper', href: '/papers/quantaview-paper.pdf', description: 'Quantaview paper, PDF' },
+      { label: 'Certificate', href: '/papers/quantaview-certificate.pdf', description: 'Certificate of publication, PDF' },
+    ],
   },
   {
     id: 'stoxium',

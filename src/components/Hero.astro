@@ -1,19 +1,28 @@
 ---
-import { Image } from 'astro:assets';
-import Icon from './Icon.astro';
-import { profile, homeScreen, inProgress, publications } from '../data/portfolio';
+import { Image } from "astro:assets";
+import Icon from "./Icon.astro";
+import {
+  profile,
+  homeScreen,
+  inProgress,
+  publications,
+} from "../data/portfolio";
 
 const titles = [...profile.titles];
 const width = Math.max(...titles.map((t) => t.length));
-const first = titles[0].padEnd(width, ' ');
-const [firstName, ...rest] = profile.name.split(' ');
+const first = titles[0].padEnd(width, " ");
+const [firstName, ...rest] = profile.name.split(" ");
 ---
 
 <section class="hero container-x" id="top" aria-labelledby="hero-name">
   <div class="hero-copy">
     <h1 id="hero-name" class="hero-name" translate="no">
-      <span class="line" data-hero-line><span data-hero-word>{firstName}</span></span>
-      <span class="line" data-hero-line><span data-hero-word>{rest.join(' ')}</span></span>
+      <span class="line" data-hero-line
+        ><span data-hero-word>{firstName}</span></span
+      >
+      <span class="line" data-hero-line
+        ><span data-hero-word>{rest.join(" ")}</span></span
+      >
     </h1>
 
     <div class="role" data-hero>
@@ -25,9 +34,21 @@ const [firstName, ...rest] = profile.name.split(' ');
         style={`--cells:${width}`}
         aria-hidden="true"
       >
-        {first.split('').map((ch) => <span class="cell" data-cell>{ch === ' ' ? ' ' : ch}</span>)}
+        {
+          first.split("").map((ch) => (
+            <span class="cell" data-cell>
+              {ch === " " ? " " : ch}
+            </span>
+          ))
+        }
       </div>
-      <button type="button" class="flap-toggle" data-flap-toggle aria-pressed="false" hidden>
+      <button
+        type="button"
+        class="flap-toggle"
+        data-flap-toggle
+        aria-pressed="false"
+        hidden
+      >
         <span data-flap-icon="pause"><Icon name="pause" size="14" /></span>
         <span data-flap-icon="play" hidden><Icon name="play" size="14" /></span>
         <span class="sr-only" data-flap-label>Pause title animation</span>
@@ -61,7 +82,7 @@ const [firstName, ...rest] = profile.name.split(' ');
           <ul class="app-grid">
             {
               homeScreen.map((app) => {
-                const id = app.name.toLowerCase().replace(/[^a-z]/g, '');
+                const id = app.name.toLowerCase().replace(/[^a-z]/g, "");
                 return (
                   <li data-app>
                     <a href={`#project-${id}`} class="app">
@@ -85,8 +106,12 @@ const [firstName, ...rest] = profile.name.split(' ');
 
         <div class="widget widget-bottom" data-app>
           <span class="meta">Published</span>
-          <p class="widget-title"><span class="widget-num">{publications.length}</span> research papers</p>
-          <p class="widget-sub">Latest: {publications[0].title}, {publications[0].date}</p>
+          <p class="widget-title">
+            <span class="widget-num">{publications.length}</span> research papers
+          </p>
+          <p class="widget-sub">
+            Latest: {publications[0].title}, {publications[0].date}
+          </p>
         </div>
 
         <span class="home-pill" aria-hidden="true"></span>
@@ -189,7 +214,7 @@ const [firstName, ...rest] = profile.name.split(' ');
     backface-visibility: hidden;
   }
   .cell::after {
-    content: '';
+    content: "";
     position: absolute;
     inset: 50% 0 auto;
     height: 1px;
@@ -241,7 +266,7 @@ const [firstName, ...rest] = profile.name.split(' ');
   }
   .phone {
     width: clamp(248px, 25vw, 318px);
-    aspect-ratio: 9 / 19;
+    aspect-ratio: 9 / 18;
     padding: 10px;
     border: 1px solid var(--color-line-2);
     border-radius: 44px;
@@ -300,20 +325,24 @@ const [firstName, ...rest] = profile.name.split(' ');
   .app-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    row-gap: 1rem;
-    column-gap: 0.25rem;
+    row-gap: 1.5rem;
+    column-gap: 0.6rem;
   }
   .app {
     display: grid;
     justify-items: center;
+    align-content: start;
     gap: 0.4rem;
     text-decoration: none;
     color: var(--color-fg-2);
     border-radius: 10px;
   }
   .app-icon {
-    width: clamp(42px, 4vw, 52px);
-    height: auto;
+    width: clamp(34px, 3.2vw, 44px);
+    height: clamp(34px, 3.2vw, 44px);
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    flex: none;
     transition: translate 0.3s var(--ease-out);
   }
   .app:hover .app-icon,
@@ -329,6 +358,9 @@ const [firstName, ...rest] = profile.name.split(' ');
     text-align: center;
     max-width: 100%;
     letter-spacing: -0.01em;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
   }
 
   .widget-live {
@@ -352,7 +384,7 @@ const [firstName, ...rest] = profile.name.split(' ');
 
   @media (max-width: 1023px) {
     .phone {
-      width: min(300px, 82vw);
+      width: min(320px, 85vw);
     }
   }
 </style>
