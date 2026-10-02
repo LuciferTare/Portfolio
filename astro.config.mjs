@@ -7,7 +7,7 @@ export default defineConfig({
   trailingSlash: 'ignore',
   devToolbar: { enabled: false },
   server: { host: '0.0.0.0', port: 4321 },
-  build: { inlineStylesheets: 'auto' },
+  build: { inlineStylesheets: 'always' },
   vite: {
     plugins: [tailwindcss()],
     build: { sourcemap: false },

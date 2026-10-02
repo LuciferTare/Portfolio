@@ -33,16 +33,26 @@ A link with `href: ''` is hidden until you fill it in. Use a plain hyphen (`-`) 
 
 ## Replace files
 
-The originals in the project root are copied into the site by a script. Replace a root file (same name), then:
+The originals live in **`assets-src/`** and are copied into the site by a script. Replace a file there (same name), then:
 
 ```bash
 node scripts/prepare-assets.mjs   # icons, CV, paper PDFs, portrait crop
 npm run og                        # social card + PNG favicons (needs Chrome or Edge)
 ```
 
-- **Higher-resolution icons:** overwrite `octanet.png` etc. in the root, or drop them straight into `src/assets/icons/` with the same names. They are resized automatically.
-- **New paper PDF:** put it in `public/papers/` and add a link to that publication.
+```
+assets-src/
+  icons/          project logo PNGs -> src/assets/icons/
+  certificates/   research paper + certificate PDFs, one pair per project -> public/papers/
+  resume/         master resume PDF -> public/cv/
+  portrait/       source photo, cropped into src/assets/portrait.jpg
+  videos/         raw project demo footage (not copied by the script)
+```
+
+- **Higher-resolution icons:** overwrite the file in `assets-src/icons/`, or drop it straight into `src/assets/icons/` with the same name. They are resized automatically.
+- **New paper or certificate PDF:** put the pair in `assets-src/certificates/` as `<Name> Paper.pdf` / `<Name> Certificate.pdf`, add the copy mapping in `scripts/prepare-assets.mjs`, then add both links to that publication.
 - **Project screenshots (later):** put them in `src/assets/`, import them in `portfolio.ts` like the icons, and render them with `<Image>` in `src/components/Projects.astro`.
+- **Project videos:** raw footage lives in `assets-src/videos/`; a rendered/trimmed version meant for the site goes in `public/videos/` and is referenced directly from a component.
 
 ## Contact form
 
@@ -65,4 +75,5 @@ src/scripts/motion.ts     every animation, one Anime.js scope, reduced-motion aw
 src/scripts/ui.ts         nav state, mobile menu, copy buttons, form
 src/styles/global.css     design tokens (colours, type, radius) and primitives
 scripts/                  asset copy + social image generation
+assets-src/               raw source files (icons, certificates, resume, portrait, videos)
 ```
