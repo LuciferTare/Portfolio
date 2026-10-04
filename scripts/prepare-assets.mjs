@@ -14,7 +14,7 @@ const copies = [
   ['assets-src/icons/stoxium.png', 'src/assets/icons/stoxium.png'],
   ['assets-src/icons/powergauge.png', 'src/assets/icons/powergauge.png'],
   ['assets-src/icons/towzer.png', 'src/assets/icons/towzer.png'],
-  ['assets-src/resume/Sushant_Tare_Master_Resume.pdf', 'public/cv/Sushant_Tare_CV.pdf'],
+  ['assets-src/resume/Sushant_Tare_CV.pdf', 'public/cv/Sushant_Tare_CV.pdf'],
   ['assets-src/certificates/Cravecoin Paper.pdf', 'public/papers/cravecoin-paper.pdf'],
   ['assets-src/certificates/Cravecoin Certificate.pdf', 'public/papers/cravecoin-certificate.pdf'],
   ['assets-src/certificates/FiberFlow Paper.pdf', 'public/papers/fiberflow-paper.pdf'],

@@ -36,7 +36,7 @@ export const handler = async (event: SubmissionEvent) => {
       text: `Hi ${firstName},\n\nThanks for getting in touch. Your message reached me, and I'll reply to this address soon.\n\nYour message:\n\n${message}\n\nSushant Tare\nFlutter Developer\nhttps://sushanttare.netlify.app`,
       html: layout(
         `<p style="margin:0 0 16px">Hi ${esc(firstName)},</p>
-         <p style="margin:0 0 16px">Thanks for getting in touch. Your message reached me, and I’ll reply to this address soon.</p>
+         <p style="margin:0 0 16px">Thanks for getting in touch. Your message reached me, and I'll reply to this address soon.</p>
          <p style="margin:24px 0 8px;color:#8a909b;font-size:13px">Your message</p>
          <div style="border-left:3px solid #fcd535;padding:4px 0 4px 16px;color:#444">${paragraphs(message)}</div>
          <p style="margin:24px 0 0">Sushant Tare<br><span style="color:#8a909b">Flutter Developer</span><br>

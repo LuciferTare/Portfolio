@@ -1,100 +1,134 @@
 ---
-import Icon from './Icon.astro';
-import { publications, recognition } from '../data/portfolio';
+import Icon from "./Icon.astro";
+import { publications } from "../data/portfolio";
 
 const me = /Tare/;
 const projectAnchor: Record<string, string> = {
-  octanet: 'OctaNet',
-  cravecoin: 'Cravecoin',
-  quantaview: 'Quantaview',
-  towzer: 'Towzer',
-  fitfuel: 'Fit&Fuel',
+  octanet: "OctaNet",
+  cravecoin: "Cravecoin",
+  quantaview: "Quantaview",
+  towzer: "Towzer",
+  fitfuel: "Fit&Fuel",
 };
 ---
 
 <section id="research" class="section" aria-labelledby="research-title">
   <div class="container-x">
-    <h2 id="research-title" class="h-section" data-reveal>Published Papers</h2>
+    <h2 id="research-title" class="h-section" data-reveal>Research</h2>
     <p class="prose-body research-intro" data-reveal>
-      I’ve published 5 papers, each about an app I’ve worked on, from the problem it solves to how it’s built.
+      I've published 5 papers, each about an app I've worked on, from the
+      problem it solves to how it's built.
     </p>
-
-    <aside class="award" aria-labelledby="award-title" data-reveal>
-      <div class="award-figure mono" aria-hidden="true">
-        <span class="award-n" data-count={recognition.finalists} data-count-from="999">{recognition.finalists}</span>
-        <span class="award-of">of ~{recognition.entries.toLocaleString('en-IN')}</span>
-      </div>
-      <div class="award-body">
-        <p class="meta">{recognition.date}</p>
-        <h3 id="award-title" class="award-title">{recognition.title}</h3>
-        <p class="award-text">{recognition.body}</p>
-        <a href="#project-cravecoin" class="link link-rest award-link">See Cravecoin Project</a>
-      </div>
-    </aside>
 
     <ol class="pubs" reversed>
       {
-        publications.map((p) => (
-          <li class="pub" data-reveal>
-            <p class="pub-year mono">{p.year}</p>
-            <article class="pub-main" aria-labelledby={`pub-${p.id}`}>
-              <p class="meta pub-kind">{p.kind}</p>
-              <h3 class="pub-title" id={`pub-${p.id}`}>
-                <cite>
-                  {p.title}
-                  {p.subtitle && <span class="pub-sub">: {p.subtitle}</span>}
-                </cite>
-              </h3>
-              <p class="pub-authors">
-                {p.authors.map((a, i) => (
-                  <>
-                    {i > 0 && (i === p.authors.length - 1 ? ' and ' : ', ')}
-                    {me.test(a) ? <strong>{a}</strong> : a}
-                  </>
-                ))}
-                {p.authorsNote && <span class="pub-authors-note">, {p.authorsNote}</span>}
-              </p>
-              <p class="pub-venue">
-                <em>{p.venue}</em>
-              </p>
-              <p class="meta pub-details">
-                {[...p.details, p.date].join('  /  ')}
-              </p>
-              {p.note && <p class="pub-note">{p.note}</p>}
+        publications.map((p) => {
+          const paper = p.links.find((l) => l.label.includes("Paper"));
+          const extra = p.links.filter((l) => l !== paper);
+          const rel = (href: string) =>
+            href.startsWith("http") ? "noopener noreferrer" : "noopener";
+          return (
+            <li class="pub" data-reveal>
+              <article class="pub-main" aria-labelledby={`pub-${p.id}`}>
+                <h3 class="pub-title" id={`pub-${p.id}`}>
+                  <cite>
+                    {p.title}
+                    {p.subtitle && <span class="pub-sub">: {p.subtitle}</span>}
+                  </cite>
+                </h3>
+                <p class="pub-venue">
+                  <em>{p.venue}</em>,{" "}
+                  <span class="mono pub-year">{p.year}</span>
+                </p>
+                {p.context && <p class="pub-context">{p.context}</p>}
 
-              <div class="pub-actions">
-                {p.links.map((l) => {
-                  const external = l.href.startsWith('http');
-                  return (
+                <div class="pub-actions">
+                  {paper && (
                     <a
-                      href={l.href}
+                      href={paper.href}
                       class="pub-link"
                       target="_blank"
-                      rel={external ? 'noopener noreferrer' : 'noopener'}
+                      rel={rel(paper.href)}
                     >
-                      <Icon name={external ? 'arrow-up-right' : 'pdf'} size="16" />
-                      {l.label}
+                      <Icon name="pdf" size="16" />
+                      Paper
                       <span class="sr-only">
-                        , {p.title}
-                        {l.description ? `, ${l.description}` : ''} (opens in a new tab)
+                        , {p.title}, PDF (opens in a new tab)
                       </span>
                     </a>
-                  );
-                })}
-                <button type="button" class="pub-link" data-copy={p.citation} data-copy-label="Citation copied">
-                  <Icon name="quotes" size="16" />
-                  <span data-copy-text>Copy Citation</span>
-                  <span class="sr-only">for {p.title}</span>
-                </button>
-                {p.project && (
-                  <a href={`#project-${p.project}`} class="pub-link pub-project">
-                    Project: {projectAnchor[p.project]}
-                  </a>
-                )}
-              </div>
-            </article>
-          </li>
-        ))
+                  )}
+                  <button
+                    type="button"
+                    class="pub-toggle"
+                    data-disclosure
+                    aria-expanded="false"
+                    aria-controls={`pub-${p.id}-details`}
+                  >
+                    Details<span class="sr-only"> for {p.title}</span>
+                    <Icon name="arrow-down" size="14" />
+                  </button>
+                </div>
+
+                <div class="pub-panel" id={`pub-${p.id}-details`} hidden>
+                  <p class="meta">{p.kind}</p>
+                  <p class="pub-authors">
+                    {p.authors.map((a, i) => (
+                      <>
+                        {i > 0 && (i === p.authors.length - 1 ? " and " : ", ")}
+                        {me.test(a) ? <strong>{a}</strong> : a}
+                      </>
+                    ))}
+                  </p>
+                  <p class="meta pub-details">
+                    {[...p.details, p.date].join("  /  ")}
+                  </p>
+                  {p.note && <p class="pub-note">{p.note}</p>}
+                  <div class="pub-panel-actions">
+                    {extra.map((l) => (
+                      <a
+                        href={l.href}
+                        class="pub-link"
+                        target="_blank"
+                        rel={rel(l.href)}
+                      >
+                        <Icon
+                          name={
+                            l.href.startsWith("http") ? "arrow-up-right" : "pdf"
+                          }
+                          size="16"
+                        />
+                        {l.label}
+                        <span class="sr-only">
+                          , {p.title}
+                          {l.description ? `, ${l.description}` : ""} (opens in
+                          a new tab)
+                        </span>
+                      </a>
+                    ))}
+                    <button
+                      type="button"
+                      class="pub-link"
+                      data-copy={p.citation}
+                      data-copy-label="Citation copied"
+                    >
+                      <Icon name="quotes" size="16" />
+                      <span data-copy-text>Copy Citation</span>
+                      <span class="sr-only">for {p.title}</span>
+                    </button>
+                    {p.project && (
+                      <a
+                        href={`#project-${p.project}`}
+                        class="pub-link pub-project"
+                      >
+                        Project: {projectAnchor[p.project]}
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </article>
+            </li>
+          );
+        })
       }
     </ol>
     <p class="sr-only" aria-live="polite" data-copy-status></p>
@@ -106,71 +140,19 @@ const projectAnchor: Record<string, string> = {
     margin-top: 1.25rem;
   }
 
-  .award {
-    margin-top: clamp(2.5rem, 5vw, 3.5rem);
-    display: grid;
-    gap: 1.5rem;
-    padding: clamp(1.5rem, 3vw, 2.5rem);
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-ui);
-    background:
-      linear-gradient(90deg, rgb(252 213 53 / 0.07), transparent 55%),
-      var(--color-bg-2);
-  }
-  .award-figure {
-    display: flex;
-    align-items: baseline;
-    gap: 0.6rem;
-    flex-wrap: wrap;
-  }
-  .award-n {
-    font-size: clamp(4rem, 10vw, 7rem);
-    font-weight: 500;
-    line-height: 0.9;
-    letter-spacing: -0.06em;
-    color: var(--color-accent);
-    font-variant-numeric: tabular-nums;
-  }
-  .award-of {
-    font-size: clamp(1rem, 2vw, 1.35rem);
-    color: var(--color-fg-2);
-  }
-  .award-title {
-    margin-top: 0.4rem;
-    font-size: clamp(1.35rem, 2.4vw, 1.75rem);
-    letter-spacing: -0.03em;
-  }
-  .award-text {
-    margin-top: 0.6rem;
-    color: var(--color-fg-2);
-    max-width: 56ch;
-  }
-  .award-link {
-    display: inline-block;
-    margin-top: 1rem;
-    font-size: 0.925rem;
-  }
-
   .pubs {
-    margin-top: clamp(3rem, 6vw, 4.5rem);
+    margin-top: clamp(2rem, 4vw, 3rem);
     list-style: none;
     display: grid;
   }
   .pub {
-    display: grid;
-    gap: 0.75rem;
-    padding: 2rem 0;
+    padding: 1.25rem 0;
     border-top: 1px solid var(--color-line);
   }
-  .pub-year {
-    font-size: 0.9rem;
-    color: var(--color-fg-3);
-  }
   .pub-title {
-    margin-top: 0.5rem;
-    font-size: clamp(1.35rem, 2.5vw, 1.85rem);
-    letter-spacing: -0.03em;
-    line-height: 1.15;
+    font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+    letter-spacing: -0.02em;
+    line-height: 1.25;
   }
   .pub-title cite {
     font-style: normal;
@@ -179,35 +161,28 @@ const projectAnchor: Record<string, string> = {
     color: var(--color-fg-2);
     font-weight: 500;
   }
-  .pub-authors {
-    margin-top: 0.75rem;
-    color: var(--color-fg-2);
-  }
-  .pub-authors strong {
-    color: var(--color-fg);
-    font-weight: 600;
-  }
   .pub-venue {
-    margin-top: 0.15rem;
-    color: var(--color-fg-2);
-  }
-  .pub-details {
-    margin-top: 0.6rem;
-    white-space: pre-wrap;
-  }
-  .pub-note {
-    margin-top: 0.9rem;
-    padding-left: 0.9rem;
-    border-left: 2px solid var(--color-accent);
+    margin-top: 0.3rem;
     font-size: 0.925rem;
     color: var(--color-fg-2);
-    max-width: 62ch;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .pub-year {
+    color: var(--color-fg-3);
+  }
+  .pub-context {
+    margin-top: 0.3rem;
+    font-size: 0.925rem;
   }
   .pub-actions {
-    margin-top: 1.25rem;
+    margin-top: 0.75rem;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    align-items: center;
+    gap: 0.5rem 1rem;
   }
   .pub-link {
     display: inline-flex;
@@ -231,24 +206,66 @@ const projectAnchor: Record<string, string> = {
     border-color: var(--color-accent);
     color: var(--color-accent);
   }
+  .pub-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 2.25rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-fg-2);
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  .pub-toggle:hover {
+    color: var(--color-accent);
+  }
+  .pub-toggle :global(svg) {
+    transition: transform 0.2s;
+  }
+  .pub-toggle[aria-expanded="true"] :global(svg) {
+    transform: rotate(180deg);
+  }
+  .pub-panel {
+    margin-top: 1rem;
+    padding: 1rem 0 0.25rem 1rem;
+    border-left: 1px solid var(--color-line-2);
+  }
+  .pub-authors {
+    margin-top: 0.4rem;
+    font-size: 0.925rem;
+    color: var(--color-fg-2);
+  }
+  .pub-authors strong {
+    color: var(--color-fg);
+    font-weight: 600;
+  }
+  .pub-details {
+    margin-top: 0.4rem;
+    white-space: pre-wrap;
+  }
+  .pub-note {
+    margin-top: 0.75rem;
+    font-size: 0.925rem;
+    color: var(--color-fg-2);
+    max-width: 62ch;
+  }
+  .pub-panel-actions {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
   .pub-project {
     border-style: dashed;
     color: var(--color-fg-2);
   }
 
-  @media (min-width: 768px) {
-    .award {
-      grid-template-columns: auto minmax(0, 1fr);
-      align-items: center;
-      gap: 3rem;
-    }
-    .pub {
-      grid-template-columns: 7rem minmax(0, 1fr);
-      gap: 2rem;
-      padding: 2.5rem 0;
-    }
-    .pub-year {
-      padding-top: 0.2rem;
+  @media (prefers-reduced-motion: reduce) {
+    .pub-toggle :global(svg) {
+      transition: none;
     }
   }
 </style>

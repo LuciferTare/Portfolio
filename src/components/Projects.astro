@@ -1,15 +1,23 @@
 ---
 import { Image } from "astro:assets";
 import Icon from "./Icon.astro";
-import { featured, inProgress, moreWork, recognition } from "../data/portfolio";
+import {
+  featured,
+  inProgress,
+  moreWork,
+  profile,
+  recognition,
+} from "../data/portfolio";
 
 const [octanet, cravecoin] = featured;
-const lineage = [
-  cravecoin,
-  ...["quantaview", "stoxium"].flatMap((id) =>
-    moreWork.filter((p) => p.id === id),
-  ),
+const caseSteps = [
+  { id: "approach", title: "Approach", items: octanet.approach },
+  { id: "build", title: "Implementation", items: octanet.implementation },
+  { id: "outcome", title: "Outcome", items: octanet.outcomes },
 ];
+const lineage = ["quantaview", "stoxium"].flatMap((id) =>
+  moreWork.filter((p) => p.id === id),
+);
 
 const count = moreWork.length;
 const columnsFor = (max: number) => {
@@ -30,7 +38,7 @@ const isExternal = (href: string) => href.startsWith("http");
 
 <section id="work" class="section" aria-labelledby="work-title">
   <div class="container-x">
-    <h2 id="work-title" class="h-section" data-reveal>Featured Projects</h2>
+    <h2 id="work-title" class="h-section" data-reveal>Selected Work</h2>
 
     <article
       class="lead-case"
@@ -64,22 +72,52 @@ const isExternal = (href: string) => href.startsWith("http");
 
       <div class="lead-cols">
         <section class="col" aria-labelledby="octanet-problem" data-reveal>
-          <h4 class="col-title" id="octanet-problem">The Problem</h4>
+          <h4 class="col-title" id="octanet-problem">Problem</h4>
           <p class="col-text">{octanet.problem}</p>
         </section>
-        <section class="col" aria-labelledby="octanet-role" data-reveal>
-          <h4 class="col-title" id="octanet-role">What I Did</h4>
-          <ul class="col-list">
-            {octanet.contributions?.map((c) => <li>{c}</li>)}
-          </ul>
-        </section>
-        <section class="col" aria-labelledby="octanet-does" data-reveal>
-          <h4 class="col-title" id="octanet-does">What It Does</h4>
-          <ul class="col-list">
-            {octanet.features?.map((f) => <li>{f}</li>)}
-          </ul>
-        </section>
+        {
+          caseSteps.map((s) => (
+            <section
+              class="col"
+              aria-labelledby={`octanet-${s.id}`}
+              data-reveal
+            >
+              <h4 class="col-title" id={`octanet-${s.id}`}>
+                {s.title}
+              </h4>
+              <ul class="col-list">
+                {s.items?.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </section>
+          ))
+        }
       </div>
+
+      {
+        octanet.readouts && (
+          <dl class="readouts">
+            {octanet.readouts.map((r) => (
+              <div class="readout" data-reveal>
+                <dt class="sr-only">{r.label}</dt>
+                <dd class="readout-value mono" aria-hidden="true">
+                  <span data-count={r.value}>{r.value}</span>
+                  {r.suffix && <span class="readout-suffix">{r.suffix}</span>}
+                </dd>
+                <dd class="readout-label">
+                  <span class="sr-only">
+                    {r.value}
+                    {r.suffix}{" "}
+                  </span>
+                  {r.label}
+                </dd>
+                <dd class="readout-context">{r.context}</dd>
+              </div>
+            ))}
+          </dl>
+        )
+      }
 
       <footer class="lead-foot" data-reveal>
         <ul class="stack" aria-label="Technologies">
@@ -95,7 +133,15 @@ const isExternal = (href: string) => href.startsWith("http");
                 class={i === 0 ? "btn btn-primary" : "btn"}
                 data-magnetic={i === 0 ? "" : undefined}
               >
-                <Icon name={i === 0 ? "google-play" : "pdf"} />
+                <Icon
+                  name={
+                    l.href.includes("play.google.com")
+                      ? "google-play"
+                      : l.href.endsWith(".pdf")
+                        ? "pdf"
+                        : "globe"
+                  }
+                />
                 {l.label}
                 <span class="sr-only">
                   {l.description ? `, ${l.description}` : ""} (opens in a new
@@ -148,28 +194,29 @@ const isExternal = (href: string) => href.startsWith("http");
           <p class="side-text">
             One of {recognition.finalists} finalists from more than {
               recognition.entries.toLocaleString("en-IN")
-            } entries. Published in the Shodh Samiksha national conference proceedings,
-            Feb 2025.
+            } entries.
           </p>
-          {
-            cravecoin.links.map((l) => (
-              <a
-                href={l.href}
-                target="_blank"
-                rel="noopener"
-                class="link link-rest side-link"
-              >
-                {l.label}
-                <span class="sr-only">
-                  , {l.description} (opens in a new tab)
-                </span>
-              </a>
-            ))
-          }
+          <div class="side-links">
+            {
+              cravecoin.links.map((l) => (
+                <a
+                  href={l.href}
+                  target="_blank"
+                  rel="noopener"
+                  class="link link-rest side-link"
+                >
+                  {l.label}
+                  <span class="sr-only">
+                    , {l.description} (opens in a new tab)
+                  </span>
+                </a>
+              ))
+            }
+          </div>
         </div>
 
         {
-          lineage.length > 1 && (
+          lineage.length > 0 && (
             <div class="side-block" data-reveal>
               <p class="meta">What It Led To</p>
               <ol
@@ -222,15 +269,17 @@ const isExternal = (href: string) => href.startsWith("http");
         <ol class="versions" aria-label="Versions">
           <li class="version done">
             <Icon name="check" size="14" />
-            <span>Version 1 complete</span>
+            <span>Version 1.0 complete</span>
           </li>
           <li class="version now">
             <span class="version-dot" aria-hidden="true"></span>
-            <span>Version 2 in progress</span>
+            <span>Version 2.0 in progress</span>
           </li>
         </ol>
         <p class="wip-summary">{inProgress.summary}</p>
-        <p class="wip-features">{inProgress.features?.join(", ")}.</p>
+        <ul class="col-list wip-features">
+          {inProgress.features?.map((f) => <li>{f}</li>)}
+        </ul>
         <p class="meta">{inProgress.period} / {inProgress.note}</p>
       </div>
     </article>
@@ -239,7 +288,7 @@ const isExternal = (href: string) => href.startsWith("http");
       count > 0 && (
         <>
           <h3 class="more-title" data-reveal>
-            More Work
+            Personal Projects
           </h3>
           <div class="more-wrap">
             <ul
@@ -288,6 +337,13 @@ const isExternal = (href: string) => href.startsWith("http");
         </>
       )
     }
+
+    <p class="hire" data-reveal>
+      Hiring a Flutter developer?
+      <a href={profile.cv.href} download class="link link-rest">Download CV</a>
+      <span aria-hidden="true">·</span>
+      <a href="#contact" class="link link-rest">Get in touch</a>
+    </p>
   </div>
 </section>
 
@@ -336,6 +392,48 @@ const isExternal = (href: string) => href.startsWith("http");
     margin-top: 2rem;
     max-width: 44ch;
   }
+  .readouts {
+    margin-top: 2.5rem;
+    display: grid;
+    border-top: 1px solid var(--color-line);
+  }
+  .readout {
+    padding: 1.5rem 0;
+    display: grid;
+    align-content: start;
+  }
+  .readout + .readout {
+    border-top: 1px solid var(--color-line);
+  }
+  .readout dd {
+    margin: 0;
+  }
+  .readout-value {
+    user-select: none;
+    font-size: clamp(3rem, 6vw, 4.5rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    color: var(--color-accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .readout-suffix {
+    font-size: 0.55em;
+    margin-left: 0.05em;
+    letter-spacing: 0;
+  }
+  .readout-label {
+    margin-top: 0.75rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .readout-context {
+    margin-top: 0.25rem;
+    font-size: 0.925rem;
+    color: var(--color-fg-2);
+    line-height: 1.55;
+  }
+
   .lead-cols {
     margin-top: 2.5rem;
     display: grid;
@@ -449,9 +547,13 @@ const isExternal = (href: string) => href.startsWith("http");
     font-size: 0.925rem;
     color: var(--color-fg-2);
   }
-  .side-link {
-    display: inline-block;
+  .side-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
     margin-top: 0.9rem;
+  }
+  .side-link {
     font-size: 0.9rem;
   }
   .lineage {
@@ -522,10 +624,9 @@ const isExternal = (href: string) => href.startsWith("http");
     max-width: 62ch;
   }
   .wip-features {
-    margin-top: 0.5rem;
-    color: var(--color-fg-2);
-    font-size: 0.95rem;
+    margin-top: 0.9rem;
     margin-bottom: 0.9rem;
+    max-width: 62ch;
   }
 
   .more-title {
@@ -577,9 +678,34 @@ const isExternal = (href: string) => href.startsWith("http");
     font-size: 0.9rem;
   }
 
+  .hire {
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--color-line);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem 0.75rem;
+    font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+  }
+  .hire span {
+    color: var(--color-fg-3);
+  }
+
   @media (min-width: 768px) {
-    .lead-cols {
+    .readouts {
       grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .readout {
+      padding: 1.75rem 1.5rem 1.75rem 0;
+    }
+    .readout + .readout {
+      border-top: 0;
+      border-left: 1px solid var(--color-line);
+      padding-left: 1.5rem;
+    }
+    .lead-cols {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 2.5rem;
     }
     .more {
@@ -592,6 +718,11 @@ const isExternal = (href: string) => href.startsWith("http");
       grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
       align-items: start;
       gap: 2.5rem;
+    }
+  }
+  @media (min-width: 1280px) {
+    .lead-cols {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
   @media (min-width: 1024px) {

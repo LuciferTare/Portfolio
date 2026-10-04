@@ -161,7 +161,7 @@ function startFlap() {
 
   const sync = () => {
     const shouldRun = !userPaused && !hoverPaused && visible && !document.hidden;
-    if (shouldRun && !timer) timer = window.setInterval(tick, 2800);
+    if (shouldRun && !timer) timer = window.setInterval(tick, 4500);
     if (!shouldRun && timer) {
       window.clearInterval(timer);
       timer = 0;

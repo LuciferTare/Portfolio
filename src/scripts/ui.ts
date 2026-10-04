@@ -4,7 +4,7 @@ import { set, stagger } from 'animejs/utils';
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export function initUI() {
-  const cleanups = [navState(), mobileMenu(), copyButtons(), contactForm(), noImageDrag()];
+  const cleanups = [navState(), mobileMenu(), copyButtons(), disclosures(), contactForm(), noImageDrag()];
   return () => cleanups.forEach((fn) => fn());
 }
 
@@ -188,6 +188,22 @@ function copyButtons() {
 }
 
 
+function disclosures() {
+  const onClick = (e: Event) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-disclosure]');
+    if (!btn) return;
+    const panel = document.getElementById(btn.getAttribute('aria-controls') ?? '');
+    if (!panel) return;
+    const open = btn.getAttribute('aria-expanded') !== 'true';
+    btn.setAttribute('aria-expanded', String(open));
+    panel.hidden = !open;
+  };
+
+  document.addEventListener('click', onClick);
+  return () => document.removeEventListener('click', onClick);
+}
+
+
 function contactForm() {
   const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
   if (!form) return () => {};
@@ -262,7 +278,7 @@ function contactForm() {
       });
       if (!res.ok) throw new Error(String(res.status));
       form.reset();
-      setStatus('ok', `Thanks, ${escapeHtml(name)}. Your message has been sent, and I’ll reply to ${escapeHtml(from)}.`);
+      setStatus('ok', `Thanks, ${escapeHtml(name)}. Your message has been sent, and I'll reply to ${escapeHtml(from)}.`);
     } catch {
       setStatus('error', `The message could not be sent. Please try again, or email me directly at ${mailLink}.`);
     } finally {

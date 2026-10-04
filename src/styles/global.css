@@ -91,7 +91,6 @@
     line-height: 1.65;
     font-feature-settings: "ss01", "cv11";
     overflow-x: clip;
-    user-select: none;
   }
   img {
     -webkit-user-drag: none;
@@ -162,7 +161,7 @@
 
   .meta {
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     line-height: 1.4;
     letter-spacing: 0.02em;
     color: var(--color-fg-3);
@@ -205,6 +204,7 @@
   }
 
   .btn {
+    user-select: none;
     --_bg: transparent;
     --_fg: var(--color-fg);
     --_bd: var(--color-line-2);

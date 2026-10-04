@@ -3,7 +3,7 @@ import '../styles/global.css';
 import { getImage } from 'astro:assets';
 import geistLatin from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url';
 import geistMonoLatin from '@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2?url';
-import { profile, socials, education, experience } from '../data/portfolio';
+import { profile, socials, education, experience, publications } from '../data/portfolio';
 
 export interface Crumb {
   name: string;
@@ -30,14 +30,13 @@ const site = Astro.site!;
 const abs = (path: string) => new URL(path, site).href;
 const canonical = abs(Astro.url.pathname);
 const ogImage = abs('/og.png');
-const ogAlt = `${profile.name}, Flutter developer. Sole mobile developer behind OctaNet, author of five research papers.`;
+const ogAlt = `${profile.name}, Flutter developer. Sole mobile developer behind OctaNet, used by ISPs across 7 countries, and author of five research papers.`;
 const portrait = await getImage({ src: profile.portrait, width: 800, format: 'jpg' });
 const portraitUrl = abs(portrait.src);
 
 const id = {
   person: abs('/#person'),
   website: abs('/#website'),
-  service: abs('/#service'),
   page: `${canonical}#webpage`,
   breadcrumbs: `${canonical}#breadcrumbs`,
 };
@@ -101,39 +100,78 @@ if (!bare) {
       knowsAbout: ['Flutter', 'Dart', 'Android', 'Firebase', 'Google Play', 'Mobile application development'],
       knowsLanguage: ['mr', 'hi', 'en'],
       sameAs: socials.map((s) => s.href),
+      // Freelance work is remote, so the offers hang off the Person rather than a LocalBusiness
+      // with a service area; `address` above is home base, not a limit on where clients are.
+      makesOffer: [
+        {
+          name: 'Android app development in Flutter',
+          description: 'Freelance Android apps in Flutter, from the first screen to the Google Play release.',
+        },
+        { name: 'Google Play Store release and maintenance' },
+        { name: 'Firebase and REST API integration' },
+      ].map((s) => ({
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          ...s,
+          serviceType: 'Mobile application development',
+          provider: { '@id': id.person },
+        },
+      })),
     },
-    {
-      // ProfessionalService is a LocalBusiness subtype, used here for freelance work.
-      '@type': 'ProfessionalService',
-      '@id': id.service,
-      name: `${profile.name}, Flutter App Development`,
-      description: `Freelance Android app development in Flutter by ${profile.name}, from the first screen to the Google Play release.`,
-      url: abs('/'),
-      image: ogImage,
-      logo: abs('/apple-touch-icon.png'),
-      email: profile.email,
-      address,
-      areaServed: [
-        { '@type': 'City', name: 'Palghar' },
-        { '@type': 'State', name: 'Maharashtra' },
-        { '@type': 'Country', name: 'India' },
-      ],
-      founder: { '@id': id.person },
-      knowsAbout: ['Flutter', 'Android apps', 'Firebase', 'Google Play publishing'],
-      hasOfferCatalog: {
-        '@type': 'OfferCatalog',
-        name: 'Services',
-        itemListElement: [
-          'Android app development in Flutter',
-          'Google Play Store release and maintenance',
-          'Firebase and REST API integration',
-        ].map((name) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name } })),
-      },
-    },
+  );
+
+  // One ScholarlyArticle per paper. `url` is the paper's card on this site, so a result
+  // built from this data lands on the page; the PDF is attached as an encoding of the article.
+  const pick = (details: string[], re: RegExp) => details.map((d) => d.match(re)?.[1]).find(Boolean);
+  graph.push(
+    ...publications.map((p) => {
+      const pdf = p.links.find((l) => l.href.startsWith('/papers/') && l.label.includes('Paper'));
+      const external = p.links.filter((l) => /^https?:/.test(l.href)).map((l) => l.href);
+      const issn = pick(p.details, /ISSN ([\dX-]+)/);
+      const isbn = pick(p.details, /ISBN ([\d-]+)/);
+      const volume = pick(p.details, /Vol\. (\d+)/);
+      const issue = pick(p.details, /Issue (\d+)/);
+      const pages = pick(p.details, /pp\. ([\d-]+)/);
+
+      const periodical = { '@type': 'Periodical', name: p.venue, ...(issn && { issn }) };
+      const volumeNode = volume ? { '@type': 'PublicationVolume', volumeNumber: volume, isPartOf: periodical } : periodical;
+      // A presentation has no containing publication, so it only names the conference.
+      const isPartOf =
+        p.kind === 'Journal article'
+          ? issue
+            ? { '@type': 'PublicationIssue', issueNumber: issue, isPartOf: volumeNode }
+            : volumeNode
+          : p.kind === 'Conference proceedings'
+            ? { '@type': 'Book', name: `${p.venue} proceedings`, ...(isbn && { isbn }) }
+            : undefined;
+
+      return {
+        '@type': 'ScholarlyArticle',
+        '@id': abs(`/#pub-${p.id}`),
+        url: abs(`/#pub-${p.id}`),
+        headline: p.subtitle ? `${p.title}: ${p.subtitle}` : p.title,
+        name: p.title,
+        ...(p.subtitle && { alternativeHeadline: p.subtitle }),
+        author: p.authors.map((name) =>
+          /\bTare\b/.test(name) ? { '@id': id.person } : { '@type': 'Person', name },
+        ),
+        datePublished: p.datePublished,
+        inLanguage: 'en',
+        genre: p.kind,
+        ...(isPartOf ? { isPartOf } : { description: `Presented at ${p.venue}.` }),
+        ...(pages && { pagination: pages }),
+        ...(p.context && { abstract: p.context }),
+        ...(pdf && {
+          encoding: { '@type': 'MediaObject', contentUrl: abs(pdf.href), encodingFormat: 'application/pdf' },
+        }),
+        ...(external.length && { sameAs: external }),
+      };
+    }),
   );
 }
 
-const schema = { '@context': 'https://schema.org', '@graph': graph };
+const schema ={ '@context': 'https://schema.org', '@graph': graph };
 ---
 
 <!doctype html>

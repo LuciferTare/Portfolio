@@ -20,11 +20,11 @@ Everything visible on the site lives in **`src/data/portfolio.ts`**:
 | --- | --- |
 | Name, rotating titles, intro, email, availability | `profile` |
 | About text, skills, languages | `about` |
-| Jobs and the three numbers | `experience` |
+| Job role card | `experience` |
 | Degrees, certifications (add `verifyUrl` when you have it) | `education`, `credentials` |
-| Aavishkar block | `recognition` |
+| Aavishkar numbers (Cravecoin sidebar) | `recognition` |
 | Papers, links, citations | `publications` |
-| OctaNet and Cravecoin | `featured` |
+| OctaNet (with the three numbers) and Cravecoin | `featured` |
 | Fit&Fuel | `inProgress` |
 | Quantaview, Stoxium, Power Gauge, Towzer | `moreWork` |
 | Contact form mode | `contact.formProvider` |
@@ -44,7 +44,7 @@ npm run og                        # social card + PNG favicons (needs Chrome or 
 assets-src/
   icons/          project logo PNGs -> src/assets/icons/
   certificates/   research paper + certificate PDFs, one pair per project -> public/papers/
-  resume/         master resume PDF -> public/cv/
+  resume/         Sushant_Tare_CV.pdf -> public/cv/ (Master_CV is reference only, not published)
   portrait/       source photo, cropped into src/assets/portrait.jpg
   videos/         raw project demo footage (not copied by the script)
 ```

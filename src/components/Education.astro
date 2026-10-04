@@ -8,7 +8,7 @@ const school = education.filter((e) => !e.major);
 
 <section id="education" class="section" aria-labelledby="education-title">
   <div class="container-x">
-    <h2 id="education-title" class="h-section" data-reveal>My Education</h2>
+    <h2 id="education-title" class="h-section" data-reveal>Degrees &amp; Certifications</h2>
 
     <ol class="degrees">
       {
@@ -98,7 +98,8 @@ const school = education.filter((e) => !e.major);
     border-bottom: 1px solid var(--color-line);
   }
   .degree-short {
-    font-size: clamp(3rem, 8vw, 6.5rem);
+    user-select: none;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
     font-weight: 600;
     letter-spacing: -0.05em;
     line-height: 0.9;

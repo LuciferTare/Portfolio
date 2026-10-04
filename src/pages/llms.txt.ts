@@ -5,6 +5,7 @@ export const GET: APIRoute = ({ site }) => {
   const abs = (href: string) => new URL(href, site).href;
   const job = experience[0];
   const projects = [...featured, inProgress, ...moreWork];
+  const octanet = featured.find((p) => p.id === 'octanet');
 
   const body = `# ${profile.name}
 
@@ -24,8 +25,9 @@ ${about.lead}
 
 ## Experience
 
-- ${job.role}, ${job.company} (${job.start} to ${job.end}): ${job.summary}
-${job.readouts.map((r) => `  - ${r.value}${r.suffix ?? ''} ${r.label}: ${r.context}`).join('\n')}
+- ${job.role}, ${job.company} (${job.start} to ${job.end}), ${job.team}: ${job.summary}
+${job.duties.map((d) => `  - ${d}`).join('\n')}
+${octanet?.readouts?.map((r) => `  - ${r.value}${r.suffix ?? ''} ${r.label}: ${r.context}`).join('\n') ?? ''}
 
 ## Projects
 

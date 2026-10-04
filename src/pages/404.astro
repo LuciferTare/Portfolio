@@ -1,17 +1,17 @@
 ---
-import Base from '../layouts/Base.astro';
-import Icon from '../components/Icon.astro';
-import { profile } from '../data/portfolio';
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+import { profile } from "../data/portfolio";
 
 const crumbs = [
-  { name: 'Home', path: '/' },
-  { name: 'Page not found', path: '/404' },
+  { name: "Home", path: "/" },
+  { name: "Page not found", path: "/404" },
 ];
 ---
 
 <Base
   title={`Page not found | ${profile.name}`}
-  description={`This page doesn’t exist. Everything ${profile.name} has built is on the home page.`}
+  description={`This page doesn't exist. Everything ${profile.name} has built is on the home page.`}
   noindex
   bare
   breadcrumbs={crumbs}
@@ -24,10 +24,13 @@ const crumbs = [
       </ol>
     </nav>
     <p class="nf-code mono" aria-hidden="true">
-      {'404'.split('').map((c) => <span class="nf-cell">{c}</span>)}
+      {"404".split("").map((c) => <span class="nf-cell">{c}</span>)}
     </p>
-    <h1 class="nf-title">This page doesn’t exist.</h1>
-    <p class="nf-text">The link may be old, or the address may have a typo. Everything I’ve built is on the home page.</p>
+    <h1 class="nf-title">This page doesn't exist.</h1>
+    <p class="nf-text">
+      The link may be old, or the address may have a typo. Everything I've built
+      is on the home page.
+    </p>
     <a href="/" class="btn btn-primary">
       <Icon name="arrow-up" class="nf-arrow" /> Back to the Home Page
     </a>
@@ -53,7 +56,7 @@ const crumbs = [
     padding: 0;
   }
   .crumbs li + li::before {
-    content: '/';
+    content: "/";
     margin-right: 0.5rem;
     color: var(--color-line-2);
   }
@@ -78,7 +81,7 @@ const crumbs = [
     position: relative;
   }
   .nf-cell::after {
-    content: '';
+    content: "";
     position: absolute;
     inset: 50% 0 auto;
     height: 1px;

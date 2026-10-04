@@ -42,7 +42,7 @@ body { width: 1200px; height: 630px; padding: 72px 80px; display: grid; grid-tem
 <div>
   <p class="name">Sushant<span>Tare</span></p>
   <p class="flap">${'Flutter Developer'.split('').map((c) => `<b>${c === ' ' ? '&nbsp;' : c}</b>`).join('')}</p>
-  <p class="line">Sole mobile developer behind OctaNet. Five research papers.</p>
+  <p class="line">Sole mobile developer behind OctaNet, used by ISPs across 7&nbsp;countries. Five research papers.</p>
 </div>
 <div class="grid">
   ${['octanet.png', 'cravecoin.png', 'fitfuel.png', 'powergauge.png'].map((i) => `<img src="${icon(i)}">`).join('')}
@@ -77,7 +77,6 @@ for (const s of shots) {
   console.log(`wrote ${s.out}`);
 }
 
-// favicon.ico: a one-image ICO container wrapping the 32px PNG, for clients that request it directly.
 const png = readFileSync(join(root, 'public/favicon-32.png'));
 const ico = Buffer.alloc(22);
 ico.writeUInt16LE(1, 2);
