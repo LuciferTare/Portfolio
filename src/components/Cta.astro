@@ -1,0 +1,34 @@
+---
+import Icon from './Icon.astro';
+---
+
+<section class="cta" aria-labelledby="cta-title">
+  <div class="container-x cta-inner">
+    <h2 id="cta-title" class="cta-title" data-reveal>Need a Flutter app shipped to Play?</h2>
+    <a href="#contact" class="btn btn-primary" data-reveal>
+      Start a conversation
+      <Icon name="arrow-right" />
+    </a>
+  </div>
+</section>
+
+<style>
+  .cta {
+    padding-block: clamp(3rem, 7vw, 5rem);
+    border-top: 1px solid var(--color-line);
+  }
+  .cta-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem 2rem;
+  }
+  .cta-title {
+    font-size: clamp(1.5rem, 3.2vw, 2.25rem);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    font-weight: 600;
+    max-width: 24ch;
+  }
+</style>

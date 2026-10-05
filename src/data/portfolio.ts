@@ -666,6 +666,40 @@ export const homeScreen = [
   { name: "Stoxium", icon: stoxiumIcon },
 ];
 
+export const freelance = {
+  heading: "Freelance",
+  intro:
+    "Remote Android projects, built in Flutter by one developer who owns the app from the first screen to the Google Play release.",
+  services: [
+    {
+      name: "Android app development in Flutter",
+      description:
+        "Freelance Android apps in Flutter, from the first screen to the Google Play release.",
+    },
+    {
+      name: "Google Play Store release and maintenance",
+      description:
+        "Listing, signing, and rollout on Google Play, then crash monitoring with Firebase Crashlytics once it is live.",
+    },
+    {
+      name: "Firebase and REST API integration",
+      description:
+        "Cloud Firestore, push notifications, Google Maps, payment gateways, and your own REST backend.",
+    },
+  ],
+  scope: {
+    label: "Typical scope",
+    text: "A focused MVP in 4 to 8 weeks: the core screens, one backend or Firebase project, and a first release on Google Play.",
+  },
+  process: [
+    { step: "Scoping call", text: "We agree the screens, integrations, and timeline up front. The scope is fixed." },
+    { step: "Weekly builds", text: "You test a fresh build every week and give feedback as it takes shape." },
+    { step: "Play Store release", text: "I handle the Google Play Console release, from listing to rollout." },
+    { step: "Support", text: "30 days of bug fixes after launch." },
+  ],
+  response: { label: "Response time", text: "I reply to every enquiry within 24 hours." },
+};
+
 export const contact = {
   heading: "Get In Touch",
   body: "Tell me about the role or the project you have in mind. A short message with the basics is plenty to start.",

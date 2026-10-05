@@ -1,0 +1,141 @@
+---
+import { freelance } from '../data/portfolio';
+---
+
+<section id="freelance" class="freelance" aria-labelledby="freelance-title">
+  <div class="container-x">
+    <div class="head">
+      <h2 id="freelance-title" class="h-section" data-reveal>{freelance.heading}</h2>
+      <p class="lead intro" data-reveal>{freelance.intro}</p>
+    </div>
+
+    <ul class="services" data-reveal>
+      {
+        freelance.services.map((s) => (
+          <li class="service">
+            <h3 class="service-name">{s.name}</h3>
+            <p class="service-text">{s.description}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="details">
+      <div class="detail" data-reveal>
+        <p class="meta">{freelance.scope.label}</p>
+        <p class="detail-text">{freelance.scope.text}</p>
+
+        <p class="meta resp-label">{freelance.response.label}</p>
+        <p class="detail-text">{freelance.response.text}</p>
+      </div>
+
+      <div class="detail" data-reveal>
+        <p class="meta" id="process-label">Delivery process</p>
+        <ol class="process" aria-labelledby="process-label">
+          {
+            freelance.process.map((p, i) => (
+              <li class="step">
+                <span class="step-n mono" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                <p class="step-body">
+                  <strong>{p.step}.</strong> {p.text}
+                </p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .freelance {
+    padding-block: var(--section-y);
+    border-top: 1px solid var(--color-line);
+  }
+  .head {
+    display: grid;
+    gap: 1.25rem;
+  }
+  .intro {
+    max-width: 52ch;
+    color: var(--color-fg-2);
+  }
+
+  .services {
+    margin-top: clamp(2rem, 4vw, 3rem);
+    display: grid;
+    border-top: 1px solid var(--color-line);
+  }
+  .service {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .service-name {
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .service-text {
+    margin-top: 0.5rem;
+    color: var(--color-fg-2);
+    max-width: 44ch;
+  }
+
+  .details {
+    margin-top: clamp(2rem, 4vw, 3rem);
+    display: grid;
+    gap: 2.5rem;
+  }
+  .detail-text {
+    margin-top: 0.5rem;
+    max-width: 44ch;
+  }
+  .resp-label {
+    margin-top: 1.75rem;
+  }
+
+  .process {
+    margin-top: 0.75rem;
+    display: grid;
+    gap: 1rem;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    gap: 0.5rem;
+  }
+  .step-n {
+    color: var(--color-fg-3);
+    font-size: 0.85rem;
+    padding-top: 0.2em;
+  }
+  .step-body {
+    color: var(--color-fg-2);
+  }
+  .step-body strong {
+    color: var(--color-fg);
+    font-weight: 500;
+  }
+
+  @media (min-width: 768px) {
+    .services {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-bottom: 1px solid var(--color-line);
+    }
+    .service {
+      padding: 1.75rem 1.5rem 1.75rem 0;
+      border-bottom: 0;
+    }
+    .service + .service {
+      padding-left: 1.5rem;
+      border-left: 1px solid var(--color-line);
+    }
+  }
+  @media (min-width: 1024px) {
+    .details {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: 5rem;
+    }
+  }
+</style>
