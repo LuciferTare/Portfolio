@@ -1,9 +1,15 @@
 ---
-import '../styles/global.css';
-import { getImage } from 'astro:assets';
-import geistLatin from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url';
-import geistMonoLatin from '@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2?url';
-import { profile, socials, education, experience, publications } from '../data/portfolio';
+import "../styles/global.css";
+import { getImage } from "astro:assets";
+import geistLatin from "@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url";
+import geistMonoLatin from "@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2?url";
+import {
+  profile,
+  socials,
+  education,
+  experience,
+  publications,
+} from "../data/portfolio";
 
 export interface Crumb {
   name: string;
@@ -16,6 +22,7 @@ interface Props {
   noindex?: boolean;
   bare?: boolean;
   breadcrumbs?: Crumb[];
+  schema?: Record<string, unknown>[];
 }
 
 const {
@@ -23,147 +30,190 @@ const {
   description = profile.description,
   noindex = false,
   bare = false,
-  breadcrumbs = [{ name: 'Home', path: '/' }],
+  breadcrumbs = [{ name: "Home", path: "/" }],
+  schema: extraSchema = [],
 } = Astro.props;
 
 const site = Astro.site!;
 const abs = (path: string) => new URL(path, site).href;
 const canonical = abs(Astro.url.pathname);
-const ogImage = abs('/og.png');
+const ogImage = abs("/og.png");
 const ogAlt = `${profile.name}, Flutter developer. Sole mobile developer behind OctaNet, used by ISPs across 7 countries, and author of five research papers.`;
-const portrait = await getImage({ src: profile.portrait, width: 800, format: 'jpg' });
+const portrait = await getImage({
+  src: profile.portrait,
+  width: 800,
+  format: "jpg",
+});
 const portraitUrl = abs(portrait.src);
 
 const id = {
-  person: abs('/#person'),
-  website: abs('/#website'),
+  person: abs("/#person"),
+  website: abs("/#website"),
   page: `${canonical}#webpage`,
   breadcrumbs: `${canonical}#breadcrumbs`,
 };
 
 const address = {
-  '@type': 'PostalAddress',
-  addressLocality: 'Palghar',
-  addressRegion: 'Maharashtra',
-  addressCountry: 'IN',
+  "@type": "PostalAddress",
+  addressLocality: "Palghar",
+  addressRegion: "Maharashtra",
+  addressCountry: "IN",
 };
 
 const graph: Record<string, unknown>[] = [
   {
-    '@type': 'WebSite',
-    '@id': id.website,
-    url: abs('/'),
+    "@type": "WebSite",
+    "@id": id.website,
+    url: abs("/"),
     name: profile.name,
     description: profile.description,
-    inLanguage: 'en-IN',
-    publisher: { '@id': id.person },
+    inLanguage: "en-IN",
+    publisher: { "@id": id.person },
   },
   {
-    '@type': noindex ? 'WebPage' : 'ProfilePage',
-    '@id': id.page,
+    "@type": bare ? "WebPage" : "ProfilePage",
+    "@id": id.page,
     url: canonical,
     name: title,
     description,
-    inLanguage: 'en-IN',
-    isPartOf: { '@id': id.website },
-    breadcrumb: { '@id': id.breadcrumbs },
-    ...(noindex ? {} : { mainEntity: { '@id': id.person }, primaryImageOfPage: ogImage }),
+    inLanguage: "en-IN",
+    isPartOf: { "@id": id.website },
+    breadcrumb: { "@id": id.breadcrumbs },
+    ...(bare
+      ? {}
+      : { mainEntity: { "@id": id.person }, primaryImageOfPage: ogImage }),
   },
   {
-    '@type': 'BreadcrumbList',
-    '@id': id.breadcrumbs,
+    "@type": "BreadcrumbList",
+    "@id": id.breadcrumbs,
     itemListElement: breadcrumbs.map((c, i) => ({
-      '@type': 'ListItem',
+      "@type": "ListItem",
       position: i + 1,
       name: c.name,
       item: abs(c.path),
     })),
   },
+  ...extraSchema,
 ];
 
 if (!bare) {
-  graph.push(
-    {
-      '@type': 'Person',
-      '@id': id.person,
-      name: profile.fullName,
-      alternateName: profile.name,
-      jobTitle: 'Flutter Developer',
-      description: profile.description,
-      url: abs('/'),
-      image: portraitUrl,
-      email: `mailto:${profile.email}`,
-      address,
-      nationality: { '@type': 'Country', name: 'India' },
-      worksFor: { '@type': 'Organization', name: experience[0].company },
-      alumniOf: { '@type': 'CollegeOrUniversity', name: education[0].institution },
-      knowsAbout: ['Flutter', 'Dart', 'Android', 'Firebase', 'Google Play', 'Mobile application development'],
-      knowsLanguage: ['mr', 'hi', 'en'],
-      sameAs: socials.map((s) => s.href),
-      // Freelance work is remote, so the offers hang off the Person rather than a LocalBusiness
-      // with a service area; `address` above is home base, not a limit on where clients are.
-      makesOffer: [
-        {
-          name: 'Android app development in Flutter',
-          description: 'Freelance Android apps in Flutter, from the first screen to the Google Play release.',
-        },
-        { name: 'Google Play Store release and maintenance' },
-        { name: 'Firebase and REST API integration' },
-      ].map((s) => ({
-        '@type': 'Offer',
-        itemOffered: {
-          '@type': 'Service',
-          ...s,
-          serviceType: 'Mobile application development',
-          provider: { '@id': id.person },
-        },
-      })),
+  graph.push({
+    "@type": "Person",
+    "@id": id.person,
+    name: profile.fullName,
+    alternateName: profile.name,
+    jobTitle: "Flutter Developer",
+    description: profile.description,
+    url: abs("/"),
+    image: portraitUrl,
+    email: `mailto:${profile.email}`,
+    address,
+    nationality: { "@type": "Country", name: "India" },
+    worksFor: { "@type": "Organization", name: experience[0].company },
+    alumniOf: {
+      "@type": "CollegeOrUniversity",
+      name: education[0].institution,
     },
-  );
+    knowsAbout: [
+      "Flutter",
+      "Dart",
+      "Android",
+      "Firebase",
+      "Google Play",
+      "Mobile application development",
+    ],
+    knowsLanguage: ["mr", "hi", "en"],
+    sameAs: socials.map((s) => s.href),
+    makesOffer: [
+      {
+        name: "Android app development in Flutter",
+        description:
+          "Freelance Android apps in Flutter, from the first screen to the Google Play release.",
+      },
+      { name: "Google Play Store release and maintenance" },
+      { name: "Firebase and REST API integration" },
+    ].map((s) => ({
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        ...s,
+        serviceType: "Mobile application development",
+        provider: { "@id": id.person },
+      },
+    })),
+  });
 
-  // One ScholarlyArticle per paper. `url` is the paper's card on this site, so a result
-  // built from this data lands on the page; the PDF is attached as an encoding of the article.
-  const pick = (details: string[], re: RegExp) => details.map((d) => d.match(re)?.[1]).find(Boolean);
+  const pick = (details: string[], re: RegExp) =>
+    details.map((d) => d.match(re)?.[1]).find(Boolean);
   graph.push(
     ...publications.map((p) => {
-      const pdf = p.links.find((l) => l.href.startsWith('/papers/') && l.label.includes('Paper'));
-      const external = p.links.filter((l) => /^https?:/.test(l.href)).map((l) => l.href);
+      const pdf = p.links.find(
+        (l) => l.href.startsWith("/papers/") && l.label.includes("Paper"),
+      );
+      const external = p.links
+        .filter((l) => /^https?:/.test(l.href))
+        .map((l) => l.href);
       const issn = pick(p.details, /ISSN ([\dX-]+)/);
       const isbn = pick(p.details, /ISBN ([\d-]+)/);
       const volume = pick(p.details, /Vol\. (\d+)/);
       const issue = pick(p.details, /Issue (\d+)/);
       const pages = pick(p.details, /pp\. ([\d-]+)/);
 
-      const periodical = { '@type': 'Periodical', name: p.venue, ...(issn && { issn }) };
-      const volumeNode = volume ? { '@type': 'PublicationVolume', volumeNumber: volume, isPartOf: periodical } : periodical;
-      // A presentation has no containing publication, so it only names the conference.
+      const periodical = {
+        "@type": "Periodical",
+        name: p.venue,
+        ...(issn && { issn }),
+      };
+      const volumeNode = volume
+        ? {
+            "@type": "PublicationVolume",
+            volumeNumber: volume,
+            isPartOf: periodical,
+          }
+        : periodical;
       const isPartOf =
-        p.kind === 'Journal article'
+        p.kind === "Journal article"
           ? issue
-            ? { '@type': 'PublicationIssue', issueNumber: issue, isPartOf: volumeNode }
+            ? {
+                "@type": "PublicationIssue",
+                issueNumber: issue,
+                isPartOf: volumeNode,
+              }
             : volumeNode
-          : p.kind === 'Conference proceedings'
-            ? { '@type': 'Book', name: `${p.venue} proceedings`, ...(isbn && { isbn }) }
+          : p.kind === "Conference proceedings"
+            ? {
+                "@type": "Book",
+                name: `${p.venue} proceedings`,
+                ...(isbn && { isbn }),
+              }
             : undefined;
 
       return {
-        '@type': 'ScholarlyArticle',
-        '@id': abs(`/#pub-${p.id}`),
+        "@type": "ScholarlyArticle",
+        "@id": abs(`/#pub-${p.id}`),
         url: abs(`/#pub-${p.id}`),
         headline: p.subtitle ? `${p.title}: ${p.subtitle}` : p.title,
         name: p.title,
         ...(p.subtitle && { alternativeHeadline: p.subtitle }),
         author: p.authors.map((name) =>
-          /\bTare\b/.test(name) ? { '@id': id.person } : { '@type': 'Person', name },
+          /\bTare\b/.test(name)
+            ? { "@id": id.person }
+            : { "@type": "Person", name },
         ),
         datePublished: p.datePublished,
-        inLanguage: 'en',
+        inLanguage: "en",
         genre: p.kind,
-        ...(isPartOf ? { isPartOf } : { description: `Presented at ${p.venue}.` }),
+        ...(isPartOf
+          ? { isPartOf }
+          : { description: `Presented at ${p.venue}.` }),
         ...(pages && { pagination: pages }),
         ...(p.context && { abstract: p.context }),
         ...(pdf && {
-          encoding: { '@type': 'MediaObject', contentUrl: abs(pdf.href), encodingFormat: 'application/pdf' },
+          encoding: {
+            "@type": "MediaObject",
+            contentUrl: abs(pdf.href),
+            encodingFormat: "application/pdf",
+          },
         }),
         ...(external.length && { sameAs: external }),
       };
@@ -171,7 +221,7 @@ if (!bare) {
   );
 }
 
-const schema ={ '@context': 'https://schema.org', '@graph': graph };
+const schema = { "@context": "https://schema.org", "@graph": graph };
 ---
 
 <!doctype html>
@@ -185,19 +235,33 @@ const schema ={ '@context': 'https://schema.org', '@graph': graph };
     {!noindex && <link rel="canonical" href={canonical} />}
     <meta
       name="robots"
-      content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1'}
+      content={noindex
+        ? "noindex, follow"
+        : "index, follow, max-image-preview:large, max-snippet:-1"}
     />
     <meta name="theme-color" content="#181A20" />
     <meta name="color-scheme" content="dark" />
-    <link rel="preload" href={geistLatin} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={geistMonoLatin} as="font" type="font/woff2" crossorigin />
+    <link
+      rel="preload"
+      href={geistLatin}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href={geistMonoLatin}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 
-    <meta property="og:type" content={noindex ? 'website' : 'profile'} />
+    <meta property="og:type" content={bare ? "website" : "profile"} />
     <meta property="og:site_name" content={profile.name} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -209,23 +273,42 @@ const schema ={ '@context': 'https://schema.org', '@graph': graph };
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={ogAlt} />
     <meta property="og:locale" content="en_IN" />
-    {!noindex && <meta property="profile:first_name" content={profile.name.split(' ')[0]} />}
-    {!noindex && <meta property="profile:last_name" content={profile.name.split(' ').at(-1)} />}
+    {
+      !bare && (
+        <meta
+          property="profile:first_name"
+          content={profile.name.split(" ")[0]}
+        />
+      )
+    }
+    {
+      !bare && (
+        <meta
+          property="profile:last_name"
+          content={profile.name.split(" ").at(-1)}
+        />
+      )
+    }
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content={ogAlt} />
 
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(schema)}
+    />
 
     <script is:inline>
       (function () {
         var d = document.documentElement;
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        d.classList.add('motion');
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+          return;
+        d.classList.add("motion");
         window.__motionFallback = setTimeout(function () {
-          d.classList.add('motion-ready-fallback');
+          d.classList.add("motion-ready-fallback");
         }, 2500);
       })();
     </script>

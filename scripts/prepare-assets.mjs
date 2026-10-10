@@ -1,4 +1,4 @@
-import { copyFile, mkdir } from 'node:fs/promises';
+import { copyFile, mkdir, readdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
@@ -35,6 +35,26 @@ for (const [from, to] of copies) {
   await mkdir(new URL('.', at(to)), { recursive: true });
   await copyFile(at(from), at(to));
   console.log(`copied ${from} -> ${to}`);
+}
+
+// Each folder in assets-src/projects/ becomes a /work/<folder> page: screenshots are
+// optimised by Astro from src/assets/projects/, the demo video is served as-is from public/videos/.
+if (existsSync(at('assets-src/projects/'))) {
+  for (const id of await readdir(at('assets-src/projects/'))) {
+    const dir = `assets-src/projects/${id}/`;
+    await mkdir(at(`src/assets/projects/${id}/`), { recursive: true });
+    for (const file of await readdir(at(dir))) {
+      if (file.endsWith('.png')) {
+        const to = `src/assets/projects/${id}/${file.toLowerCase().replaceAll('_', '-')}`;
+        await copyFile(at(dir + file), at(to));
+        console.log(`copied ${dir}${file} -> ${to}`);
+      } else if (file === 'launch-video.mp4') {
+        await mkdir(at('public/videos/'), { recursive: true });
+        await copyFile(at(dir + file), at(`public/videos/${id}.mp4`));
+        console.log(`copied ${dir}${file} -> public/videos/${id}.mp4`);
+      }
+    }
+  }
 }
 
 if (existsSync(at('assets-src/portrait/image.jpeg'))) {

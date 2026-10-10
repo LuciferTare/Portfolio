@@ -8,6 +8,7 @@ import {
   profile,
   recognition,
 } from "../data/portfolio";
+import { showcaseHref } from "../data/showcase";
 
 const [octanet, cravecoin] = featured;
 const caseSteps = [
@@ -183,6 +184,17 @@ const isExternal = (href: string) => href.startsWith("http");
         <ul class="stack" aria-label="Technologies" data-reveal>
           {cravecoin.stack.map((t) => <li class="chip">{t}</li>)}
         </ul>
+        {
+          showcaseHref(cravecoin.id) && (
+            <a
+              href={showcaseHref(cravecoin.id)}
+              class="btn showcase-btn"
+              data-reveal
+            >
+              Screens and demo <Icon name="arrow-right" />
+            </a>
+          )
+        }
       </div>
 
       <div class="second-side">
@@ -317,6 +329,15 @@ const isExternal = (href: string) => href.startsWith("http");
                   </p>
                   <p class="more-summary">{p.summary}</p>
                   <p class="more-stack mono">{p.stack.join(" + ")}</p>
+                  {showcaseHref(p.id) && (
+                    <a
+                      href={showcaseHref(p.id)}
+                      class="link link-rest more-link more-showcase"
+                    >
+                      Screens and demo
+                      <Icon name="arrow-right" size="14" />
+                    </a>
+                  )}
                   {p.links.map((l) => (
                     <a
                       href={l.href}
@@ -676,6 +697,15 @@ const isExternal = (href: string) => href.startsWith("http");
     justify-self: start;
     margin-top: 0.5rem;
     font-size: 0.9rem;
+  }
+  .more-showcase {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--color-accent);
+  }
+  .showcase-btn {
+    margin-top: 1.5rem;
   }
 
   .hire {

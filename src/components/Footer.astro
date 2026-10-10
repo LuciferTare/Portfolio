@@ -2,6 +2,12 @@
 import Icon from './Icon.astro';
 import { nav, profile, socials } from '../data/portfolio';
 
+interface Props {
+  /** Prefix for the section links, e.g. '/' on pages other than home. */
+  base?: string;
+}
+
+const { base = '' } = Astro.props;
 const year = new Date().getFullYear();
 ---
 
@@ -16,7 +22,7 @@ const year = new Date().getFullYear();
         <ul class="footer-nav">
           {nav.map((n) => (
             <li>
-              <a href={n.href} class="link">{n.label}</a>
+              <a href={base + n.href} class="link">{n.label}</a>
             </li>
           ))}
           <li>

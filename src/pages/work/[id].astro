@@ -1,0 +1,844 @@
+---
+import { Image, getImage } from "astro:assets";
+import Base from "../../layouts/Base.astro";
+import Footer from "../../components/Footer.astro";
+import Icon from "../../components/Icon.astro";
+import { profile } from "../../data/portfolio";
+import { showcases, type Showcase } from "../../data/showcase";
+
+export function getStaticPaths() {
+  return showcases.map((showcase, i) => ({
+    params: { id: showcase.project.id },
+    props: {
+      showcase,
+      prev: showcases[(i - 1 + showcases.length) % showcases.length],
+      next: showcases[(i + 1) % showcases.length],
+    },
+  }));
+}
+
+interface Props {
+  showcase: Showcase;
+  prev: Showcase;
+  next: Showcase;
+}
+
+const { showcase, prev, next } = Astro.props;
+const { project: p, screens, video } = showcase;
+
+const site = Astro.site!;
+const abs = (path: string) => new URL(path, site).href;
+const backHref = `/#project-${p.id}`;
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Work", path: "/#work" },
+  { name: p.name, path: showcase.href },
+];
+
+// Full-size frames for the viewer, and a poster for the video taken from the first real screen.
+const full = await Promise.all(
+  screens.map((s) => getImage({ src: s.src, width: 1080, format: "webp" })),
+);
+const posterScreen =
+  screens.find((s) => !/splash/i.test(s.caption)) ?? screens[0];
+const poster = video
+  ? await getImage({ src: posterScreen.src, width: 720, format: "webp" })
+  : undefined;
+
+const tone = (s: string) =>
+  s === "Live on Google Play" || s === "Built" ? "live" : "progress";
+const isExternal = (href: string) => href.startsWith("http");
+const pad = (n: number) => String(n).padStart(2, "0");
+
+const title = `${p.name}, ${p.tagline} | ${profile.name}`;
+const description = `${p.name} running on Android: ${screens.length} screens${video ? " and a demo video" : ""}. ${p.summary}`;
+const schema = [
+  {
+    "@type": "SoftwareApplication",
+    "@id": `${abs(showcase.href)}#app`,
+    name: p.name,
+    description: p.summary,
+    url: abs(showcase.href),
+    operatingSystem: "Android",
+    author: { "@id": abs("/#person") },
+    screenshot: full.map((f) => abs(f.src)),
+  },
+];
+---
+
+<Base {title} {description} bare breadcrumbs={crumbs} {schema}>
+  <a href="#main" class="skip">Skip to content</a>
+  <div class="bar-sentinel" aria-hidden="true"></div>
+  <header class="bar" data-bar>
+    <a href="/" class="mark" aria-label={`${profile.name}, home`}>
+      <span class="mark-glyph mono" aria-hidden="true">{profile.initials}</span>
+      <span class="mark-name">{profile.name}</span>
+    </a>
+    <a href={backHref} class="btn bar-back">
+      <Icon name="arrow-left" /> All work
+    </a>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section class="intro container-x" aria-labelledby="project-name">
+      <div class:list={["intro-grid", { solo: !video }]}>
+        <div class="intro-text">
+          <nav aria-label="Breadcrumb" class="crumbs mono">
+            <ol>
+              <li><a href="/" class="link">Home</a></li>
+              <li><a href="/#work" class="link">Work</a></li>
+              <li aria-current="page">{p.name}</li>
+            </ol>
+          </nav>
+
+          <div class="id">
+            <Image
+              src={p.icon}
+              alt=""
+              width={72}
+              height={72}
+              densities={[1, 2]}
+              class="icon-app"
+              loading="eager"
+            />
+            <div>
+              <h1 id="project-name" class="name">{p.name}</h1>
+              <p class="tag">{p.tagline}</p>
+            </div>
+          </div>
+
+          <div class="status-row">
+            <p class="status" data-tone={tone(p.status)}>{p.status}</p>
+            {p.period && <p class="meta">{p.period}</p>}
+          </div>
+
+          <p class="lead summary">{p.summary}</p>
+
+          {
+            p.features && (
+              <ul class="features">
+                {p.features.map((f) => (
+                  <li>{f}</li>
+                ))}
+              </ul>
+            )
+          }
+
+          <ul class="stack" aria-label="Technologies">
+            {p.stack.map((t) => <li class="chip">{t}</li>)}
+          </ul>
+
+          <dl class="facts mono">
+            <div>
+              <dt>Screens</dt>
+              <dd>{pad(screens.length)}</dd>
+            </div>
+            {
+              video && (
+                <div>
+                  <dt>Demo</dt>
+                  <dd>Video</dd>
+                </div>
+              )
+            }
+            <div>
+              <dt>Platform</dt>
+              <dd>Android</dd>
+            </div>
+          </dl>
+
+          <div class="links">
+            <a href="#screens" class="btn btn-primary">
+              <Icon name="arrow-down" /> View screens
+            </a>
+            {
+              p.links.map((l) => (
+                <a
+                  href={l.href}
+                  target="_blank"
+                  rel={isExternal(l.href) ? "noopener noreferrer" : "noopener"}
+                  class="btn"
+                >
+                  <Icon
+                    name={
+                      l.href.includes("play.google.com")
+                        ? "google-play"
+                        : l.href.endsWith(".pdf")
+                          ? "pdf"
+                          : "globe"
+                    }
+                  />
+                  {l.label}
+                  <span class="sr-only">
+                    {l.description ? `, ${l.description}` : ""} (opens in a new
+                    tab)
+                  </span>
+                </a>
+              ))
+            }
+          </div>
+        </div>
+
+        {
+          video && poster && (
+            <figure class="demo">
+              <div class="device">
+                <video
+                  src={video}
+                  poster={poster.src}
+                  controls
+                  playsinline
+                  preload="none"
+                  width="1080"
+                  height="1920"
+                  aria-label={`${p.name} demo video`}
+                />
+              </div>
+              <figcaption class="meta">
+                Demo recording of {p.name}, with sound
+              </figcaption>
+            </figure>
+          )
+        }
+      </div>
+    </section>
+
+    <section id="screens" class="screens" aria-labelledby="screens-title">
+      <div class="container-x screens-head">
+        <h2 id="screens-title" class="screens-title">
+          Screens <span class="meta">{pad(screens.length)}</span>
+        </h2>
+        <div class="rail-nav">
+          <button
+            type="button"
+            class="round"
+            data-rail-prev
+            aria-controls="rail"
+            disabled
+          >
+            <Icon name="caret-left" size="18" />
+            <span class="sr-only">Scroll screens back</span>
+          </button>
+          <button
+            type="button"
+            class="round"
+            data-rail-next
+            aria-controls="rail"
+          >
+            <Icon name="caret-right" size="18" />
+            <span class="sr-only">Scroll screens forward</span>
+          </button>
+        </div>
+      </div>
+
+      <ol class="rail" id="rail" data-rail>
+        {
+          screens.map((s, i) => (
+            <li class="shot">
+              <button
+                type="button"
+                class="shot-btn"
+                data-shot={i}
+                data-full={full[i].src}
+                data-caption={s.caption}
+              >
+                <Image
+                  src={s.src}
+                  alt={`${p.name}, ${s.caption} screen`}
+                  widths={[240, 360, 520]}
+                  sizes="(min-width: 1024px) 260px, (min-width: 640px) 30vw, 58vw"
+                  loading={i < 4 ? "eager" : "lazy"}
+                  class="shot-img"
+                />
+                <span class="sr-only">, open larger</span>
+              </button>
+              <p class="shot-cap">
+                <span class="mono shot-num">{pad(i + 1)}</span>
+                {s.caption}
+              </p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <nav class="pager container-x" aria-label="More projects">
+      <a href={prev.href} class="pager-link">
+        <span class="meta"><Icon name="arrow-left" size="14" /> Previous</span>
+        <span class="pager-name">{prev.project.name}</span>
+      </a>
+      <a href={next.href} class="pager-link pager-next">
+        <span class="meta">Next <Icon name="arrow-right" size="14" /></span>
+        <span class="pager-name">{next.project.name}</span>
+      </a>
+    </nav>
+  </main>
+
+  <Footer base="/" />
+
+  <dialog class="viewer" aria-label={`${p.name} screens`} data-viewer>
+    <div class="viewer-top">
+      <p class="meta" aria-live="polite" data-viewer-count></p>
+      <button type="button" class="round" data-viewer-close>
+        <Icon name="x" size="18" />
+        <span class="sr-only">Close</span>
+      </button>
+    </div>
+    <div class="viewer-stage">
+      <button type="button" class="round viewer-step" data-viewer-step="-1">
+        <Icon name="caret-left" size="20" />
+        <span class="sr-only">Previous screen</span>
+      </button>
+      <img class="viewer-img" alt="" width="1080" height="2400" data-viewer-img />
+      <button type="button" class="round viewer-step" data-viewer-step="1">
+        <Icon name="caret-right" size="20" />
+        <span class="sr-only">Next screen</span>
+      </button>
+    </div>
+    <p class="viewer-cap" data-viewer-cap></p>
+  </dialog>
+</Base>
+
+<script>
+  // Border under the bar only once the page has scrolled, as on the home nav.
+  const bar = document.querySelector<HTMLElement>("[data-bar]")!;
+  new IntersectionObserver(([e]) =>
+    bar.toggleAttribute("data-scrolled", !e.isIntersecting),
+  ).observe(document.querySelector(".bar-sentinel")!);
+
+  const rail = document.querySelector<HTMLElement>("[data-rail]")!;
+  const prevBtn = document.querySelector<HTMLButtonElement>("[data-rail-prev]")!;
+  const nextBtn = document.querySelector<HTMLButtonElement>("[data-rail-next]")!;
+  const reduced = () =>
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const syncRail = () => {
+    const max = rail.scrollWidth - rail.clientWidth;
+    prevBtn.disabled = rail.scrollLeft <= 4;
+    nextBtn.disabled = rail.scrollLeft >= max - 4;
+  };
+  const scrollRail = (dir: number) =>
+    rail.scrollBy({
+      left: dir * rail.clientWidth * 0.8,
+      behavior: reduced() ? "auto" : "smooth",
+    });
+  prevBtn.addEventListener("click", () => scrollRail(-1));
+  nextBtn.addEventListener("click", () => scrollRail(1));
+  rail.addEventListener("scroll", syncRail, { passive: true });
+  window.addEventListener("resize", syncRail, { passive: true });
+  syncRail();
+
+  const viewer = document.querySelector<HTMLDialogElement>("[data-viewer]")!;
+  const img = viewer.querySelector<HTMLImageElement>("[data-viewer-img]")!;
+  const cap = viewer.querySelector<HTMLElement>("[data-viewer-cap]")!;
+  const count = viewer.querySelector<HTMLElement>("[data-viewer-count]")!;
+  const shots = [...document.querySelectorAll<HTMLButtonElement>("[data-shot]")];
+  let index = 0;
+
+  const show = (i: number) => {
+    index = (i + shots.length) % shots.length;
+    const shot = shots[index];
+    img.src = shot.dataset.full!;
+    img.alt = shot.querySelector("img")?.alt ?? "";
+    cap.textContent = shot.dataset.caption ?? "";
+    count.textContent = `${index + 1} / ${shots.length}`;
+    // Warm the neighbours so stepping through feels instant.
+    [index - 1, index + 1].forEach((n) => {
+      const s = shots[(n + shots.length) % shots.length];
+      new Image().src = s.dataset.full!;
+    });
+  };
+
+  shots.forEach((shot, i) =>
+    shot.addEventListener("click", () => {
+      show(i);
+      viewer.showModal();
+    }),
+  );
+  viewer.addEventListener("close", () => {
+    const shot = shots[index];
+    shot.focus();
+    shot.scrollIntoView({ block: "nearest", inline: "center" });
+  });
+  viewer
+    .querySelector("[data-viewer-close]")!
+    .addEventListener("click", () => viewer.close());
+  viewer.querySelectorAll<HTMLButtonElement>("[data-viewer-step]").forEach((b) =>
+    b.addEventListener("click", () => show(index + Number(b.dataset.viewerStep))),
+  );
+  viewer.addEventListener("click", (e) => {
+    if (e.target === viewer) viewer.close();
+  });
+  viewer.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") show(index - 1);
+    if (e.key === "ArrowRight") show(index + 1);
+  });
+
+  let startX: number | null = null;
+  img.addEventListener("pointerdown", (e) => (startX = e.clientX));
+  img.addEventListener("pointerup", (e) => {
+    if (startX === null) return;
+    const dx = e.clientX - startX;
+    startX = null;
+    if (Math.abs(dx) > 40) show(index + (dx < 0 ? 1 : -1));
+  });
+</script>
+
+<style>
+  .skip {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: var(--z-skip);
+    padding: 0.6rem 1rem;
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    border-radius: var(--radius-ui);
+    font-weight: 600;
+    translate: 0 -200%;
+    transition: translate 0.2s var(--ease-out);
+  }
+  .skip:focus-visible {
+    translate: 0 0;
+  }
+
+  .bar {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-nav);
+    height: var(--nav-h);
+    padding-inline: var(--nav-pad);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    background: color-mix(in srgb, var(--color-bg) 90%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s;
+  }
+  .bar[data-scrolled] {
+    border-bottom-color: var(--color-line);
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .bar {
+      background: var(--color-bg);
+      backdrop-filter: none;
+    }
+  }
+  .bar-sentinel {
+    position: absolute;
+    top: 0;
+    height: 8px;
+    width: 1px;
+  }
+  .mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--color-fg);
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .mark-glyph {
+    user-select: none;
+    display: grid;
+    place-items: center;
+    width: var(--nav-item);
+    height: var(--nav-item);
+    border-radius: var(--radius-ui);
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+  .bar-back {
+    height: var(--nav-item);
+    padding-inline: 0.9rem;
+    font-size: 0.875rem;
+  }
+  @media (max-width: 479px) {
+    .mark-name {
+      display: none;
+    }
+  }
+
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--color-fg-3);
+  }
+  .crumbs li + li::before {
+    content: "/";
+    margin-right: 0.5rem;
+    color: var(--color-line-2);
+  }
+  .crumbs [aria-current] {
+    color: var(--color-fg-2);
+  }
+
+  /* Laid out like the home hero (Hero.astro .hero), so the phone sits in the same place. */
+  .intro-grid {
+    display: grid;
+    gap: 3.5rem;
+    padding-top: clamp(2.5rem, 7vw, 5.5rem);
+    padding-bottom: clamp(4rem, 8vw, 6rem);
+    min-height: calc(100dvh - var(--nav-h));
+    align-content: center;
+  }
+  .crumbs {
+    margin-bottom: clamp(1.25rem, 3dvh, 2rem);
+  }
+  .id {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .name {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    letter-spacing: -0.05em;
+    line-height: 1;
+  }
+  .tag {
+    margin-top: 0.35rem;
+    color: var(--color-fg-2);
+  }
+  .status-row {
+    margin-top: 1.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.25rem;
+  }
+  .summary {
+    margin-top: 1rem;
+    max-width: 44ch;
+  }
+  .features {
+    margin-top: 1.5rem;
+    display: grid;
+    gap: 0.5rem;
+    color: var(--color-fg-2);
+    font-size: 0.975rem;
+    max-width: 56ch;
+  }
+  .features li {
+    padding-left: 1rem;
+    position: relative;
+  }
+  .features li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.75em;
+    width: 0.45rem;
+    height: 1px;
+    background: var(--color-fg-3);
+  }
+  .stack {
+    margin-top: 1.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .facts {
+    margin-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--color-line);
+  }
+  .facts > div {
+    padding: 1rem 1.5rem 0 0;
+    margin-right: 1.5rem;
+  }
+  .facts > div + div {
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--color-line);
+  }
+  .facts dt {
+    font-size: 0.75rem;
+    color: var(--color-fg-3);
+    letter-spacing: 0.02em;
+  }
+  .facts dd {
+    margin: 0.2rem 0 0;
+    font-size: 1.25rem;
+    color: var(--color-fg);
+  }
+  .links {
+    margin-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .demo {
+    position: relative;
+    justify-self: center;
+  }
+  /* Out of flow so the caption doesn't nudge the phone off the hero's position. */
+  .demo figcaption {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 0.75rem;
+    text-align: center;
+  }
+  /* Same frame as the hero phone (Hero.astro .phone / .phone-screen). */
+  .device {
+    width: clamp(248px, 25vw, 318px);
+    aspect-ratio: 9 / 18;
+    padding: 10px;
+    border: 1px solid var(--color-line-2);
+    border-radius: 44px;
+    background: var(--color-sunk);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.04),
+      0 40px 80px -30px rgb(6 7 9 / 0.8);
+  }
+  .device video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 1px solid var(--color-line);
+    border-radius: 34px;
+    background: var(--color-sunk);
+  }
+  @media (max-width: 1023px) {
+    .device {
+      width: min(320px, 85vw);
+    }
+  }
+
+  .screens {
+    padding-block: clamp(3rem, 6vw, 5rem);
+    border-top: 1px solid var(--color-line);
+    background: var(--color-bg-2);
+  }
+  .screens-head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .screens-title {
+    font-size: clamp(1.75rem, 3.6vw, 2.5rem);
+    letter-spacing: -0.04em;
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+  .rail-nav {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .round {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--color-line-2);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--color-fg);
+    cursor: pointer;
+    transition:
+      border-color 0.2s,
+      opacity 0.2s;
+  }
+  .round:hover:not(:disabled) {
+    border-color: var(--color-fg-3);
+  }
+  .round:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .rail {
+    --edge: max(var(--gutter), calc((100vw - 1320px) / 2 + var(--gutter)));
+    margin-top: 2rem;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min(58vw, 260px);
+    gap: clamp(1rem, 2vw, 1.5rem);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--edge);
+    padding-inline: var(--edge);
+    padding-bottom: 0.5rem;
+    scrollbar-width: none;
+  }
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+  @media (min-width: 640px) {
+    .rail {
+      grid-auto-columns: min(30vw, 260px);
+    }
+  }
+  .shot {
+    scroll-snap-align: start;
+  }
+  .shot-btn {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 1px solid var(--color-line);
+    border-radius: 1.25rem;
+    overflow: hidden;
+    background: var(--color-sunk);
+    cursor: zoom-in;
+    transition:
+      border-color 0.2s,
+      translate 0.3s var(--ease-out);
+  }
+  .shot-btn:hover {
+    border-color: var(--color-line-2);
+    translate: 0 -4px;
+  }
+  .shot-img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 9 / 20;
+    object-fit: cover;
+    object-position: top;
+  }
+  .shot-cap {
+    margin-top: 0.75rem;
+    display: flex;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+    color: var(--color-fg-2);
+  }
+  .shot-num {
+    color: var(--color-accent);
+    font-size: 0.8rem;
+    padding-top: 0.1em;
+  }
+
+  .pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+  }
+  .pager-link {
+    display: grid;
+    gap: 0.35rem;
+    padding: 1.25rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-ui);
+    color: var(--color-fg);
+    text-decoration: none;
+    transition: border-color 0.2s;
+  }
+  .pager-link:hover {
+    border-color: var(--color-line-2);
+  }
+  .pager-link:hover .pager-name {
+    color: var(--color-accent);
+  }
+  .pager-link .meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .pager-next {
+    text-align: right;
+    justify-items: end;
+  }
+  .pager-name {
+    font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    transition: color 0.2s;
+  }
+
+  .viewer {
+    width: 100%;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 1rem var(--gutter) 1.25rem;
+    border: 0;
+    background: rgb(12 13 16 / 0.94);
+    color: var(--color-fg);
+    overscroll-behavior: contain;
+  }
+  .viewer[open] {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 1rem;
+  }
+  .viewer::backdrop {
+    background: transparent;
+  }
+  .viewer-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .viewer-stage {
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.5rem, 3vw, 2rem);
+  }
+  .viewer-img {
+    height: 100%;
+    max-height: 100%;
+    width: auto;
+    max-width: calc(100% - 7rem);
+    object-fit: contain;
+    border-radius: 1.25rem;
+    border: 1px solid var(--color-line);
+    touch-action: pan-y;
+    user-select: none;
+  }
+  .viewer-step {
+    flex: none;
+    background: var(--color-bg);
+  }
+  .viewer-cap {
+    text-align: center;
+    color: var(--color-fg-2);
+  }
+  @media (max-width: 639px) {
+    .viewer-step {
+      display: none;
+    }
+    .viewer-img {
+      max-width: 100%;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .intro-grid {
+      --hero-pad: clamp(1.5rem, 4dvh, 3rem);
+      align-items: center;
+      gap: 2rem;
+      min-height: max(560px, calc(100dvh - var(--nav-h)));
+      padding-block: var(--hero-pad);
+    }
+    .intro-grid:not(.solo) {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    }
+    .demo {
+      justify-self: end;
+    }
+    .device {
+      height: min(calc(100dvh - var(--nav-h) - 2 * var(--hero-pad)), 680px);
+      width: auto;
+    }
+  }
+</style>

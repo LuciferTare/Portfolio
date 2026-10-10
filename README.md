@@ -36,7 +36,7 @@ A link with `href: ''` is hidden until you fill it in. Use a plain hyphen (`-`) 
 The originals live in **`assets-src/`** and are copied into the site by a script. Replace a file there (same name), then:
 
 ```bash
-node scripts/prepare-assets.mjs   # icons, CV, paper PDFs, portrait crop
+node scripts/prepare-assets.mjs   # icons, CV, paper PDFs, project screens + videos, portrait crop
 npm run og                        # social card + PNG favicons (needs Chrome or Edge)
 ```
 
@@ -46,13 +46,12 @@ assets-src/
   certificates/   research paper + certificate PDFs, one pair per project -> public/papers/
   resume/         Sushant_Tare_CV.pdf -> public/cv/ (Master_CV is reference only, not published)
   portrait/       source photo, cropped into src/assets/portrait.jpg
-  videos/         raw project demo footage (not copied by the script)
+  projects/<id>/  screenshots (NN-name.png) + launch-video.mp4 per project -> src/assets/projects/, public/videos/
 ```
 
 - **Higher-resolution icons:** overwrite the file in `assets-src/icons/`, or drop it straight into `src/assets/icons/` with the same name. They are resized automatically.
 - **New paper or certificate PDF:** put the pair in `assets-src/certificates/` as `<Name> Paper.pdf` / `<Name> Certificate.pdf`, add the copy mapping in `scripts/prepare-assets.mjs`, then add both links to that publication.
-- **Project screenshots (later):** put them in `src/assets/`, import them in `portfolio.ts` like the icons, and render them with `<Image>` in `src/components/Projects.astro`.
-- **Project videos:** raw footage lives in `assets-src/videos/`; a rendered/trimmed version meant for the site goes in `public/videos/` and is referenced directly from a component.
+- **Project pages (`/work/<id>`):** make a folder in `assets-src/projects/` named after the project's `id` in `portfolio.ts`. Add screenshots as `01-splash.png`, `02-home.png`, ... (the number sets the order, the rest becomes the caption) and optionally `launch-video.mp4`, then run the script. The page, the "Screens and demo" link on the home page, and the sitemap entry appear automatically. Template: `src/pages/work/[id].astro`.
 
 ## Contact form
 
@@ -71,9 +70,10 @@ The form uses Netlify Forms (`contact.formProvider: 'netlify'`). Enable form det
 ```
 src/data/portfolio.ts     all content (typed)
 src/components/           one component per section
+src/pages/work/[id].astro project page template (screens + demo video)
 src/scripts/motion.ts     every animation, one Anime.js scope, reduced-motion aware
 src/scripts/ui.ts         nav state, mobile menu, copy buttons, form
 src/styles/global.css     design tokens (colours, type, radius) and primitives
 scripts/                  asset copy + social image generation
-assets-src/               raw source files (icons, certificates, resume, portrait, videos)
+assets-src/               raw source files (icons, certificates, resume, portrait, project screens + videos)
 ```

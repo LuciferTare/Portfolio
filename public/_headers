@@ -12,3 +12,6 @@
 
 /cv/*
   Cache-Control: public, max-age=3600
+
+/videos/*
+  Cache-Control: public, max-age=604800

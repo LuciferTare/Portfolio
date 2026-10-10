@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { execFileSync } from 'node:child_process';
 import { publications } from '../data/portfolio';
+import { showcases } from '../data/showcase';
 
 // Date of the last commit touching these paths, or undefined when git history is unavailable
 // (e.g. a shallow clone). An omitted lastmod is better than one that changes on every build.
@@ -19,7 +20,12 @@ export const GET: APIRoute = ({ site }) => {
       .filter((l) => l.href.startsWith('/papers/') && l.label.includes('Paper'))
       .map((l) => ({ loc: l.href, lastmod: p.datePublished, priority: '0.6' })),
   );
-  const urls = [{ loc: '/', lastmod: lastCommit('src', 'public'), priority: '1.0' }, ...papers];
+  const work = showcases.map((s) => ({
+    loc: s.href,
+    lastmod: lastCommit(`src/assets/projects/${s.project.id}`, 'src/pages/work'),
+    priority: '0.7',
+  }));
+  const urls = [{ loc: '/', lastmod: lastCommit('src', 'public'), priority: '1.0' }, ...work, ...papers];
 
   const body = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
