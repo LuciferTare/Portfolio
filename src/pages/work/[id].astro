@@ -147,10 +147,8 @@ const schema = [
             </div>
           </dl>
 
+          {p.links.length > 0 && (
           <div class="links">
-            <a href="#screens" class="btn btn-primary">
-              <Icon name="arrow-down" /> View screens
-            </a>
             {
               p.links.map((l) => (
                 <a
@@ -177,6 +175,7 @@ const schema = [
               ))
             }
           </div>
+          )}
         </div>
 
         {
@@ -357,8 +356,12 @@ const schema = [
   );
   viewer.addEventListener("close", () => {
     const shot = shots[index];
-    shot.focus();
-    shot.scrollIntoView({ block: "nearest", inline: "center" });
+    // Scroll only the rail: scrollIntoView/focus also scroll the page
+    // sideways, and body's overflow-x: clip leaves no way to scroll back.
+    shot.focus({ preventScroll: true });
+    const s = shot.getBoundingClientRect();
+    const r = rail.getBoundingClientRect();
+    rail.scrollBy({ left: s.left + s.width / 2 - (r.left + r.width / 2) });
   });
   viewer
     .querySelector("[data-viewer-close]")!
