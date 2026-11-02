@@ -2,6 +2,7 @@ import nodemailer from 'nodemailer';
 
 const { GMAIL_USER, GMAIL_APP_PASSWORD } = process.env;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const FIT_FUEL_INBOX = 'fitandfuel26@gmail.com';
 
 interface SubmissionEvent {
   body: string;
@@ -9,6 +10,7 @@ interface SubmissionEvent {
 
 export const handler = async (event: SubmissionEvent) => {
   const { payload } = JSON.parse(event.body);
+  if (payload.form_name === 'fitfuel-contact') return notifyFitFuel(payload.data ?? {});
   if (payload.form_name !== 'contact') return { statusCode: 200 };
 
   const data = payload.data ?? {};
@@ -48,6 +50,37 @@ export const handler = async (event: SubmissionEvent) => {
   }
   return { statusCode: 200 };
 };
+
+async function notifyFitFuel(data: Record<string, unknown>) {
+  const email = String(data.email ?? '').trim();
+  const name = String(data.name ?? '').trim().slice(0, 100);
+  const topic = String(data.topic ?? 'Contact').trim().slice(0, 50);
+  const message = String(data.message ?? '').trim().slice(0, 5000);
+  if (!EMAIL_RE.test(email) || !name) return { statusCode: 200 };
+
+  if (!GMAIL_USER || !GMAIL_APP_PASSWORD) {
+    console.error('submission-created: missing GMAIL_USER or GMAIL_APP_PASSWORD');
+    return { statusCode: 200 };
+  }
+
+  const transport = nodemailer.createTransport({
+    service: 'gmail',
+    auth: { user: GMAIL_USER, pass: GMAIL_APP_PASSWORD },
+  });
+
+  try {
+    await transport.sendMail({
+      from: { name: 'Fit&Fuel contact form', address: GMAIL_USER },
+      to: FIT_FUEL_INBOX,
+      replyTo: { name, address: email },
+      subject: `Fit&Fuel ${topic}: message from ${name}`,
+      text: `${message}\n\n${name}\n${email}`,
+    });
+  } catch (error) {
+    console.error('submission-created: Fit&Fuel notification failed', error);
+  }
+  return { statusCode: 200 };
+}
 
 function esc(s: string) {
   return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
