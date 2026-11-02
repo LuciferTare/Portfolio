@@ -1,0 +1,146 @@
+---
+import { Image } from "astro:assets";
+import { appNav, type AppSite } from "../../data/apps";
+
+interface Props {
+  app: AppSite;
+  /** On the app's home page the section links stay in-page. */
+  home?: boolean;
+}
+
+const { app, home = false } = Astro.props;
+const base = `/${app.id}/`;
+const to = (hash: string) => (home ? hash : base + hash);
+---
+
+<a href="#main" class="skip">Skip to content</a>
+<div class="bar-sentinel" aria-hidden="true"></div>
+<header class="bar" data-bar>
+  <a href={to("#home")} class="brand" aria-label={`${app.name}, home`}>
+    <Image
+      src={app.icon}
+      alt=""
+      width={32}
+      height={32}
+      densities={[1, 2]}
+      class="icon-app"
+      loading="eager"
+    />
+    <span class="brand-name">{app.name}</span>
+  </a>
+
+  <nav aria-label={app.name} class="bar-nav">
+    <ul>
+      {
+        appNav.map((n) => (
+          <li>
+            <a href={to(n.hash)} class="bar-link">
+              {n.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const bar = document.querySelector<HTMLElement>("[data-bar]")!;
+  new IntersectionObserver(([e]) =>
+    bar.toggleAttribute("data-scrolled", !e.isIntersecting),
+  ).observe(document.querySelector(".bar-sentinel")!);
+</script>
+
+<style>
+  .skip {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: var(--z-skip);
+    padding: 0.6rem 1rem;
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    border-radius: var(--radius-ui);
+    font-weight: 600;
+    translate: 0 -200%;
+    transition: translate 0.2s var(--ease-out);
+  }
+  .skip:focus-visible {
+    translate: 0 0;
+  }
+
+  .bar {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-nav);
+    height: var(--nav-h);
+    padding-inline: var(--nav-pad);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    background: color-mix(in srgb, var(--color-bg) 90%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s;
+  }
+  .bar[data-scrolled] {
+    border-bottom-color: var(--color-line);
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .bar {
+      background: var(--color-bg);
+      backdrop-filter: none;
+    }
+  }
+  .bar-sentinel {
+    position: absolute;
+    top: 0;
+    height: 8px;
+    width: 1px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--color-fg);
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .brand :global(.icon-app) {
+    width: var(--nav-item);
+    height: var(--nav-item);
+  }
+
+  .bar-nav {
+    display: none;
+    margin-left: auto;
+  }
+  .bar-nav ul {
+    display: flex;
+    gap: 0.25rem;
+  }
+  .bar-link {
+    display: inline-flex;
+    align-items: center;
+    height: var(--nav-item);
+    padding-inline: 0.75rem;
+    border-radius: var(--radius-ui);
+    color: var(--color-fg-2);
+    font-size: 0.9375rem;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .bar-link:hover {
+    color: var(--color-fg);
+  }
+
+  @media (min-width: 900px) {
+    .bar-nav {
+      display: block;
+    }
+  }
+</style>

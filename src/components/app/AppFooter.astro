@@ -1,0 +1,141 @@
+---
+import { Image } from "astro:assets";
+import Icon from "../Icon.astro";
+import { profile } from "../../data/portfolio";
+import { appDocs, appNav, type AppSite } from "../../data/apps";
+
+interface Props {
+  app: AppSite;
+  home?: boolean;
+}
+
+const { app, home = false } = Astro.props;
+const base = `/${app.id}/`;
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container-x">
+    <div class="footer-top">
+      <div>
+        <p class="footer-name">
+          <Image
+            src={app.icon}
+            alt=""
+            width={28}
+            height={28}
+            densities={[1, 2]}
+            class="icon-app"
+          />
+          {app.name}
+        </p>
+        <p class="footer-line">{app.tagline}.</p>
+        <a href={`mailto:${app.contact.email}`} class="link link-rest footer-mail">
+          {app.contact.email}
+        </a>
+      </div>
+
+      <nav aria-label={`${app.name} pages`} class="footer-cols">
+        <div>
+          <p class="meta">App</p>
+          <ul class="footer-list">
+            {
+              appNav.map((n) => (
+                <li>
+                  <a href={home ? n.hash : base + n.hash} class="link">
+                    {n.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div>
+          <p class="meta">Legal</p>
+          <ul class="footer-list">
+            {
+              appDocs.map((d) => (
+                <li>
+                  <a href={`${base}${d.slug}/`} class="link">
+                    {d.title}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </nav>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="meta">&copy; {year} {app.name}. All rights reserved.</p>
+      <p class="meta credit">
+        Designed and developed by <a href="/" class="link link-rest">{profile.name}</a>
+        <Icon name="arrow-up-right" size="12" />
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--color-line);
+    padding-block: 3.5rem 2rem;
+  }
+  .footer-top {
+    display: grid;
+    gap: 2.5rem;
+  }
+  .footer-name {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+  }
+  .footer-line {
+    margin-top: 0.5rem;
+    color: var(--color-fg-2);
+  }
+  .footer-mail {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+  }
+  .footer-cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, max-content));
+    gap: 3rem;
+  }
+  .footer-list {
+    margin-top: 0.75rem;
+    display: grid;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+  }
+  .footer-bottom {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-line);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .credit {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .credit .link {
+    color: var(--color-fg-2);
+  }
+  @media (min-width: 768px) {
+    .footer-top {
+      grid-template-columns: 1fr auto;
+      align-items: start;
+    }
+  }
+</style>

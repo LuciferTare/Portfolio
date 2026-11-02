@@ -1,0 +1,230 @@
+---
+import type { MarkdownInstance } from "astro";
+import Base from "../../layouts/Base.astro";
+import AppHeader from "../../components/app/AppHeader.astro";
+import AppFooter from "../../components/app/AppFooter.astro";
+import { apps, appDocs, type AppDoc, type AppSite } from "../../data/apps";
+
+type Legal = MarkdownInstance<{ description: string }>;
+
+// A page exists for each src/data/legal/<app>/<doc>.md that matches an entry in appDocs.
+export function getStaticPaths() {
+  const files = import.meta.glob<Legal>("../../data/legal/*/*.md", { eager: true });
+  return apps.flatMap((app) =>
+    appDocs.flatMap((doc) => {
+      const file = files[`../../data/legal/${app.id}/${doc.slug}.md`];
+      return file ? [{ params: { app: app.id, doc: doc.slug }, props: { app, doc, file } }] : [];
+    }),
+  );
+}
+
+interface Props {
+  app: AppSite;
+  doc: AppDoc;
+  file: Legal;
+}
+
+const { app, doc, file } = Astro.props;
+const { Content } = file;
+const base = `/${app.id}/`;
+const href = `${base}${doc.slug}/`;
+
+const title = `${doc.title} | ${app.name}`;
+const description = file.frontmatter.description;
+const crumbs = [
+  { name: app.name, path: base },
+  { name: doc.title, path: href },
+];
+---
+
+<Base {title} {description} bare breadcrumbs={crumbs}>
+  <AppHeader {app} />
+
+  <main id="main" tabindex="-1" class="container-x page">
+    <nav aria-label="Breadcrumb" class="crumbs mono">
+      <ol>
+        <li><a href={base} class="link">{app.name}</a></li>
+        <li aria-current="page">{doc.title}</li>
+      </ol>
+    </nav>
+
+    <h1 class="title">{doc.title}</h1>
+    <p class="meta effective">
+      Effective <time datetime={app.legal.effectiveIso}>{app.legal.effective}</time>
+    </p>
+
+    <div class="layout">
+      <article class="legal">
+        <Content />
+      </article>
+
+      <aside class="others" aria-labelledby="others-title">
+        <p id="others-title" class="meta">{app.name} policies</p>
+        <ul>
+          {
+            appDocs.map((d) => (
+              <li>
+                <a
+                  href={`${base}${d.slug}/`}
+                  class="other"
+                  aria-current={d.slug === doc.slug ? "page" : undefined}
+                >
+                  {d.title}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </aside>
+    </div>
+  </main>
+
+  <AppFooter {app} />
+</Base>
+
+<style>
+  .page {
+    padding-block: clamp(2.5rem, 6vw, 4.5rem) clamp(4rem, 8vw, 6rem);
+  }
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--color-fg-3);
+  }
+  .crumbs li + li::before {
+    content: "/";
+    margin-right: 0.5rem;
+    color: var(--color-line-2);
+  }
+  .crumbs [aria-current] {
+    color: var(--color-fg-2);
+  }
+  .title {
+    margin-top: 1.5rem;
+    font-size: clamp(1.875rem, 5vw, 3.5rem);
+    letter-spacing: -0.045em;
+    line-height: 1;
+  }
+  .effective {
+    margin-top: 1rem;
+  }
+
+  .layout {
+    margin-top: clamp(2rem, 4vw, 3rem);
+    padding-top: clamp(2rem, 4vw, 3rem);
+    border-top: 1px solid var(--color-line);
+    display: grid;
+    gap: 3rem;
+  }
+
+  .legal {
+    min-width: 0;
+    max-width: 72ch;
+    font-size: clamp(1rem, 1.4vw, 1.1875rem);
+    line-height: 1.6;
+    color: var(--color-fg-2);
+    overflow-wrap: anywhere;
+  }
+  .legal :global(h2) {
+    margin-top: 2.75rem;
+    font-size: clamp(1.35rem, 2.4vw, 1.65rem);
+    letter-spacing: -0.03em;
+    color: var(--color-fg);
+  }
+  .legal :global(h2:first-child) {
+    margin-top: 0;
+  }
+  .legal :global(p),
+  .legal :global(ul),
+  .legal :global(ol) {
+    margin-top: 1rem;
+  }
+  .legal :global(ul) {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .legal :global(li) {
+    padding-left: 1rem;
+    position: relative;
+  }
+  .legal :global(ul > li)::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.8em;
+    width: 0.45rem;
+    height: 1px;
+    background: var(--color-fg-3);
+  }
+  .legal :global(strong) {
+    color: var(--color-fg);
+    font-weight: 600;
+  }
+  .legal :global(a) {
+    color: var(--color-fg);
+    text-decoration: underline;
+    text-decoration-color: var(--color-line-2);
+    text-underline-offset: 3px;
+    transition:
+      color 0.2s,
+      text-decoration-color 0.2s;
+  }
+  .legal :global(a:hover) {
+    color: var(--color-accent);
+    text-decoration-color: currentColor;
+  }
+  /* Tables scroll sideways on narrow screens instead of widening the page. */
+  .legal :global(table) {
+    display: block;
+    overflow-x: auto;
+    margin-top: 1.25rem;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+  .legal :global(th),
+  .legal :global(td) {
+    padding: 0.75rem 1.25rem 0.75rem 0;
+    border-bottom: 1px solid var(--color-line);
+    text-align: left;
+    vertical-align: top;
+    min-width: 12rem;
+  }
+  .legal :global(th) {
+    color: var(--color-fg);
+    font-weight: 600;
+  }
+
+  .others ul {
+    margin-top: 0.75rem;
+    display: grid;
+    border-top: 1px solid var(--color-line);
+  }
+  .other {
+    display: block;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-line);
+    color: var(--color-fg-2);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .other:hover {
+    color: var(--color-fg);
+  }
+  .other[aria-current="page"] {
+    color: var(--color-accent);
+  }
+
+  @media (min-width: 1024px) {
+    .layout {
+      grid-template-columns: minmax(0, 1fr) 16rem;
+      gap: 5rem;
+    }
+    .others {
+      position: sticky;
+      top: calc(var(--nav-h) + 2rem);
+      align-self: start;
+    }
+  }
+</style>

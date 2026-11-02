@@ -1,0 +1,1079 @@
+---
+import { Image } from "astro:assets";
+import Base from "../../layouts/Base.astro";
+import AppHeader from "../../components/app/AppHeader.astro";
+import AppFooter from "../../components/app/AppFooter.astro";
+import Icon from "../../components/Icon.astro";
+import { profile } from "../../data/portfolio";
+import { apps, appDocs, type AppSite } from "../../data/apps";
+
+export function getStaticPaths() {
+  return apps.map((app) => ({ params: { app: app.id }, props: { app } }));
+}
+
+interface Props {
+  app: AppSite;
+}
+
+const { app } = Astro.props;
+const { pricing, contact } = app;
+
+const site = Astro.site!;
+const abs = (path: string) => new URL(path, site).href;
+const href = `/${app.id}/`;
+const pad = (n: number) => String(n).padStart(2, "0");
+const rupees = (n: number) => `₹${n.toLocaleString("en-IN")}`;
+
+const [firstPeriod] = pricing.periods;
+const monthly = pricing.periods.find((p) => p.months === 1)!;
+const breakdown = (
+  plan: (typeof pricing.plans)[number],
+  period: (typeof pricing.periods)[number],
+) => {
+  const price = plan.prices[period.id];
+  if (period.months === 1) return "Billed every month";
+  const saving = Math.round(
+    (1 - price / (plan.prices[monthly.id] * period.months)) * 100,
+  );
+  return `${rupees(Math.round(price / period.months))}/month, save ${saving}%`;
+};
+
+const priceTable = (plan: (typeof pricing.plans)[number]) =>
+  Object.fromEntries(
+    pricing.periods.map((period) => [
+      period.id,
+      {
+        amount: rupees(plan.prices[period.id]),
+        per: `/ ${period.per}`,
+        breakdown: breakdown(plan, period),
+      },
+    ]),
+  );
+const allPrices = pricing.plans.flatMap((p) => Object.values(p.prices));
+
+const title = `${app.name} | ${app.tagline}`;
+const description = app.summary;
+const schema = [
+  {
+    "@type": "SoftwareApplication",
+    "@id": `${abs(href)}#app`,
+    name: app.name,
+    description: app.summary,
+    url: abs(href),
+    operatingSystem: "Android",
+    applicationCategory: "BusinessApplication",
+    author: { "@id": abs("/#person") },
+    offers: {
+      "@type": "AggregateOffer",
+      priceCurrency: "INR",
+      lowPrice: Math.min(...allPrices),
+      highPrice: Math.max(...allPrices),
+      offerCount: allPrices.length,
+    },
+  },
+];
+---
+
+<Base
+  {title}
+  {description}
+  bare
+  breadcrumbs={[{ name: app.name, path: href }]}
+  {schema}
+>
+  <AppHeader {app} home />
+
+  <main id="main" tabindex="-1">
+    <section id="home" class="hero container-x" aria-labelledby="hero-title">
+      <div class="id">
+        <Image
+          src={app.icon}
+          alt={`${app.name} app icon`}
+          width={72}
+          height={72}
+          densities={[1, 2]}
+          class="icon-app"
+          loading="eager"
+        />
+        <div>
+          <p class="name">{app.name}</p>
+          <p class="status" data-tone="progress">{app.status}</p>
+        </div>
+      </div>
+
+      <h1 id="hero-title" class="hero-title">{app.tagline}</h1>
+      <p class="lead hero-summary">{app.summary}</p>
+
+      <div class="hero-actions">
+        <a href="#pricing" class="btn btn-primary">
+          See pricing <Icon name="arrow-right" />
+        </a>
+        <a href="#contact" class="btn">Contact us</a>
+      </div>
+
+      <dl class="facts mono">
+        {
+          app.highlights.map((h) => (
+            <div>
+              <dt>{h.label}</dt>
+              <dd>{h.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <section id="about" class="block" aria-labelledby="about-title">
+      <div class="container-x split">
+        <h2 id="about-title" class="h-section">About {app.name}</h2>
+        <div>
+          <p class="lead">{app.about.lead}</p>
+          <div class="prose-body about-body">
+            {app.about.paragraphs.map((p) => <p>{p}</p>)}
+          </div>
+
+          <div class="maker">
+            <span class="mark-glyph mono" aria-hidden="true"
+              >{profile.initials}</span
+            >
+            <div>
+              <p class="maker-name">{profile.fullName}</p>
+              <p class="meta">Developer, {profile.location}</p>
+            </div>
+            <a href="/" class="btn maker-link">
+              More of my work <Icon name="arrow-up-right" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="block" aria-labelledby="features-title">
+      <div class="container-x">
+        <div class="head">
+          <h2 id="features-title" class="h-section">{app.features.heading}</h2>
+          <p class="lead head-intro">{app.features.intro}</p>
+        </div>
+        <ol class="features">
+          {
+            app.features.items.map((f, i) => (
+              <li class="feature">
+                <span class="mono feature-n" aria-hidden="true">
+                  {pad(i + 1)}
+                </span>
+                <h3 class="feature-title">{f.title}</h3>
+                <p class="feature-text">{f.text}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <section
+      id="pricing"
+      class="block pricing"
+      aria-labelledby="pricing-title"
+      data-pricing
+    >
+      <div class="container-x">
+        <div class="head">
+          <h2 id="pricing-title" class="h-section">Pricing</h2>
+          <p class="lead head-intro">{pricing.intro}</p>
+        </div>
+
+        <fieldset class="periods">
+          <legend class="sr-only">Billing period</legend>
+          {
+            pricing.periods.map((p) => (
+              <label class="period">
+                <input
+                  type="radio"
+                  name="period"
+                  value={p.id}
+                  checked={p.id === firstPeriod.id}
+                  data-period-input
+                />
+                <span>{p.label}</span>
+              </label>
+            ))
+          }
+        </fieldset>
+
+        <ul class="plans">
+          {
+            pricing.plans.map((plan) => (
+              <li class:list={["plan", { featured: plan.featured }]}>
+                <div class="plan-head">
+                  <h3 class="plan-name">{plan.name}</h3>
+                  {plan.featured && <p class="plan-badge mono">Recommended</p>}
+                </div>
+                {plan.note && <p class="plan-note">{plan.note}</p>}
+
+                <div
+                  class="plan-price"
+                  data-plan-prices={JSON.stringify(priceTable(plan))}
+                >
+                  <p>
+                    <span class="amount">
+                      <span class="sr-only" data-amount-label>
+                        {rupees(plan.prices[firstPeriod.id])}
+                      </span>
+                      <span class="digits" aria-hidden="true" data-digits>
+                        {rupees(plan.prices[firstPeriod.id])}
+                      </span>
+                    </span>
+                    <span class="per" data-per>
+                      / {firstPeriod.per}
+                    </span>
+                  </p>
+                  <p class="meta" data-breakdown>
+                    {breakdown(plan, firstPeriod)}
+                  </p>
+                </div>
+
+                <dl class="limits">
+                  {plan.limits.map((l) => (
+                    <div>
+                      <dt class="meta">{l.label}</dt>
+                      <dd class="mono">{l.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+
+                <a
+                  href="#contact"
+                  class:list={[
+                    "btn",
+                    "plan-cta",
+                    { "btn-primary": plan.featured },
+                  ]}
+                >
+                  Get {plan.name} <Icon name="arrow-right" />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="table-wrap">
+          <table class="compare">
+            <thead>
+              <tr>
+                <th scope="col">Billing period</th>
+                {pricing.plans.map((p) => <th scope="col">{p.name}</th>)}
+              </tr>
+            </thead>
+            <tbody>
+              {
+                pricing.periods.map((period) => (
+                  <tr>
+                    <th scope="row">{period.label}</th>
+                    {pricing.plans.map((p) => (
+                      <td class="mono">{rupees(p.prices[period.id])}</td>
+                    ))}
+                  </tr>
+                ))
+              }
+              {
+                pricing.plans[0].limits.map((_, i) => (
+                  <tr>
+                    <th scope="row">{pricing.plans[0].limits[i].label}</th>
+                    {pricing.plans.map((p) => (
+                      <td class="mono">{p.limits[i].value}</td>
+                    ))}
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <ul class="notes">
+          {pricing.notes.map((n) => <li>{n}</li>)}
+          <li>
+            See the <a href={`${href}refund-policy/`} class="link link-rest"
+              >Refund Policy</a
+            >{" "}
+            and <a href={`${href}terms-conditions/`} class="link link-rest"
+              >Terms and Conditions</a
+            >.
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="contact" class="block" aria-labelledby="contact-title">
+      <div class="container-x contact">
+        <div>
+          <h2 id="contact-title" class="h-section">Contact us</h2>
+          <p class="lead contact-body">{contact.intro}</p>
+
+          <div class="email-row">
+            <a href={`mailto:${contact.email}`} class="email link"
+              >{contact.email}</a
+            >
+            <button
+              type="button"
+              class="copy-btn"
+              data-copy={contact.email}
+              data-copy-label="Email address copied"
+            >
+              <Icon name="copy" size="16" />
+              <span data-copy-text>Copy</span>
+              <span class="sr-only">email address</span>
+            </button>
+          </div>
+
+          <dl class="contact-facts">
+            <div>
+              <dt class="meta">Based in</dt>
+              <dd>
+                <Icon name="map-pin" size="16" class="fact-icon" />
+                {app.legal.address}
+              </dd>
+            </div>
+            <div>
+              <dt class="meta">Policies</dt>
+              <dd class="doc-links">
+                {
+                  appDocs.map((d) => (
+                    <a href={`${href}${d.slug}/`} class="link link-rest">
+                      {d.short}
+                    </a>
+                  ))
+                }
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <form
+          class="form"
+          name={contact.formName}
+          method="post"
+          action="/"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          data-contact-form
+          data-provider="netlify"
+          data-email={contact.email}
+          novalidate
+        >
+          <input type="hidden" name="form-name" value={contact.formName} />
+          <p class="honeypot" aria-hidden="true">
+            <label
+              >Leave this empty <input
+                name="bot-field"
+                tabindex="-1"
+                autocomplete="off"
+              /></label
+            >
+          </p>
+
+          <fieldset class="field">
+            <legend class="label">What is it about?</legend>
+            <div class="topics">
+              {
+                contact.topics.map((t, i) => (
+                  <label class="topic">
+                    <input
+                      type="radio"
+                      name="topic"
+                      value={t}
+                      checked={i === 0}
+                    />
+                    <span>{t}</span>
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label class="label" for="cf-name">Your name</label>
+            <input
+              class="input"
+              id="cf-name"
+              name="name"
+              type="text"
+              autocomplete="name"
+              required
+              aria-describedby="cf-name-err"
+            />
+            <p class="error" id="cf-name-err" data-error-for="name" hidden>
+              Please tell us your name.
+            </p>
+          </div>
+
+          <div class="field">
+            <label class="label" for="cf-email">Your email</label>
+            <input
+              class="input"
+              id="cf-email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              spellcheck="false"
+              inputmode="email"
+              required
+              aria-describedby="cf-email-err"
+            />
+            <p class="error" id="cf-email-err" data-error-for="email" hidden>
+              Please enter a valid email address.
+            </p>
+          </div>
+
+          <div class="field">
+            <label class="label" for="cf-message">Message</label>
+            <textarea
+              class="input textarea"
+              id="cf-message"
+              name="message"
+              rows="5"
+              required
+              minlength="10"
+              aria-describedby="cf-message-err"></textarea>
+            <p
+              class="error"
+              id="cf-message-err"
+              data-error-for="message"
+              hidden
+            >
+              A few more words, please (10 characters or more).
+            </p>
+          </div>
+
+          <div class="form-foot">
+            <button type="submit" class="btn btn-primary" data-submit>
+              <span data-submit-label>Send Message</span>
+              <Icon name="arrow-right" />
+            </button>
+          </div>
+
+          <div
+            class="form-status"
+            role="status"
+            aria-live="polite"
+            data-form-status
+          >
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <AppFooter {app} home />
+  <p class="sr-only" aria-live="polite" data-live></p>
+</Base>
+
+<script>
+  import { animate } from "animejs/animation";
+  import { stagger } from "animejs/utils";
+  import { initUI } from "../../scripts/ui";
+
+  initUI();
+
+  type Price = { amount: string; per: string; breakdown: string };
+
+  const pricing = document.querySelector<HTMLElement>("[data-pricing]")!;
+  const cards = [
+    ...pricing.querySelectorAll<HTMLElement>("[data-plan-prices]"),
+  ];
+  const reduced = () =>
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const splitDigits = (el: HTMLElement, text: string) => {
+    el.replaceChildren(
+      ...[...text].map((c) => {
+        const span = document.createElement("span");
+        span.className = "digit";
+        span.textContent = c;
+        return span;
+      }),
+    );
+    return [...el.children];
+  };
+
+  const showPeriod = (period: string, roll: boolean) => {
+    cards.forEach((card, i) => {
+      const price: Price = JSON.parse(card.dataset.planPrices!)[period];
+      const digits = card.querySelector<HTMLElement>("[data-digits]")!;
+      card.querySelector("[data-amount-label]")!.textContent = price.amount;
+      card.querySelector("[data-per]")!.textContent = price.per;
+      card.querySelector("[data-breakdown]")!.textContent = price.breakdown;
+      if (digits.textContent === price.amount) return;
+
+      const chars = splitDigits(digits, price.amount);
+      if (!roll || reduced()) return;
+      animate(chars, {
+        translateY: ["110%", "0%"],
+        opacity: [0, 1],
+        duration: 1000,
+        ease: "outExpo",
+        delay: stagger(40, { start: i * 60 }),
+      });
+    });
+  };
+
+  pricing.addEventListener("change", (e) => {
+    const input = e.target as HTMLInputElement;
+    if (input.matches("[data-period-input]")) showPeriod(input.value, true);
+  });
+
+  const sync = () => {
+    const checked = pricing.querySelector<HTMLInputElement>(
+      "[data-period-input]:checked",
+    );
+    if (checked) showPeriod(checked.value, false);
+  };
+  sync();
+  window.addEventListener("pageshow", sync);
+</script>
+
+<style>
+  .hero {
+    min-height: calc(100dvh - var(--nav-h));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-block: clamp(1.25rem, 4dvh, 3rem);
+  }
+  .id {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .id :global(.icon-app) {
+    width: clamp(2.75rem, 7dvh, 4rem);
+    height: auto;
+  }
+  .name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+  }
+  .hero-title {
+    margin-top: clamp(1rem, 3.5dvh, 2rem);
+    /* Sized by both width and height, so the whole hero fits one screen. */
+    font-size: clamp(1.875rem, min(5vw, 6.5dvh), 3.5rem);
+    letter-spacing: -0.045em;
+    line-height: 1;
+    max-width: 16ch;
+  }
+  .hero-summary {
+    margin-top: clamp(0.75rem, 2.5dvh, 1.25rem);
+    font-size: clamp(1rem, min(1.4vw, 2.4dvh), 1.1875rem);
+    line-height: 1.55;
+    max-width: 52ch;
+    color: var(--color-fg-2);
+  }
+  .hero-actions {
+    margin-top: clamp(1rem, 3dvh, 1.75rem);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .facts {
+    margin-top: clamp(1.25rem, 4dvh, 2.25rem);
+    display: grid;
+    gap: 0.75rem;
+    padding-top: 0.875rem;
+    border-top: 1px solid var(--color-line);
+  }
+  @media (min-width: 640px) {
+    .facts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      padding-top: 0;
+    }
+    .facts > div {
+      padding: 1rem 1.5rem 0 0;
+      margin-right: 1.5rem;
+    }
+    .facts > div + div {
+      padding-left: 1.5rem;
+      border-left: 1px solid var(--color-line);
+    }
+  }
+  .facts dt {
+    font-size: 0.75rem;
+    color: var(--color-fg-3);
+    letter-spacing: 0.02em;
+  }
+  .facts dd {
+    margin: 0.2rem 0 0;
+    font-size: 1.125rem;
+    color: var(--color-fg);
+  }
+
+  /* Same type scale as the hero: section titles match the hero title, leads match its summary. */
+  .h-section {
+    font-size: clamp(1.875rem, 5vw, 3.5rem);
+    letter-spacing: -0.045em;
+  }
+  .lead {
+    font-size: clamp(1rem, 1.4vw, 1.1875rem);
+    line-height: 1.55;
+  }
+  .hero-summary {
+    font-size: clamp(1rem, min(1.4vw, 2.4dvh), 1.1875rem);
+  }
+
+  /* Every section fills at least one screen below the header, like the hero. */
+  .block {
+    min-height: calc(100dvh - var(--nav-h));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-block: clamp(3rem, 7dvh, 6rem);
+    border-top: 1px solid var(--color-line);
+  }
+  .head {
+    display: grid;
+    gap: 1.25rem;
+  }
+  .head-intro {
+    max-width: 52ch;
+    color: var(--color-fg-2);
+  }
+
+  .split {
+    display: grid;
+    gap: 2rem;
+  }
+  .about-body {
+    margin-top: 1.5rem;
+    display: grid;
+    gap: 1rem;
+  }
+  .maker {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-line);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+  }
+  .mark-glyph {
+    user-select: none;
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--radius-ui);
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .maker-name {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .maker-link {
+    margin-left: auto;
+  }
+
+  .features {
+    margin-top: clamp(2rem, 4vw, 3rem);
+    display: grid;
+    border-top: 1px solid var(--color-line);
+  }
+  .feature {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .feature-n {
+    font-size: 0.8rem;
+    color: var(--color-accent);
+  }
+  .feature-title {
+    margin-top: 0.5rem;
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .feature-text {
+    margin-top: 0.5rem;
+    color: var(--color-fg-2);
+    max-width: 48ch;
+  }
+
+  .periods {
+    margin: clamp(2rem, 4vw, 3rem) 0 0;
+    padding: 0.25rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-ui);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.25rem;
+  }
+  @media (min-width: 640px) {
+    .periods {
+      display: inline-flex;
+    }
+  }
+  .period {
+    position: relative;
+  }
+  .period input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+  .period span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.5rem;
+    padding-inline: 1rem;
+    border-radius: var(--radius-ui);
+    font-size: 0.9rem;
+    color: var(--color-fg-2);
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+  }
+  .period input:checked + span {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    font-weight: 500;
+  }
+  .period input:focus-visible + span {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .plans {
+    margin-top: 2.5rem;
+    display: grid;
+    gap: 1rem;
+  }
+  .plan {
+    display: flex;
+    flex-direction: column;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-ui);
+    background: var(--color-bg-2);
+  }
+  .plan.featured {
+    border: 2px solid var(--color-accent);
+    background: rgb(252 213 53 / 0.025);
+    box-shadow: 0 24px 30px -28px rgb(252 213 53 / 0.25);
+  }
+  .plan.featured .amount {
+    font-size: clamp(2.75rem, 5vw, 3.5rem);
+    color: var(--color-accent);
+  }
+  @media (min-width: 768px) {
+    .plan.featured {
+      margin-top: -1.5rem;
+      align-self: end;
+    }
+  }
+  .plan-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .plan-name {
+    font-size: 1.5rem;
+    letter-spacing: -0.03em;
+  }
+  .plan-badge {
+    padding: 0.35rem 0.7rem;
+    border-radius: var(--radius-ui);
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+  .plan-note {
+    margin-top: 0.35rem;
+    color: var(--color-fg-2);
+    font-size: 0.95rem;
+  }
+  .plan-price {
+    margin-top: 1.75rem;
+  }
+  .amount {
+    font-size: clamp(2.25rem, 4vw, 2.75rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .digits {
+    display: inline-flex;
+    overflow: hidden;
+    padding-block: 0.08em;
+    vertical-align: bottom;
+  }
+  .digits :global(.digit) {
+    display: inline-block;
+    white-space: pre;
+  }
+  .per {
+    margin-left: 0.35rem;
+    color: var(--color-fg-3);
+  }
+  .plan-price .meta {
+    margin-top: 0.5rem;
+  }
+  .limits {
+    margin: 1.75rem 0;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-line);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .limits dd {
+    margin: 0.2rem 0 0;
+    font-size: 1.25rem;
+  }
+  .plan-cta {
+    margin-top: auto;
+    justify-content: center;
+  }
+
+  .table-wrap {
+    margin-top: 2.5rem;
+    overflow-x: auto;
+  }
+  .compare {
+    width: 100%;
+    min-width: 480px;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+  .compare caption {
+    text-align: left;
+    padding-bottom: 0.75rem;
+  }
+  .compare th,
+  .compare td {
+    padding: 0.75rem 1rem 0.75rem 0;
+    border-bottom: 1px solid var(--color-line);
+    text-align: left;
+  }
+  .compare thead th {
+    color: var(--color-fg);
+    font-weight: 600;
+  }
+  .compare tbody th {
+    color: var(--color-fg-2);
+    font-weight: 400;
+  }
+
+  .notes {
+    margin-top: 1.5rem;
+    display: grid;
+    gap: 0.35rem;
+    color: var(--color-fg-3);
+    font-size: 0.9rem;
+  }
+
+  .contact {
+    display: grid;
+    gap: 3.5rem;
+  }
+  .contact-body {
+    margin-top: 1.25rem;
+    max-width: 32ch;
+    color: var(--color-fg-2);
+  }
+  .email-row {
+    margin-top: 2.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+  }
+  .email {
+    font-size: clamp(1.15rem, 2.6vw, 1.9rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    word-break: break-all;
+    background-size: 100% 1px;
+  }
+  .copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    height: 2.25rem;
+    padding-inline: 0.75rem;
+    border: 1px solid var(--color-line-2);
+    border-radius: var(--radius-ui);
+    background: transparent;
+    color: var(--color-fg-2);
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  .copy-btn:hover {
+    color: var(--color-fg);
+    border-color: var(--color-fg-3);
+  }
+  .contact-facts {
+    margin-top: 2.5rem;
+    display: grid;
+    gap: 1.25rem;
+  }
+  .contact-facts dd {
+    margin: 0.35rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+  }
+  .contact-facts :global(.fact-icon) {
+    color: var(--color-fg-3);
+  }
+
+  .form {
+    display: grid;
+    gap: 1.5rem;
+    align-content: start;
+    padding: clamp(1.25rem, 3vw, 2.25rem);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-ui);
+    background: var(--color-bg-2);
+  }
+  .honeypot {
+    position: absolute;
+    left: -9999px;
+  }
+  .field {
+    display: grid;
+    gap: 0.5rem;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+  }
+  .label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-fg);
+    padding: 0;
+  }
+  .input {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--color-control);
+    border-radius: var(--radius-ui);
+    background: var(--color-sunk);
+    color: var(--color-fg);
+    font: inherit;
+    font-size: 1rem;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+  .input:hover {
+    border-color: var(--color-fg-3);
+  }
+  .input:focus-visible {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgb(252 213 53 / 0.25);
+  }
+  .input[aria-invalid="true"] {
+    border-color: var(--color-error);
+  }
+  .textarea {
+    resize: vertical;
+    min-height: 8.5rem;
+  }
+  .error {
+    font-size: 0.8125rem;
+    color: var(--color-error);
+  }
+  .error[hidden] {
+    display: none;
+  }
+  .topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  .topic {
+    position: relative;
+  }
+  .topic input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+  .topic span {
+    display: inline-flex;
+    align-items: center;
+    height: 2.5rem;
+    padding-inline: 0.9rem;
+    border: 1px solid var(--color-control);
+    border-radius: var(--radius-ui);
+    font-size: 0.9rem;
+    color: var(--color-fg-2);
+    transition:
+      border-color 0.2s,
+      color 0.2s,
+      background-color 0.2s;
+  }
+  .topic input:checked + span {
+    border-color: var(--color-accent);
+    color: var(--color-fg);
+    background: rgb(252 213 53 / 0.08);
+  }
+  .topic input:focus-visible + span {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+  .form-status:empty {
+    display: none;
+  }
+  .form-status {
+    padding: 1rem;
+    border-radius: var(--radius-ui);
+    border: 1px solid var(--color-line-2);
+    font-size: 0.925rem;
+    color: var(--color-fg);
+  }
+  .form-status[data-tone="ok"] {
+    border-color: var(--color-ok);
+  }
+  .form-status[data-tone="error"] {
+    border-color: var(--color-error);
+  }
+
+  @media (min-width: 768px) {
+    .features {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      column-gap: 2rem;
+    }
+    .plans {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1024px) {
+    .split {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: 5rem;
+    }
+    .contact {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+      gap: 5rem;
+    }
+  }
+</style>
