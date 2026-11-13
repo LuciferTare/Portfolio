@@ -18,14 +18,14 @@ export const GET: APIRoute = ({ site }) => {
   const papers = publications.flatMap((p) =>
     p.links
       .filter((l) => l.href.startsWith('/papers/') && l.label.includes('Paper'))
-      .map((l) => ({ loc: l.href, lastmod: p.datePublished, priority: '0.6' })),
+      // datePublished is sometimes year-month only; the file's last commit is always a full date.
+      .map((l) => ({ loc: l.href, lastmod: lastCommit(`public${l.href}`) })),
   );
   const work = showcases.map((s) => ({
     loc: s.href,
     lastmod: lastCommit(`src/assets/projects/${s.project.id}`, 'src/pages/work'),
-    priority: '0.7',
   }));
-  const urls = [{ loc: '/', lastmod: lastCommit('src', 'public'), priority: '1.0' }, ...work, ...papers];
+  const urls = [{ loc: '/', lastmod: lastCommit('src', 'public') }, ...work, ...papers];
 
   const body = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -33,7 +33,6 @@ ${urls
   .map(
     (u) => `  <url>
     <loc>${new URL(u.loc, site).href}</loc>${u.lastmod ? `\n    <lastmod>${u.lastmod}</lastmod>` : ''}
-    <priority>${u.priority}</priority>
   </url>`,
   )
   .join('\n')}

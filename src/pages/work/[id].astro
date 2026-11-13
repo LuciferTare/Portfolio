@@ -4,7 +4,7 @@ import Base from "../../layouts/Base.astro";
 import Footer from "../../components/Footer.astro";
 import Icon from "../../components/Icon.astro";
 import { profile } from "../../data/portfolio";
-import { showcases, type Showcase } from "../../data/showcase";
+import { showcases, workCard, type Showcase } from "../../data/showcase";
 
 export function getStaticPaths() {
   return showcases.map((showcase, i) => ({
@@ -51,7 +51,7 @@ const isExternal = (href: string) => href.startsWith("http");
 const pad = (n: number) => String(n).padStart(2, "0");
 
 const title = `${p.name}, ${p.tagline} | ${profile.name}`;
-const description = `${p.name} running on Android: ${screens.length} screens${video ? " and a demo video" : ""}. ${p.summary}`;
+const description = p.seoDescription ?? p.summary;
 const schema = [
   {
     "@type": "SoftwareApplication",
@@ -60,13 +60,21 @@ const schema = [
     description: p.summary,
     url: abs(showcase.href),
     operatingSystem: "Android",
+    ...(p.appCategory && { applicationCategory: p.appCategory }),
     author: { "@id": abs("/#person") },
     screenshot: full.map((f) => abs(f.src)),
   },
 ];
 ---
 
-<Base {title} {description} bare breadcrumbs={crumbs} {schema}>
+<Base
+  {title}
+  {description}
+  bare
+  breadcrumbs={crumbs}
+  {schema}
+  {...workCard(showcase)}
+>
   <a href="#main" class="skip">Skip to content</a>
   <div class="bar-sentinel" aria-hidden="true"></div>
   <header class="bar" data-bar>

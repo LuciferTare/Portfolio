@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { existsSync, readFileSync, writeFileSync, mkdtempSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync, mkdirSync, mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -50,6 +50,49 @@ body { width: 1200px; height: 630px; padding: 72px 80px; display: grid; grid-tem
 <p class="bar"><span>sushanttare.netlify.app</span><span>Palghar, India</span></p>
 </body></html>`;
 
+// One card per app page. Keep name and tagline in step with src/data/portfolio.ts and apps.ts,
+// and the alt text built in work/[id].astro and [app]/index.astro, which describes this layout.
+const cards = [
+  { id: 'cravecoin', name: 'Cravecoin', tagline: 'Real-time crypto tracking', icon: 'cravecoin.png', chips: ['Android', 'Flutter'],
+    shots: ['04-home-all-coins', '07-coin-line-chart', '13-heatmap'] },
+  { id: 'powergauge', name: 'Power Gauge', tagline: 'Battery telemetry', icon: 'powergauge.png', chips: ['Android', 'Flutter'],
+    shots: ['01-home', '03-sessions', '04-battery-health'] },
+  { id: 'quantaview', name: 'Quantaview', tagline: 'Crypto analyser', icon: 'quantaview.png', chips: ['Android', 'Flutter'],
+    shots: ['02-markets', '05-heatmap', '07-coin-detail-btc'] },
+  { id: 'stoxium', name: 'Stoxium', tagline: 'Stock analyser', icon: 'stoxium.png', chips: ['Android', 'Flutter'],
+    shots: ['02-home', '06-heatmap', '07-stock-detail'] },
+  { id: 'fitfuel', name: 'Fit&amp;Fuel', tagline: 'Run your gym from your phone', icon: 'fitfuel.png',
+    chips: ['Android', 'Works offline', 'From ₹599/month'], shots: [] },
+];
+
+const card = (c) => {
+  const tops = [96, 40, 128];
+  const phones = c.shots.map((f, i) => {
+    const file = join(root, 'src/assets/projects', c.id, f + '.png');
+    return `<img class="phone" style="left:${548 + i * 214}px; top:${tops[i]}px" src="${pathToFileURL(file).href}">`;
+  }).join('');
+  return `<!doctype html><html><head>${base}<style>
+body { position: relative; width: 1200px; height: 630px; }
+.text { position: absolute; left: 80px; top: 0; bottom: 0; width: ${c.shots.length ? 440 : 1040}px; display: flex; flex-direction: column; justify-content: center; }
+.icon { width: 112px; height: 112px; border-radius: 22%; }
+.name { margin-top: 36px; font-size: ${c.shots.length ? 76 : 120}px; font-weight: 620; letter-spacing: -0.055em; line-height: .95; }
+.tag { margin-top: 20px; font-size: 34px; color: #A8AEB8; line-height: 1.25; }
+.chips { margin-top: 36px; display: flex; gap: 12px; flex-wrap: wrap; font-family: GeistMono; font-size: 20px; color: #FCD535; }
+.chips span { padding: 8px 16px; border: 1px solid #3a3f4b; border-radius: 999px; }
+.phone { position: absolute; width: 190px; height: 422px; object-fit: cover; object-position: top; border-radius: 28px; border: 1px solid #3a3f4b; background: #0f1115; }
+.bar { position: absolute; left: 80px; bottom: 56px; font-family: GeistMono; font-size: 20px; color: #8A909B; }
+</style></head><body>
+<div class="text">
+  <img class="icon" src="${icon(c.icon)}">
+  <p class="name">${c.name}</p>
+  <p class="tag">${c.tagline}</p>
+  <p class="chips">${c.chips.map((t) => `<span>${t}</span>`).join('')}</p>
+</div>
+${phones}
+<p class="bar">Sushant Tare · sushanttare.netlify.app</p>
+</body></html>`;
+};
+
 const mark = (size) => `<!doctype html><html><head>${base}<style>
 body { width: ${size}px; height: ${size}px; display: grid; place-items: center; background: #FCD535; color: #181A20;
   font-family: GeistMono; font-weight: 700; font-size: ${Math.round(size * 0.42)}px; letter-spacing: -0.02em; }
@@ -61,8 +104,11 @@ const shots = [
   { html: mark(32), w: 32, h: 32, out: 'public/favicon-32.png' },
 ];
 
+mkdirSync(join(root, 'public/og'), { recursive: true });
+for (const c of cards) shots.push({ html: card(c), w: 1200, h: 630, out: `public/og/${c.id}.png` });
+
 for (const s of shots) {
-  const file = join(tmp, `${s.w}x${s.h}.html`);
+  const file = join(tmp, `${s.out.replace(/[^a-z0-9]/gi, '-')}.html`);
   writeFileSync(file, s.html);
   execFileSync(browser, [
     '--headless=new',

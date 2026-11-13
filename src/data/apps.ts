@@ -2,8 +2,6 @@ import type { ImageMetadata } from "astro";
 import { profile } from "./portfolio";
 import fitfuelIcon from "../assets/icons/fitfuel.png";
 
-// Each app here gets its own site at /<id>/ with the policy pages Google Play asks for.
-// The portfolio never links to these pages; the app and its Play listing do.
 
 export interface AppFeature {
   title: string;
@@ -14,7 +12,6 @@ export interface AppPlan {
   name: string;
   note?: string;
   featured?: boolean;
-  /** Price in rupees for each billing period, keyed by AppPeriod id. */
   prices: Record<string, number>;
   limits: { label: string; value: string }[];
 }
@@ -22,7 +19,6 @@ export interface AppPlan {
 export interface AppPeriod {
   id: string;
   label: string;
-  /** Unit after the price, as in "₹599 / month". */
   per: string;
   months: number;
 }
@@ -34,6 +30,7 @@ export interface AppSite {
   icon: ImageMetadata;
   status: string;
   summary: string;
+  seoDescription: string;
   highlights: { label: string; value: string }[];
   about: { lead: string; paragraphs: string[] };
   features: { heading: string; intro: string; items: AppFeature[] };
@@ -68,6 +65,8 @@ export const apps: AppSite[] = [
     status: "Coming soon to Google Play",
     summary:
       "Version 2 turns Fit&Fuel from a personal workout app into a tool for running a gym: trainers, members, memberships, payments, and attendance in one Android app that keeps working without internet.",
+    seoDescription:
+      "Run your gym from your phone: trainers, members, memberships, payments and attendance in one Android app that works offline. Plans from ₹599/month.",
     highlights: [
       { label: "Platform", value: "Android" },
       { label: "Offline", value: "Works without internet" },
@@ -193,7 +192,6 @@ export interface AppDoc {
   short: string;
 }
 
-// Order here is the order of the footer links.
 export const appDocs: AppDoc[] = [
   { slug: "privacy-policy", title: "Privacy Policy", short: "Privacy" },
   { slug: "terms-conditions", title: "Terms and Conditions", short: "Terms" },
@@ -208,3 +206,9 @@ export const appNav = [
   { label: "Pricing", hash: "#pricing" },
   { label: "Contact", hash: "#contact" },
 ];
+
+// Social card for an app's pages, drawn by scripts/make-og.mjs (icon, name, tagline and labels).
+export const appCard = (app: AppSite) => ({
+  image: `/og/${app.id.replace(/\W/g, "")}.png`,
+  imageAlt: `${app.name} app icon and the tagline "${app.tagline}", for Android.`,
+});

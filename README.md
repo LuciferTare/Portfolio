@@ -16,18 +16,18 @@ npm run check     # TypeScript + Astro diagnostics
 
 Everything visible on the site lives in **`src/data/portfolio.ts`**:
 
-| What | Where in the file |
-| --- | --- |
-| Name, rotating titles, intro, email, availability | `profile` |
-| About text, skills, languages | `about` |
-| Job role card | `experience` |
+| What                                                       | Where in the file          |
+| ---------------------------------------------------------- | -------------------------- |
+| Name, rotating titles, intro, email, availability          | `profile`                  |
+| About text, skills, languages                              | `about`                    |
+| Job role card                                              | `experience`               |
 | Degrees, certifications (add `verifyUrl` when you have it) | `education`, `credentials` |
-| Aavishkar numbers (Cravecoin sidebar) | `recognition` |
-| Papers, links, citations | `publications` |
-| OctaNet (with the three numbers) and Cravecoin | `featured` |
-| Fit&Fuel | `inProgress` |
-| Quantaview, Stoxium, Power Gauge, Towzer | `moreWork` |
-| Contact form mode | `contact.formProvider` |
+| Aavishkar numbers (Cravecoin sidebar)                      | `recognition`              |
+| Papers, links, citations                                   | `publications`             |
+| OctaNet (with the three numbers) and Cravecoin             | `featured`                 |
+| Fit&Fuel                                                   | `inProgress`               |
+| Quantaview, Stoxium, Power Gauge, Towzer                   | `moreWork`                 |
+| Contact form mode                                          | `contact.formProvider`     |
 
 A link with `href: ''` is hidden until you fill it in. Use a plain hyphen (`-`) in ranges.
 

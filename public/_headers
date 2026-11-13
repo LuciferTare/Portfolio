@@ -15,3 +15,16 @@
 
 /videos/*
   Cache-Control: public, max-age=604800
+
+# Stable names, not content-hashed, so no `immutable`: a redrawn card or icon shows up within a day.
+/og.png
+  Cache-Control: public, max-age=86400
+
+/og/*
+  Cache-Control: public, max-age=86400
+
+/favicon*
+  Cache-Control: public, max-age=86400
+
+/apple-touch-icon.png
+  Cache-Control: public, max-age=86400

@@ -42,7 +42,7 @@ export const showcases: Showcase[] = projects.flatMap((project) => {
   return [
     {
       project,
-      href: `/work/${project.id}`,
+      href: `/work/${project.id}/`,
       screens,
       video: videoFor(project.id),
     },
@@ -51,3 +51,13 @@ export const showcases: Showcase[] = projects.flatMap((project) => {
 
 export const showcaseHref = (id: string) =>
   showcases.find((s) => s.project.id === id)?.href;
+
+// Social card per work page, drawn by scripts/make-og.mjs (icon, name, tagline and three screens).
+// A project without a card yet falls back to the portfolio card in Base.astro.
+export const workCard = ({ project: p }: Showcase) =>
+  existsSync(`public/og/${p.id}.png`)
+    ? {
+        image: `/og/${p.id}.png`,
+        imageAlt: `${p.name}, ${p.tagline}. The app icon beside three screens from the Android app.`,
+      }
+    : {};

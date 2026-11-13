@@ -90,6 +90,9 @@ export interface Project {
   status: ProjectStatus;
   period?: string;
   summary: string;
+  seoDescription?: string;
+  /** schema.org applicationCategory for the project's /work/ page. */
+  appCategory?: string;
   problem?: string;
   approach?: string[];
   implementation?: string[];
@@ -123,7 +126,7 @@ export const profile = {
     "Sushant Tare outdoors under a tree, wearing a navy velvet blazer and sunglasses.",
   site: "https://sushanttare.netlify.app",
   description:
-    "Sushant Tare is a Flutter developer from Palghar, India, who builds Android apps such as OctaNet on Google Play and has published five research papers on mobile apps.",
+    "Sushant Tare is a Flutter developer from Palghar, India, who builds Android apps such as OctaNet on Google Play and has published five research papers.",
 } as const;
 
 export const socials: Social[] = [
@@ -541,6 +544,9 @@ export const featured: Project[] = [
     period: "Jun 2023 - Dec 2023",
     summary:
       "A real-time cryptocurrency tracker with market data integration, portfolio management, crypto analytics, and predictive logic for trend monitoring.",
+    seoDescription:
+      "Real-time crypto tracker for Android with live market data, portfolio management and trend analytics. Built with Flutter by Sushant Tare.",
+    appCategory: "FinanceApplication",
     features: [
       "Live market data integration",
       "Portfolio management",
@@ -606,6 +612,9 @@ export const moreWork: Project[] = [
     period: "Jan 2025 - Mar 2025",
     summary:
       "Real-time battery telemetry. Method Channels bridge Flutter to native Android for live performance metrics and battery health analytics.",
+    seoDescription:
+      "Battery telemetry app for Android. Method Channels bridge Flutter to native code for live performance metrics and battery health analytics.",
+    appCategory: "UtilitiesApplication",
     stack: ["Flutter", "Method Channels", "Native Android"],
     links: [],
   },
@@ -630,6 +639,9 @@ export const moreWork: Project[] = [
     status: "Built",
     summary:
       "Tracks 20 cryptocurrencies live through the CoinGecko API and a Binance WebSocket, scores fundamentals, market activity, and valuation, models ROI scenarios, and maps market cap as a heatmap.",
+    seoDescription:
+      "Crypto analyser for Android tracking 20 coins live via CoinGecko and Binance, with fundamentals scoring, ROI scenarios and a market-cap heatmap.",
+    appCategory: "FinanceApplication",
     stack: ["Flutter", "Firebase", "Binance WebSocket", "CoinGecko API"],
     links: [
       {
@@ -651,6 +663,9 @@ export const moreWork: Project[] = [
     icon: stoxiumIcon,
     status: "Built",
     summary: "Quantaview's analysis model, rebuilt for the stock market.",
+    seoDescription:
+      "Stoxium is a Flutter stock analyser for Android, built by taking the Quantaview analysis model and rebuilding it for the stock market.",
+    appCategory: "FinanceApplication",
     stack: ["Flutter", "Dart"],
     links: [],
   },

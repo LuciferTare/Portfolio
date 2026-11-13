@@ -3,7 +3,7 @@ import type { MarkdownInstance } from "astro";
 import Base from "../../layouts/Base.astro";
 import AppHeader from "../../components/app/AppHeader.astro";
 import AppFooter from "../../components/app/AppFooter.astro";
-import { apps, appDocs, type AppDoc, type AppSite } from "../../data/apps";
+import { apps, appCard, appDocs, type AppDoc, type AppSite } from "../../data/apps";
 
 type Legal = MarkdownInstance<{ description: string }>;
 
@@ -37,7 +37,7 @@ const crumbs = [
 ];
 ---
 
-<Base {title} {description} bare breadcrumbs={crumbs}>
+<Base {title} {description} bare breadcrumbs={crumbs} {...appCard(app)}>
   <AppHeader {app} />
 
   <main id="main" tabindex="-1" class="container-x page">

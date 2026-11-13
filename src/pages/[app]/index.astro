@@ -5,7 +5,7 @@ import AppHeader from "../../components/app/AppHeader.astro";
 import AppFooter from "../../components/app/AppFooter.astro";
 import Icon from "../../components/Icon.astro";
 import { profile } from "../../data/portfolio";
-import { apps, appDocs, type AppSite } from "../../data/apps";
+import { apps, appCard, appDocs, type AppSite } from "../../data/apps";
 
 export function getStaticPaths() {
   return apps.map((app) => ({ params: { app: app.id }, props: { app } }));
@@ -52,7 +52,7 @@ const priceTable = (plan: (typeof pricing.plans)[number]) =>
 const allPrices = pricing.plans.flatMap((p) => Object.values(p.prices));
 
 const title = `${app.name} | ${app.tagline}`;
-const description = app.summary;
+const description = app.seoDescription;
 const schema = [
   {
     "@type": "SoftwareApplication",
@@ -80,6 +80,7 @@ const schema = [
   bare
   breadcrumbs={[{ name: app.name, path: href }]}
   {schema}
+  {...appCard(app)}
 >
   <AppHeader {app} home />
 

@@ -22,6 +22,10 @@ interface Props {
   noindex?: boolean;
   bare?: boolean;
   breadcrumbs?: Crumb[];
+  /** Social card path (1200x630 PNG in public/). Defaults to the portfolio card. */
+  image?: string;
+  /** Describes `image`. Required whenever `image` is set. */
+  imageAlt?: string;
   schema?: Record<string, unknown>[];
 }
 
@@ -31,14 +35,16 @@ const {
   noindex = false,
   bare = false,
   breadcrumbs = [{ name: "Home", path: "/" }],
+  image = "/og.png",
+  imageAlt = `${profile.name}, Flutter developer. Sole mobile developer behind OctaNet, used by ISPs across 7 countries, and author of five research papers.`,
   schema: extraSchema = [],
 } = Astro.props;
 
 const site = Astro.site!;
 const abs = (path: string) => new URL(path, site).href;
 const canonical = abs(Astro.url.pathname);
-const ogImage = abs("/og.png");
-const ogAlt = `${profile.name}, Flutter developer. Sole mobile developer behind OctaNet, used by ISPs across 7 countries, and author of five research papers.`;
+const ogImage = abs(image);
+const ogAlt = imageAlt;
 const portrait = await getImage({
   src: profile.portrait,
   width: 800,
@@ -81,7 +87,15 @@ const graph: Record<string, unknown>[] = [
     breadcrumb: { "@id": id.breadcrumbs },
     ...(bare
       ? {}
-      : { mainEntity: { "@id": id.person }, primaryImageOfPage: ogImage }),
+      : {
+          mainEntity: { "@id": id.person },
+          primaryImageOfPage: {
+            "@type": "ImageObject",
+            url: ogImage,
+            width: 1200,
+            height: 630,
+          },
+        }),
   },
   {
     "@type": "BreadcrumbList",
@@ -106,7 +120,7 @@ if (!bare) {
     description: profile.description,
     url: abs("/"),
     image: portraitUrl,
-    email: `mailto:${profile.email}`,
+    email: profile.email,
     address,
     nationality: { "@type": "Country", name: "India" },
     worksFor: { "@type": "Organization", name: experience[0].company },
@@ -225,7 +239,7 @@ const schema = { "@context": "https://schema.org", "@graph": graph };
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en-IN">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -265,7 +279,7 @@ const schema = { "@context": "https://schema.org", "@graph": graph };
     <meta property="og:site_name" content={profile.name} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
+    {!noindex && <meta property="og:url" content={canonical} />}
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:secure_url" content={ogImage} />
     <meta property="og:image:type" content="image/png" />
@@ -295,11 +309,15 @@ const schema = { "@context": "https://schema.org", "@graph": graph };
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content={ogAlt} />
 
-    <script
-      is:inline
-      type="application/ld+json"
-      set:html={JSON.stringify(schema)}
-    />
+    {
+      !noindex && (
+        <script
+          is:inline
+          type="application/ld+json"
+          set:html={JSON.stringify(schema)}
+        />
+      )
+    }
 
     <script is:inline>
       (function () {
