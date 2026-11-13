@@ -493,7 +493,6 @@ const schema = [
     color: var(--color-fg-2);
   }
 
-  /* Laid out like the home hero (Hero.astro .hero), so the phone sits in the same place. */
   .intro-grid {
     display: grid;
     gap: 3.5rem;
@@ -592,7 +591,6 @@ const schema = [
     position: relative;
     justify-self: center;
   }
-  /* Out of flow so the caption doesn't nudge the phone off the hero's position. */
   .demo figcaption {
     position: absolute;
     top: 100%;
@@ -600,8 +598,8 @@ const schema = [
     right: 0;
     margin-top: 0.75rem;
     text-align: center;
+    text-wrap: balance;
   }
-  /* Same frame as the hero phone (Hero.astro .phone / .phone-screen). */
   .device {
     width: clamp(248px, 25vw, 318px);
     aspect-ratio: 9 / 18;
@@ -839,7 +837,9 @@ const schema = [
       align-items: center;
       gap: 2rem;
       min-height: max(560px, calc(100dvh - var(--nav-h)));
+      --caption-room: 3.5rem;
       padding-block: var(--hero-pad);
+      padding-bottom: calc(var(--hero-pad) + var(--caption-room));
     }
     .intro-grid:not(.solo) {
       grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
@@ -848,7 +848,12 @@ const schema = [
       justify-self: end;
     }
     .device {
-      height: min(calc(100dvh - var(--nav-h) - 2 * var(--hero-pad)), 680px);
+      height: min(
+        calc(
+          100dvh - var(--nav-h) - 2 * var(--hero-pad) - var(--caption-room)
+        ),
+        680px
+      );
       width: auto;
     }
   }
