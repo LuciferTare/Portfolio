@@ -41,6 +41,14 @@ const isExternal = (href: string) => href.startsWith("http");
   <div class="container-x">
     <h2 id="work-title" class="h-section" data-reveal>Selected Work</h2>
 
+    <header class="group-head group-head-first" data-reveal>
+      <h3 id="work-company" class="group-title">At TrustLink</h3>
+      <p class="group-sub">
+        Apps I build and ship on Google Play as TrustLink's only mobile
+        developer.
+      </p>
+    </header>
+
     <article
       class="lead-case"
       id="project-octanet"
@@ -57,7 +65,8 @@ const isExternal = (href: string) => href.startsWith("http");
             class="icon-app"
           />
           <div>
-            <h3 id="octanet-title" class="lead-name">{octanet.name}</h3>
+            <p class="origin">TrustLink</p>
+            <h4 id="octanet-title" class="lead-name">{octanet.name}</h4>
             <p class="lead-tag">{octanet.tagline}</p>
           </div>
         </div>
@@ -73,7 +82,7 @@ const isExternal = (href: string) => href.startsWith("http");
 
       <div class="lead-cols">
         <section class="col" aria-labelledby="octanet-problem" data-reveal>
-          <h4 class="col-title" id="octanet-problem">Problem</h4>
+          <h5 class="col-title" id="octanet-problem">Problem</h5>
           <p class="col-text">{octanet.problem}</p>
         </section>
         {
@@ -83,9 +92,9 @@ const isExternal = (href: string) => href.startsWith("http");
               aria-labelledby={`octanet-${s.id}`}
               data-reveal
             >
-              <h4 class="col-title" id={`octanet-${s.id}`}>
+              <h5 class="col-title" id={`octanet-${s.id}`}>
                 {s.title}
-              </h4>
+              </h5>
               <ul class="col-list">
                 {s.items?.map((item) => (
                   <li>{item}</li>
@@ -179,10 +188,14 @@ const isExternal = (href: string) => href.startsWith("http");
             class="icon-app"
           />
           <div>
-            <h3 id="isp_connect-title" class="second-name">{ispConnect.name}</h3>
+            <p class="origin">TrustLink</p>
+            <h4 id="isp_connect-title" class="second-name">{ispConnect.name}</h4>
             <p class="lead-tag">{ispConnect.tagline}</p>
           </div>
         </div>
+        <p class="status second-period" data-tone={tone(ispConnect.status)} data-reveal>
+          {ispConnect.status}
+        </p>
         <p class="second-summary" data-reveal>{ispConnect.summary}</p>
         <ul class="feature-grid" data-reveal>
           {ispConnect.features?.map((f) => <li>{f}</li>)}
@@ -225,6 +238,13 @@ const isExternal = (href: string) => href.startsWith("http");
       </div>
     </article>
 
+    <header class="group-head" data-reveal>
+      <h3 id="work-independent" class="group-title">Built Independently</h3>
+      <p class="group-sub">
+        Apps I started on my own. Three of them became research papers.
+      </p>
+    </header>
+
     <article
       class="second"
       id="project-cravecoin"
@@ -241,7 +261,8 @@ const isExternal = (href: string) => href.startsWith("http");
             class="icon-app"
           />
           <div>
-            <h3 id="cravecoin-title" class="second-name">{cravecoin.name}</h3>
+            <p class="origin">Independent</p>
+            <h4 id="cravecoin-title" class="second-name">{cravecoin.name}</h4>
             <p class="lead-tag">{cravecoin.tagline}</p>
           </div>
         </div>
@@ -342,7 +363,8 @@ const isExternal = (href: string) => href.startsWith("http");
           class="icon-app"
         />
         <div>
-          <h3 id="fitfuel-title" class="wip-name">{inProgress.name}</h3>
+          <p class="origin">Independent</p>
+          <h4 id="fitfuel-title" class="wip-name">{inProgress.name}</h4>
           <p class="lead-tag">{inProgress.tagline}</p>
         </div>
       </div>
@@ -368,9 +390,6 @@ const isExternal = (href: string) => href.startsWith("http");
     {
       count > 0 && (
         <>
-          <h3 class="more-title" data-reveal>
-            Personal Projects
-          </h3>
           <div class="more-wrap">
             <ul
               class="more"
@@ -391,6 +410,7 @@ const isExternal = (href: string) => href.startsWith("http");
                       {p.status}
                     </p>
                   </div>
+                  <p class="origin">Independent</p>
                   <h4 class="more-name">{p.name}</h4>
                   <p class="meta">
                     {p.tagline}
@@ -438,6 +458,38 @@ const isExternal = (href: string) => href.startsWith("http");
 </section>
 
 <style>
+  .group-head {
+    margin-top: clamp(4.5rem, 9vw, 7.5rem);
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--color-line);
+    display: grid;
+    gap: 0.5rem;
+  }
+  .group-head-first {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+  .group-title {
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    letter-spacing: -0.03em;
+  }
+  .group-sub {
+    color: var(--color-fg-2);
+    max-width: 52ch;
+  }
+  .group-head + .lead-case,
+  .group-head + .second {
+    margin-top: clamp(1.75rem, 3.5vw, 2.5rem);
+  }
+  .origin {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    line-height: 1.4;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-fg-3);
+    margin-bottom: 0.4rem;
+  }
+
   .lead-id {
     display: flex;
     align-items: center;
@@ -719,14 +771,9 @@ const isExternal = (href: string) => href.startsWith("http");
     max-width: 62ch;
   }
 
-  .more-title {
-    margin-top: clamp(4rem, 8vw, 6.5rem);
-    font-size: clamp(1.5rem, 2.6vw, 2rem);
-    letter-spacing: -0.03em;
-  }
   .more-wrap {
     --col-gap: 1.5rem;
-    margin-top: 1.75rem;
+    margin-top: clamp(3.5rem, 7vw, 6rem);
     overflow: hidden;
   }
   .more {
