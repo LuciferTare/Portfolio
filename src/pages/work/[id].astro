@@ -39,11 +39,13 @@ const crumbs = [
 const full = await Promise.all(
   screens.map((s) => getImage({ src: s.src, width: 1080, format: "webp" })),
 );
+// No screens (client apps): no poster, so the video preloads metadata to show its first frame.
 const posterScreen =
   screens.find((s) => !/splash/i.test(s.caption)) ?? screens[0];
-const poster = video
-  ? await getImage({ src: posterScreen.src, width: 720, format: "webp" })
-  : undefined;
+const poster =
+  video && posterScreen
+    ? await getImage({ src: posterScreen.src, width: 720, format: "webp" })
+    : undefined;
 
 const tone = (s: string) =>
   s === "Live on Google Play" || s === "Built" ? "live" : "progress";
@@ -62,7 +64,7 @@ const schema = [
     operatingSystem: "Android",
     ...(p.appCategory && { applicationCategory: p.appCategory }),
     author: { "@id": abs("/#person") },
-    screenshot: full.map((f) => abs(f.src)),
+    ...(full.length && { screenshot: full.map((f) => abs(f.src)) }),
   },
 ];
 ---
@@ -137,10 +139,14 @@ const schema = [
           </ul>
 
           <dl class="facts mono">
-            <div>
-              <dt>Screens</dt>
-              <dd>{pad(screens.length)}</dd>
-            </div>
+            {
+              screens.length > 0 && (
+                <div>
+                  <dt>Screens</dt>
+                  <dd>{pad(screens.length)}</dd>
+                </div>
+              )
+            }
             {
               video && (
                 <div>
@@ -187,15 +193,15 @@ const schema = [
         </div>
 
         {
-          video && poster && (
+          video && (
             <figure class="demo">
               <div class="device">
                 <video
                   src={video}
-                  poster={poster.src}
+                  poster={poster?.src}
                   controls
                   playsinline
-                  preload="none"
+                  preload={poster ? "none" : "metadata"}
                   width="1080"
                   height="1920"
                   aria-label={`${p.name} demo video`}
@@ -210,6 +216,7 @@ const schema = [
       </div>
     </section>
 
+    {screens.length > 0 && (
     <section id="screens" class="screens" aria-labelledby="screens-title">
       <div class="container-x screens-head">
         <h2 id="screens-title" class="screens-title">
@@ -268,6 +275,7 @@ const schema = [
         }
       </ol>
     </section>
+    )}
 
     <nav class="pager container-x" aria-label="More projects">
       <a href={prev.href} class="pager-link">
@@ -283,6 +291,7 @@ const schema = [
 
   <Footer base="/" />
 
+  {screens.length > 0 && (
   <dialog class="viewer" aria-label={`${p.name} screens`} data-viewer>
     <div class="viewer-top">
       <p class="meta" aria-live="polite" data-viewer-count></p>
@@ -304,6 +313,7 @@ const schema = [
     </div>
     <p class="viewer-cap" data-viewer-cap></p>
   </dialog>
+  )}
 </Base>
 
 <script>
@@ -313,86 +323,89 @@ const schema = [
     bar.toggleAttribute("data-scrolled", !e.isIntersecting),
   ).observe(document.querySelector(".bar-sentinel")!);
 
-  const rail = document.querySelector<HTMLElement>("[data-rail]")!;
-  const prevBtn = document.querySelector<HTMLButtonElement>("[data-rail-prev]")!;
-  const nextBtn = document.querySelector<HTMLButtonElement>("[data-rail-next]")!;
-  const reduced = () =>
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // Video-only pages have no screens rail or viewer.
+  const rail = document.querySelector<HTMLElement>("[data-rail]");
+  if (rail) {
+    const prevBtn = document.querySelector<HTMLButtonElement>("[data-rail-prev]")!;
+    const nextBtn = document.querySelector<HTMLButtonElement>("[data-rail-next]")!;
+    const reduced = () =>
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const syncRail = () => {
-    const max = rail.scrollWidth - rail.clientWidth;
-    prevBtn.disabled = rail.scrollLeft <= 4;
-    nextBtn.disabled = rail.scrollLeft >= max - 4;
-  };
-  const scrollRail = (dir: number) =>
-    rail.scrollBy({
-      left: dir * rail.clientWidth * 0.8,
-      behavior: reduced() ? "auto" : "smooth",
+    const syncRail = () => {
+      const max = rail.scrollWidth - rail.clientWidth;
+      prevBtn.disabled = rail.scrollLeft <= 4;
+      nextBtn.disabled = rail.scrollLeft >= max - 4;
+    };
+    const scrollRail = (dir: number) =>
+      rail.scrollBy({
+        left: dir * rail.clientWidth * 0.8,
+        behavior: reduced() ? "auto" : "smooth",
+      });
+    prevBtn.addEventListener("click", () => scrollRail(-1));
+    nextBtn.addEventListener("click", () => scrollRail(1));
+    rail.addEventListener("scroll", syncRail, { passive: true });
+    window.addEventListener("resize", syncRail, { passive: true });
+    syncRail();
+
+    const viewer = document.querySelector<HTMLDialogElement>("[data-viewer]")!;
+    const img = viewer.querySelector<HTMLImageElement>("[data-viewer-img]")!;
+    const cap = viewer.querySelector<HTMLElement>("[data-viewer-cap]")!;
+    const count = viewer.querySelector<HTMLElement>("[data-viewer-count]")!;
+    const shots = [...document.querySelectorAll<HTMLButtonElement>("[data-shot]")];
+    let index = 0;
+
+    const show = (i: number) => {
+      index = (i + shots.length) % shots.length;
+      const shot = shots[index];
+      img.src = shot.dataset.full!;
+      img.alt = shot.querySelector("img")?.alt ?? "";
+      cap.textContent = shot.dataset.caption ?? "";
+      count.textContent = `${index + 1} / ${shots.length}`;
+      // Warm the neighbours so stepping through feels instant.
+      [index - 1, index + 1].forEach((n) => {
+        const s = shots[(n + shots.length) % shots.length];
+        new Image().src = s.dataset.full!;
+      });
+    };
+
+    shots.forEach((shot, i) =>
+      shot.addEventListener("click", () => {
+        show(i);
+        viewer.showModal();
+      }),
+    );
+    viewer.addEventListener("close", () => {
+      const shot = shots[index];
+      // Scroll only the rail: scrollIntoView/focus also scroll the page
+      // sideways, and body's overflow-x: clip leaves no way to scroll back.
+      shot.focus({ preventScroll: true });
+      const s = shot.getBoundingClientRect();
+      const r = rail.getBoundingClientRect();
+      rail.scrollBy({ left: s.left + s.width / 2 - (r.left + r.width / 2) });
     });
-  prevBtn.addEventListener("click", () => scrollRail(-1));
-  nextBtn.addEventListener("click", () => scrollRail(1));
-  rail.addEventListener("scroll", syncRail, { passive: true });
-  window.addEventListener("resize", syncRail, { passive: true });
-  syncRail();
-
-  const viewer = document.querySelector<HTMLDialogElement>("[data-viewer]")!;
-  const img = viewer.querySelector<HTMLImageElement>("[data-viewer-img]")!;
-  const cap = viewer.querySelector<HTMLElement>("[data-viewer-cap]")!;
-  const count = viewer.querySelector<HTMLElement>("[data-viewer-count]")!;
-  const shots = [...document.querySelectorAll<HTMLButtonElement>("[data-shot]")];
-  let index = 0;
-
-  const show = (i: number) => {
-    index = (i + shots.length) % shots.length;
-    const shot = shots[index];
-    img.src = shot.dataset.full!;
-    img.alt = shot.querySelector("img")?.alt ?? "";
-    cap.textContent = shot.dataset.caption ?? "";
-    count.textContent = `${index + 1} / ${shots.length}`;
-    // Warm the neighbours so stepping through feels instant.
-    [index - 1, index + 1].forEach((n) => {
-      const s = shots[(n + shots.length) % shots.length];
-      new Image().src = s.dataset.full!;
+    viewer
+      .querySelector("[data-viewer-close]")!
+      .addEventListener("click", () => viewer.close());
+    viewer.querySelectorAll<HTMLButtonElement>("[data-viewer-step]").forEach((b) =>
+      b.addEventListener("click", () => show(index + Number(b.dataset.viewerStep))),
+    );
+    viewer.addEventListener("click", (e) => {
+      if (e.target === viewer) viewer.close();
     });
-  };
+    viewer.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") show(index - 1);
+      if (e.key === "ArrowRight") show(index + 1);
+    });
 
-  shots.forEach((shot, i) =>
-    shot.addEventListener("click", () => {
-      show(i);
-      viewer.showModal();
-    }),
-  );
-  viewer.addEventListener("close", () => {
-    const shot = shots[index];
-    // Scroll only the rail: scrollIntoView/focus also scroll the page
-    // sideways, and body's overflow-x: clip leaves no way to scroll back.
-    shot.focus({ preventScroll: true });
-    const s = shot.getBoundingClientRect();
-    const r = rail.getBoundingClientRect();
-    rail.scrollBy({ left: s.left + s.width / 2 - (r.left + r.width / 2) });
-  });
-  viewer
-    .querySelector("[data-viewer-close]")!
-    .addEventListener("click", () => viewer.close());
-  viewer.querySelectorAll<HTMLButtonElement>("[data-viewer-step]").forEach((b) =>
-    b.addEventListener("click", () => show(index + Number(b.dataset.viewerStep))),
-  );
-  viewer.addEventListener("click", (e) => {
-    if (e.target === viewer) viewer.close();
-  });
-  viewer.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowLeft") show(index - 1);
-    if (e.key === "ArrowRight") show(index + 1);
-  });
-
-  let startX: number | null = null;
-  img.addEventListener("pointerdown", (e) => (startX = e.clientX));
-  img.addEventListener("pointerup", (e) => {
-    if (startX === null) return;
-    const dx = e.clientX - startX;
-    startX = null;
-    if (Math.abs(dx) > 40) show(index + (dx < 0 ? 1 : -1));
-  });
+    let startX: number | null = null;
+    img.addEventListener("pointerdown", (e) => (startX = e.clientX));
+    img.addEventListener("pointerup", (e) => {
+      if (startX === null) return;
+      const dx = e.clientX - startX;
+      startX = null;
+      if (Math.abs(dx) > 40) show(index + (dx < 0 ? 1 : -1));
+    });
+  }
 </script>
 
 <style>
@@ -602,7 +615,6 @@ const schema = [
   }
   .device {
     width: clamp(248px, 25vw, 318px);
-    aspect-ratio: 9 / 18;
     padding: 10px;
     border: 1px solid var(--color-line-2);
     border-radius: 44px;
@@ -614,7 +626,8 @@ const schema = [
   .device video {
     display: block;
     width: 100%;
-    height: 100%;
+    /* The videos are 9:16; the frame hugs the video so nothing is cropped. */
+    aspect-ratio: 9 / 16;
     object-fit: cover;
     border: 1px solid var(--color-line);
     border-radius: 34px;
@@ -716,7 +729,7 @@ const schema = [
   .shot-img {
     display: block;
     width: 100%;
-    aspect-ratio: 9 / 20;
+    aspect-ratio: 9 / 16;
     object-fit: cover;
     object-position: top;
   }
@@ -848,11 +861,15 @@ const schema = [
       justify-self: end;
     }
     .device {
-      height: min(
-        calc(
-          100dvh - var(--nav-h) - 2 * var(--hero-pad) - var(--caption-room)
-        ),
-        680px
+      width: auto;
+    }
+    .device video {
+      /* 22px = the frame's padding and border, so the frame itself stays within the old height cap. */
+      height: calc(
+        min(
+            100dvh - var(--nav-h) - 2 * var(--hero-pad) - var(--caption-room),
+            680px
+          ) - 22px
       );
       width: auto;
     }

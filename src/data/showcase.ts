@@ -2,8 +2,8 @@ import { existsSync } from "node:fs";
 import type { ImageMetadata } from "astro";
 import { featured, inProgress, moreWork, type Project } from "./portfolio";
 
-// Screenshots dropped into src/assets/projects/<id>/ (by scripts/prepare-assets.mjs) give that
-// project a /work/<id> page. Files sort by their numeric prefix; the rest of the name is the caption.
+// Screenshots dropped into src/assets/projects/<id>/ or a demo video in public/videos/<id>.mp4
+// (by scripts/prepare-assets.mjs) give that project a /work/<id> page. Files sort by their numeric prefix; the rest of the name is the caption.
 const files = import.meta.glob<ImageMetadata>("../assets/projects/*/*.png", {
   eager: true,
   import: "default",
@@ -38,15 +38,10 @@ export const showcases: Showcase[] = projects.flatMap((project) => {
     .filter(([path]) => path.split("/").at(-2) === project.id)
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([path, src]) => ({ src, caption: caption(path.split("/").at(-1)!) }));
-  if (!screens.length) return [];
-  return [
-    {
-      project,
-      href: `/work/${project.id}/`,
-      screens,
-      video: videoFor(project.id),
-    },
-  ];
+  // Client apps (OctaNet, ISP Connect) can't show screenshots, so a demo video alone is enough.
+  const video = videoFor(project.id);
+  if (!screens.length && !video) return [];
+  return [{ project, href: `/work/${project.id}/`, screens, video }];
 });
 
 export const showcaseHref = (id: string) =>

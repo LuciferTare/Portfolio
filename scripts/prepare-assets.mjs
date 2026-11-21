@@ -8,6 +8,7 @@ const at = (p) => new URL(p, root);
 
 const copies = [
   ['assets-src/icons/octanet.png', 'src/assets/icons/octanet.png'],
+  ['assets-src/icons/isp_connect.png', 'src/assets/icons/isp_connect.png'],
   ['assets-src/icons/cravecoin.png', 'src/assets/icons/cravecoin.png'],
   ['assets-src/icons/fit&fuel.png', 'src/assets/icons/fitfuel.png'],
   ['assets-src/icons/quantaview.png', 'src/assets/icons/quantaview.png'],

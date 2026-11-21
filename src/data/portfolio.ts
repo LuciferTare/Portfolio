@@ -1,5 +1,6 @@
 import type { ImageMetadata } from "astro";
 import octanetIcon from "../assets/icons/octanet.png";
+import ispConnectIcon from "../assets/icons/isp_connect.png";
 import cravecoinIcon from "../assets/icons/cravecoin.png";
 import fitfuelIcon from "../assets/icons/fitfuel.png";
 import quantaviewIcon from "../assets/icons/quantaview.png";
@@ -536,6 +537,39 @@ export const featured: Project[] = [
     note: "I published it as FiberFlow in IJIRT, a UGC-approved journal.",
   },
   {
+    id: "isp_connect",
+    name: "ISP Connect",
+    tagline: "Self-care app for broadband subscribers",
+    icon: ispConnectIcon,
+    status: "Live on Google Play",
+    summary:
+      "OctaNet's customer-facing companion. One white-label Flutter app lets the subscribers of every ISP on the platform check their plan, renew and pay, download invoices, raise tickets, and put their own router under remote management.",
+    seoDescription:
+      "White-label broadband self-care app for Android: plan renewal, invoices, support tickets and automatic router setup. Built in Flutter by Sushant Tare.",
+    appCategory: "UtilitiesApplication",
+    features: [
+      "Passwordless OTP sign-in, with one number managing several connections",
+      "Dashboard with dues, renewal date, days left, and daily and monthly data usage",
+      "Renewal and plan change through Razorpay, verified server-side with retries so a paid renewal is never lost",
+      "Invoice history with itemised charges and one-tap PDF download",
+      "Support tickets by category with live status, plus one-tap call or email",
+      "New-customer sign-up with Aadhaar and PAN verified through DigiLocker",
+      "Biometric app lock, Keystore-backed tokens, and screenshot blocking",
+      "Server-driven branding: each ISP's logo, colours, contacts, and launcher icon, plus Light, Dark, and Company themes",
+    ],
+    stack: [
+      "Flutter",
+      "Dart",
+      "GetX",
+      "Razorpay",
+      "DigiLocker",
+      "InAppWebView",
+      "Firebase Crashlytics",
+      "REST APIs",
+    ],
+    links: [],
+  },
+  {
     id: "cravecoin",
     name: "Cravecoin",
     tagline: "Real-time crypto tracking",
@@ -673,6 +707,7 @@ export const moreWork: Project[] = [
 
 export const homeScreen = [
   { name: "OctaNet", icon: octanetIcon },
+  { name: "ISP Connect", icon: ispConnectIcon, id: "isp_connect" },
   { name: "Cravecoin", icon: cravecoinIcon },
   { name: "Fit&Fuel", icon: fitfuelIcon },
   { name: "Power Gauge", icon: powergaugeIcon },

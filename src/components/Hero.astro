@@ -82,7 +82,8 @@ const [firstName, ...rest] = profile.name.split(" ");
           <ul class="app-grid">
             {
               homeScreen.map((app) => {
-                const id = app.name.toLowerCase().replace(/[^a-z]/g, "");
+                const id =
+                  app.id ?? app.name.toLowerCase().replace(/[^a-z]/g, "");
                 return (
                   <li data-app>
                     <a href={`#project-${id}`} class="app">

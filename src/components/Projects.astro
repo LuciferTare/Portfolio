@@ -10,7 +10,7 @@ import {
 } from "../data/portfolio";
 import { showcaseHref } from "../data/showcase";
 
-const [octanet, cravecoin] = featured;
+const [octanet, ispConnect, cravecoin] = featured;
 const caseSteps = [
   { id: "approach", title: "Approach", items: octanet.approach },
   { id: "build", title: "Implementation", items: octanet.implementation },
@@ -151,9 +151,78 @@ const isExternal = (href: string) => href.startsWith("http");
               </a>
             ))
           }
+          {
+            showcaseHref(octanet.id) && (
+              <a href={showcaseHref(octanet.id)} class="btn">
+                Demo video <Icon name="arrow-right" />
+              </a>
+            )
+          }
         </div>
       </footer>
       {octanet.note && <p class="meta lead-note">{octanet.note}</p>}
+    </article>
+
+    <article
+      class="second"
+      id="project-isp_connect"
+      aria-labelledby="isp_connect-title"
+    >
+      <div class="second-main">
+        <div class="lead-id" data-reveal>
+          <Image
+            src={ispConnect.icon}
+            alt="ISP Connect app icon"
+            width={64}
+            height={64}
+            densities={[1, 2]}
+            class="icon-app"
+          />
+          <div>
+            <h3 id="isp_connect-title" class="second-name">{ispConnect.name}</h3>
+            <p class="lead-tag">{ispConnect.tagline}</p>
+          </div>
+        </div>
+        <p class="second-summary" data-reveal>{ispConnect.summary}</p>
+        <ul class="feature-grid" data-reveal>
+          {ispConnect.features?.map((f) => <li>{f}</li>)}
+        </ul>
+        <ul class="stack" aria-label="Technologies" data-reveal>
+          {ispConnect.stack.map((t) => <li class="chip">{t}</li>)}
+        </ul>
+        {
+          showcaseHref(ispConnect.id) && (
+            <a
+              href={showcaseHref(ispConnect.id)}
+              class="btn showcase-btn"
+              data-reveal
+            >
+              Demo video <Icon name="arrow-right" />
+            </a>
+          )
+        }
+      </div>
+
+      <div class="second-side">
+        <div class="side-block" data-reveal>
+          <p class="meta">Signature Feature</p>
+          <p class="side-big"><span class="accent">Edge Control</span></p>
+          <p class="side-text">
+            Finds the customer's router on their Wi-Fi, logs into its own admin
+            page in a WebView, and turns on TR-069 remote management with the
+            ISP's ACS settings. It reads the values back to verify them, and
+            replaces a technician's home visit.
+          </p>
+        </div>
+        <div class="side-block" data-reveal>
+          <p class="meta">One App, Many ISPs</p>
+          <p class="side-text">
+            Each ISP's name, colours, support contacts, legal pages, and
+            launcher icon come from build config and a branding API, so one
+            codebase ships under every client's brand.
+          </p>
+        </div>
+      </div>
     </article>
 
     <article

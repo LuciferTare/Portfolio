@@ -23,7 +23,7 @@ ${about.lead}
 
 - [Portfolio home](${abs('/')}): about, experience, education, research, projects and contact, on one page
 - [CV (PDF)](${abs(profile.cv.href)})
-${showcases.map((s) => `- [${s.project.name} screens${s.video ? ' and demo video' : ''}](${abs(s.href)}): ${s.project.tagline}`).join('\n')}
+${showcases.map((s) => `- [${s.project.name} ${[s.screens.length && 'screens', s.video && 'demo video'].filter(Boolean).join(' and ')}](${abs(s.href)}): ${s.project.tagline}`).join('\n')}
 
 ## Experience
 
