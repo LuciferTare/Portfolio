@@ -756,4 +756,24 @@ export const contact = {
   formProvider: "netlify" as "mailto" | "netlify",
   formName: "contact",
   topics: ["A full-time role", "A freelance project", "Something else"],
+  presets: {
+    "A full-time role": [
+      `Hi ${profile.name.split(" ")[0]},`,
+      "I'd like to talk to you about a full-time role.",
+      "",
+      "Company: ",
+      "Role: ",
+      "Location (on-site, hybrid or remote): ",
+      "Link to the job post: ",
+    ].join("\n"),
+    "A freelance project": [
+      `Hi ${profile.name.split(" ")[0]},`,
+      "I have a freelance project I'd like your help with.",
+      "",
+      "What the app should do: ",
+      "New app, or an existing one: ",
+      "Timeline: ",
+      "Budget: ",
+    ].join("\n"),
+  } as Record<string, string>,
 };

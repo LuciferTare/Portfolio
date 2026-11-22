@@ -215,22 +215,56 @@ function contactForm() {
   const email = form.dataset.email ?? '';
   const idleLabel = submitLabel.textContent ?? '';
 
-  const fields = ['name', 'email', 'message'].map((n) => form.elements.namedItem(n) as HTMLInputElement);
+  type Field = HTMLInputElement | HTMLTextAreaElement;
 
-  const showError = (field: HTMLInputElement, show: boolean) => {
+  // Not every form has a phone field, so keep only the fields that exist.
+  const fields = ['name', 'email', 'phone', 'message']
+    .map((n) => form.elements.namedItem(n) as Field | null)
+    .filter((f): f is Field => f !== null);
+  const message = form.elements.namedItem('message') as HTMLTextAreaElement | null;
+
+  // A topic radio's data-preset is the outline its message starts with. The
+  // outline follows the topic until the sender edits it, and can't be sent as is.
+  const presetOf = () =>
+    form.querySelector<HTMLInputElement>('input[name="topic"]:checked')?.dataset.preset ?? '';
+  let preset = presetOf();
+
+  const isValid = (f: Field) => {
+    const value = f.value.trim();
+    if (!value) return !f.required;
+    if (f === message && preset && value === preset.trim()) return false;
+    if (f.type === 'tel') {
+      const digits = value.replace(/\D/g, '').length;
+      return /^\+?[\d\s()-]+$/.test(value) && digits >= 10 && digits <= 15;
+    }
+    return f.checkValidity();
+  };
+
+  const showError = (field: Field, show: boolean) => {
     field.setAttribute('aria-invalid', String(show));
     form.querySelector(`[data-error-for="${field.name}"]`)?.toggleAttribute('hidden', !show);
   };
 
+  const onTopic = (e: Event) => {
+    if ((e.target as HTMLInputElement).name !== 'topic' || !message) return;
+    const untouched = message.value.trim() === preset.trim();
+    preset = presetOf();
+    if (!untouched) return;
+    message.value = preset;
+    showError(message, false);
+  };
+  // reset() fires its event before restoring the defaults, so read the preset after.
+  const onReset = () => setTimeout(() => (preset = presetOf()));
+
   const validate = () => {
-    let firstInvalid: HTMLInputElement | null = null;
+    let firstInvalid: Field | null = null;
     fields.forEach((f) => {
       f.value = f.value.trimStart();
-      const ok = f.checkValidity() && f.value.trim().length > 0;
+      const ok = isValid(f);
       showError(f, !ok);
       if (!ok && !firstInvalid) firstInvalid = f;
     });
-    (firstInvalid as HTMLInputElement | null)?.focus();
+    (firstInvalid as Field | null)?.focus();
     return !firstInvalid;
   };
 
@@ -240,8 +274,8 @@ function contactForm() {
   };
 
   const onInput = (e: Event) => {
-    const f = e.target as HTMLInputElement;
-    if (f.getAttribute('aria-invalid') === 'true' && f.checkValidity()) showError(f, false);
+    const f = e.target as Field;
+    if (f.getAttribute('aria-invalid') === 'true' && isValid(f)) showError(f, false);
   };
 
   const onSubmit = async (e: SubmitEvent) => {
@@ -255,11 +289,12 @@ function contactForm() {
     const name = String(data.get('name') ?? '').trim();
     const from = String(data.get('email') ?? '').trim();
     const message = String(data.get('message') ?? '').trim();
+    const phone = String(data.get('phone') ?? '').trim();
     const mailLink = `<a class="link link-rest" href="mailto:${email}">${email}</a>`;
 
     if (provider !== 'netlify') {
       const subject = `${topic}: message from ${name}`;
-      const body = `${message}\n\n${name}\n${from}`;
+      const body = `${message}\n\n${name}\n${from}${phone ? `\n${phone}` : ''}`;
       window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       setStatus(
         'ok',
@@ -289,9 +324,13 @@ function contactForm() {
 
   form.addEventListener('submit', onSubmit);
   form.addEventListener('input', onInput);
+  form.addEventListener('change', onTopic);
+  form.addEventListener('reset', onReset);
   return () => {
     form.removeEventListener('submit', onSubmit);
     form.removeEventListener('input', onInput);
+    form.removeEventListener('change', onTopic);
+    form.removeEventListener('reset', onReset);
   };
 }
 

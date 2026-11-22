@@ -98,45 +98,53 @@ const schema = [
         />
         <div>
           <p class="name">{app.name}</p>
-          <p class="status" data-tone="progress">{app.status}</p>
+          <p class="status" data-tone="progress">
+            {app.status}
+          </p>
         </div>
       </div>
 
-      <h1 id="hero-title" class="hero-title">{app.tagline}</h1>
+      <h1 id="hero-title" class="hero-title">
+        {app.tagline}
+      </h1>
       <p class="lead hero-summary">{app.summary}</p>
 
       <div class="hero-actions">
         <a href="#pricing" class="btn btn-primary">
           See pricing <Icon name="arrow-right" />
         </a>
-        <a href="#contact" class="btn">Contact us</a>
+        <a href="#contact" class="btn">
+          Contact us
+        </a>
       </div>
 
       <dl class="facts mono">
-        {
-          app.highlights.map((h) => (
-            <div>
-              <dt>{h.label}</dt>
-              <dd>{h.value}</dd>
-            </div>
-          ))
-        }
+        {app.highlights.map((h) => (
+          <div>
+            <dt>{h.label}</dt>
+            <dd>{h.value}</dd>
+          </div>
+        ))}
       </dl>
     </section>
 
     <section id="about" class="block" aria-labelledby="about-title">
       <div class="container-x split">
-        <h2 id="about-title" class="h-section">About {app.name}</h2>
+        <h2 id="about-title" class="h-section">
+          About {app.name}
+        </h2>
         <div>
           <p class="lead">{app.about.lead}</p>
           <div class="prose-body about-body">
-            {app.about.paragraphs.map((p) => <p>{p}</p>)}
+            {app.about.paragraphs.map((p) => (
+              <p>{p}</p>
+            ))}
           </div>
 
           <div class="maker">
-            <span class="mark-glyph mono" aria-hidden="true"
-              >{profile.initials}</span
-            >
+            <span class="mark-glyph mono" aria-hidden="true">
+              {profile.initials}
+            </span>
             <div>
               <p class="maker-name">{profile.fullName}</p>
               <p class="meta">Developer, {profile.location}</p>
@@ -152,21 +160,21 @@ const schema = [
     <section id="features" class="block" aria-labelledby="features-title">
       <div class="container-x">
         <div class="head">
-          <h2 id="features-title" class="h-section">{app.features.heading}</h2>
+          <h2 id="features-title" class="h-section">
+            {app.features.heading}
+          </h2>
           <p class="lead head-intro">{app.features.intro}</p>
         </div>
         <ol class="features">
-          {
-            app.features.items.map((f, i) => (
-              <li class="feature">
-                <span class="mono feature-n" aria-hidden="true">
-                  {pad(i + 1)}
-                </span>
-                <h3 class="feature-title">{f.title}</h3>
-                <p class="feature-text">{f.text}</p>
-              </li>
-            ))
-          }
+          {app.features.items.map((f, i) => (
+            <li class="feature">
+              <span class="mono feature-n" aria-hidden="true">
+                {pad(i + 1)}
+              </span>
+              <h3 class="feature-title">{f.title}</h3>
+              <p class="feature-text">{f.text}</p>
+            </li>
+          ))}
         </ol>
       </div>
     </section>
@@ -179,82 +187,84 @@ const schema = [
     >
       <div class="container-x">
         <div class="head">
-          <h2 id="pricing-title" class="h-section">Pricing</h2>
+          <h2 id="pricing-title" class="h-section">
+            Pricing
+          </h2>
           <p class="lead head-intro">{pricing.intro}</p>
         </div>
 
         <fieldset class="periods">
           <legend class="sr-only">Billing period</legend>
-          {
-            pricing.periods.map((p) => (
-              <label class="period">
-                <input
-                  type="radio"
-                  name="period"
-                  value={p.id}
-                  checked={p.id === firstPeriod.id}
-                  data-period-input
-                />
-                <span>{p.label}</span>
-              </label>
-            ))
-          }
+          {pricing.periods.map((p) => (
+            <label class="period">
+              <input
+                type="radio"
+                name="period"
+                value={p.id}
+                checked={p.id === firstPeriod.id}
+                data-period-input
+              />
+              <span>{p.label}</span>
+            </label>
+          ))}
         </fieldset>
 
         <ul class="plans">
-          {
-            pricing.plans.map((plan) => (
-              <li class:list={["plan", { featured: plan.featured }]}>
-                <div class="plan-head">
-                  <h3 class="plan-name">{plan.name}</h3>
-                  {plan.featured && <p class="plan-badge mono">Recommended</p>}
-                </div>
-                {plan.note && <p class="plan-note">{plan.note}</p>}
+          {pricing.plans.map((plan) => (
+            <li
+              class:list={["plan", { featured: plan.featured }]}
+              data-plan={plan.name}
+            >
+              <div class="plan-head">
+                <h3 class="plan-name">{plan.name}</h3>
+                {plan.featured && <p class="plan-badge mono">Recommended</p>}
+              </div>
+              {plan.note && <p class="plan-note">{plan.note}</p>}
 
-                <div
-                  class="plan-price"
-                  data-plan-prices={JSON.stringify(priceTable(plan))}
-                >
-                  <p>
-                    <span class="amount">
-                      <span class="sr-only" data-amount-label>
-                        {rupees(plan.prices[firstPeriod.id])}
-                      </span>
-                      <span class="digits" aria-hidden="true" data-digits>
-                        {rupees(plan.prices[firstPeriod.id])}
-                      </span>
+              <div
+                class="plan-price"
+                data-plan-prices={JSON.stringify(priceTable(plan))}
+              >
+                <p>
+                  <span class="amount">
+                    <span class="sr-only" data-amount-label>
+                      {rupees(plan.prices[firstPeriod.id])}
                     </span>
-                    <span class="per" data-per>
-                      / {firstPeriod.per}
+                    <span class="digits" aria-hidden="true" data-digits>
+                      {rupees(plan.prices[firstPeriod.id])}
                     </span>
-                  </p>
-                  <p class="meta" data-breakdown>
-                    {breakdown(plan, firstPeriod)}
-                  </p>
-                </div>
+                  </span>
+                  <span class="per" data-per>
+                    / {firstPeriod.per}
+                  </span>
+                </p>
+                <p class="meta" data-breakdown>
+                  {breakdown(plan, firstPeriod)}
+                </p>
+              </div>
 
-                <dl class="limits">
-                  {plan.limits.map((l) => (
-                    <div>
-                      <dt class="meta">{l.label}</dt>
-                      <dd class="mono">{l.value}</dd>
-                    </div>
-                  ))}
-                </dl>
+              <dl class="limits">
+                {plan.limits.map((l) => (
+                  <div>
+                    <dt class="meta">{l.label}</dt>
+                    <dd class="mono">{l.value}</dd>
+                  </div>
+                ))}
+              </dl>
 
-                <a
-                  href="#contact"
-                  class:list={[
-                    "btn",
-                    "plan-cta",
-                    { "btn-primary": plan.featured },
-                  ]}
-                >
-                  Get {plan.name} <Icon name="arrow-right" />
-                </a>
-              </li>
-            ))
-          }
+              <a
+                href="#contact"
+                class:list={[
+                  "btn",
+                  "plan-cta",
+                  { "btn-primary": plan.featured },
+                ]}
+                data-plan-cta
+              >
+                Get {plan.name} <Icon name="arrow-right" />
+              </a>
+            </li>
+          ))}
         </ul>
 
         <div class="table-wrap">
@@ -262,43 +272,46 @@ const schema = [
             <thead>
               <tr>
                 <th scope="col">Billing period</th>
-                {pricing.plans.map((p) => <th scope="col">{p.name}</th>)}
+                {pricing.plans.map((p) => (
+                  <th scope="col">{p.name}</th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              {
-                pricing.periods.map((period) => (
-                  <tr>
-                    <th scope="row">{period.label}</th>
-                    {pricing.plans.map((p) => (
-                      <td class="mono">{rupees(p.prices[period.id])}</td>
-                    ))}
-                  </tr>
-                ))
-              }
-              {
-                pricing.plans[0].limits.map((_, i) => (
-                  <tr>
-                    <th scope="row">{pricing.plans[0].limits[i].label}</th>
-                    {pricing.plans.map((p) => (
-                      <td class="mono">{p.limits[i].value}</td>
-                    ))}
-                  </tr>
-                ))
-              }
+              {pricing.periods.map((period) => (
+                <tr>
+                  <th scope="row">{period.label}</th>
+                  {pricing.plans.map((p) => (
+                    <td class="mono">{rupees(p.prices[period.id])}</td>
+                  ))}
+                </tr>
+              ))}
+              {pricing.plans[0].limits.map((_, i) => (
+                <tr>
+                  <th scope="row">{pricing.plans[0].limits[i].label}</th>
+                  {pricing.plans.map((p) => (
+                    <td class="mono">{p.limits[i].value}</td>
+                  ))}
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
 
         <ul class="notes">
-          {pricing.notes.map((n) => <li>{n}</li>)}
+          {pricing.notes.map((n) => (
+            <li>{n}</li>
+          ))}
           <li>
-            See the <a href={`${href}refund-policy/`} class="link link-rest"
-              >Refund Policy</a
-            >{" "}
-            and <a href={`${href}terms-conditions/`} class="link link-rest"
-              >Terms and Conditions</a
-            >.
+            See the{" "}
+            <a href={`${href}refund-policy/`} class="link link-rest">
+              Refund Policy
+            </a>{" "}
+            and{" "}
+            <a href={`${href}terms-conditions/`} class="link link-rest">
+              Terms and Conditions
+            </a>
+            .
           </li>
         </ul>
       </div>
@@ -307,13 +320,15 @@ const schema = [
     <section id="contact" class="block" aria-labelledby="contact-title">
       <div class="container-x contact">
         <div>
-          <h2 id="contact-title" class="h-section">Contact us</h2>
+          <h2 id="contact-title" class="h-section">
+            Contact us
+          </h2>
           <p class="lead contact-body">{contact.intro}</p>
 
           <div class="email-row">
-            <a href={`mailto:${contact.email}`} class="email link"
-              >{contact.email}</a
-            >
+            <a href={`mailto:${contact.email}`} class="email link">
+              {contact.email}
+            </a>
             <button
               type="button"
               class="copy-btn"
@@ -337,13 +352,11 @@ const schema = [
             <div>
               <dt class="meta">Policies</dt>
               <dd class="doc-links">
-                {
-                  appDocs.map((d) => (
-                    <a href={`${href}${d.slug}/`} class="link link-rest">
-                      {d.short}
-                    </a>
-                  ))
-                }
+                {appDocs.map((d) => (
+                  <a href={`${href}${d.slug}/`} class="link link-rest">
+                    {d.short}
+                  </a>
+                ))}
               </dd>
             </div>
           </dl>
@@ -362,37 +375,48 @@ const schema = [
           novalidate
         >
           <input type="hidden" name="form-name" value={contact.formName} />
+          <input type="hidden" name="plan" value="" />
+          <input type="hidden" name="period" value="" />
           <p class="honeypot" aria-hidden="true">
-            <label
-              >Leave this empty <input
-                name="bot-field"
-                tabindex="-1"
-                autocomplete="off"
-              /></label
-            >
+            <label>
+              Leave this empty{" "}
+              <input name="bot-field" tabindex="-1" autocomplete="off" />
+            </label>
           </p>
 
           <fieldset class="field">
             <legend class="label">What is it about?</legend>
             <div class="topics">
-              {
-                contact.topics.map((t, i) => (
-                  <label class="topic">
-                    <input
-                      type="radio"
-                      name="topic"
-                      value={t}
-                      checked={i === 0}
-                    />
-                    <span>{t}</span>
-                  </label>
-                ))
-              }
+              {contact.topics.map((t, i) => (
+                <label class="topic">
+                  <input
+                    type="radio"
+                    name="topic"
+                    value={t}
+                    checked={i === 0}
+                    data-sales-topic={t === contact.salesTopic ? "" : undefined}
+                    data-preset={contact.presets[t] ?? ""}
+                  />
+                  <span>{t}</span>
+                </label>
+              ))}
             </div>
           </fieldset>
 
+          <div class="selection" data-plan-summary hidden>
+            <p>
+              <span class="meta selection-label">Selected plan</span>
+              <span class="selection-value" data-plan-summary-text></span>
+            </p>
+            <a href="#pricing" class="link link-rest selection-change">
+              Change
+            </a>
+          </div>
+
           <div class="field">
-            <label class="label" for="cf-name">Your name</label>
+            <label class="label" for="cf-name">
+              Your name
+            </label>
             <input
               class="input"
               id="cf-name"
@@ -407,26 +431,49 @@ const schema = [
             </p>
           </div>
 
-          <div class="field">
-            <label class="label" for="cf-email">Your email</label>
-            <input
-              class="input"
-              id="cf-email"
-              name="email"
-              type="email"
-              autocomplete="email"
-              spellcheck="false"
-              inputmode="email"
-              required
-              aria-describedby="cf-email-err"
-            />
-            <p class="error" id="cf-email-err" data-error-for="email" hidden>
-              Please enter a valid email address.
-            </p>
+          <div class="field-row">
+            <div class="field field-email">
+              <label class="label" for="cf-email">
+                Your email
+              </label>
+              <input
+                class="input"
+                id="cf-email"
+                name="email"
+                type="email"
+                autocomplete="email"
+                spellcheck="false"
+                inputmode="email"
+                required
+                aria-describedby="cf-email-err"
+              />
+              <p class="error" id="cf-email-err" data-error-for="email" hidden>
+                Please enter a valid email address.
+              </p>
+            </div>
+
+            <div class="field field-phone">
+              <label class="label" for="cf-phone">
+                Phone <span class="optional">(optional)</span>
+              </label>
+              <input
+                class="input"
+                id="cf-phone"
+                name="phone"
+                type="tel"
+                autocomplete="tel"
+                aria-describedby="cf-phone-err"
+              />
+              <p class="error" id="cf-phone-err" data-error-for="phone" hidden>
+                Please enter a valid phone number.
+              </p>
+            </div>
           </div>
 
           <div class="field">
-            <label class="label" for="cf-message">Message</label>
+            <label class="label" for="cf-message">
+              Message
+            </label>
             <textarea
               class="input textarea"
               id="cf-message"
@@ -434,14 +481,15 @@ const schema = [
               rows="5"
               required
               minlength="10"
-              aria-describedby="cf-message-err"></textarea>
+              aria-describedby="cf-message-err"
+            >{contact.presets[contact.topics[0]] ?? ""}</textarea>
             <p
               class="error"
               id="cf-message-err"
               data-error-for="message"
               hidden
             >
-              A few more words, please (10 characters or more).
+              Please add a few details about what you need.
             </p>
           </div>
 
@@ -457,8 +505,7 @@ const schema = [
             role="status"
             aria-live="polite"
             data-form-status
-          >
-          </div>
+          ></div>
         </form>
       </div>
     </section>
@@ -517,9 +564,75 @@ const schema = [
     });
   };
 
+  // Picking a plan presets the contact form: the sales topic, its outline
+  // with the plan filled in, hidden plan and period fields for the
+  // submission, and a visible summary line.
+  const form = document.querySelector<HTMLFormElement>("[data-contact-form]")!;
+  const planField = form.elements.namedItem("plan") as HTMLInputElement;
+  const periodField = form.elements.namedItem("period") as HTMLInputElement;
+  const salesTopic = form.querySelector<HTMLInputElement>("[data-sales-topic]");
+  const summary = form.querySelector<HTMLElement>("[data-plan-summary]")!;
+  const summaryText = form.querySelector<HTMLElement>(
+    "[data-plan-summary-text]",
+  )!;
+  const baseOutline = salesTopic?.dataset.preset ?? "";
+  let chosen: HTMLElement | null = null;
+
+  // ui.ts swaps the message to the checked topic's outline on "change",
+  // as long as the sender hasn't edited it.
+  const setOutline = () => {
+    if (!salesTopic) return;
+    salesTopic.dataset.preset = chosen
+      ? baseOutline.replace(
+          /^Plan:.*$/m,
+          `Plan: ${planField.value} (${periodField.value} billing)`,
+        )
+      : baseOutline;
+    if (salesTopic.checked) {
+      salesTopic.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+  };
+
+  const showPlan = () => {
+    if (!chosen) return;
+    const period = pricing.querySelector<HTMLInputElement>(
+      "[data-period-input]:checked",
+    )!;
+    const prices = chosen.querySelector<HTMLElement>("[data-plan-prices]")!;
+    const price: Price = JSON.parse(prices.dataset.planPrices!)[period.value];
+    planField.value = chosen.dataset.plan!;
+    periodField.value = period.nextElementSibling!.textContent!.trim();
+    summaryText.textContent = `${planField.value} · ${periodField.value} · ${price.amount} ${price.per}`;
+    setOutline();
+  };
+
+  const choosePlan = (card: HTMLElement | null) => {
+    chosen = card;
+    summary.hidden = !card;
+    if (card) return showPlan();
+    planField.value = periodField.value = "";
+    setOutline();
+  };
+
+  pricing.addEventListener("click", (e) => {
+    const cta = (e.target as Element).closest("[data-plan-cta]");
+    if (!cta) return;
+    if (salesTopic) salesTopic.checked = true;
+    choosePlan(cta.closest<HTMLElement>("[data-plan]"));
+  });
+
+  // Choosing another topic, or a sent form being reset, drops the plan.
+  form.addEventListener("change", (e) => {
+    const input = e.target as HTMLInputElement;
+    if (input.name === "topic" && input !== salesTopic) choosePlan(null);
+  });
+  form.addEventListener("reset", () => choosePlan(null));
+
   pricing.addEventListener("change", (e) => {
     const input = e.target as HTMLInputElement;
-    if (input.matches("[data-period-input]")) showPeriod(input.value, true);
+    if (!input.matches("[data-period-input]")) return;
+    showPeriod(input.value, true);
+    showPlan();
   });
 
   const sync = () => {
@@ -993,7 +1106,57 @@ const schema = [
   }
   .textarea {
     resize: vertical;
-    min-height: 8.5rem;
+    min-height: 14rem;
+  }
+  .optional {
+    font-weight: 400;
+    color: var(--color-fg-3);
+  }
+  /* Email and phone share a row (3:2), and stack on narrow screens. */
+  .field-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: start;
+    gap: 1.5rem 1rem;
+  }
+  .field-row > .field {
+    flex: 1 1 100%;
+  }
+  @media (min-width: 480px) {
+    .field-row > .field-email {
+      flex: 3 1 0;
+    }
+    .field-row > .field-phone {
+      flex: 2 1 0;
+    }
+  }
+  .selection {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-ui);
+    background: rgb(252 213 53 / 0.08);
+  }
+  .selection[hidden] {
+    display: none;
+  }
+  .selection-label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--color-fg-3);
+  }
+  .selection-value {
+    display: block;
+    margin-top: 0.15rem;
+    font-weight: 600;
+    color: var(--color-fg);
+  }
+  .selection-change {
+    font-size: 0.9rem;
   }
   .error {
     font-size: 0.8125rem;

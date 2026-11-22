@@ -74,7 +74,7 @@ const formAttrs = netlify
           {
             contact.topics.map((t, i) => (
               <label class="topic">
-                <input type="radio" name="topic" value={t} checked={i === 0} />
+                <input type="radio" name="topic" value={t} checked={i === 0} data-preset={contact.presets[t] ?? ''} />
                 <span>{t}</span>
               </label>
             ))
@@ -88,20 +88,28 @@ const formAttrs = netlify
         <p class="error" id="cf-name-err" data-error-for="name" hidden>Please tell me your name.</p>
       </div>
 
-      <div class="field">
-        <label class="label" for="cf-email">Your email</label>
-        <input
-          class="input"
-          id="cf-email"
-          name="email"
-          type="email"
-          autocomplete="email"
-          spellcheck="false"
-          inputmode="email"
-          required
-          aria-describedby="cf-email-err"
-        />
-        <p class="error" id="cf-email-err" data-error-for="email" hidden>Please enter a valid email address.</p>
+      <div class="field-row">
+        <div class="field field-email">
+          <label class="label" for="cf-email">Your email</label>
+          <input
+            class="input"
+            id="cf-email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            spellcheck="false"
+            inputmode="email"
+            required
+            aria-describedby="cf-email-err"
+          />
+          <p class="error" id="cf-email-err" data-error-for="email" hidden>Please enter a valid email address.</p>
+        </div>
+
+        <div class="field field-phone">
+          <label class="label" for="cf-phone">Phone <span class="optional">(optional)</span></label>
+          <input class="input" id="cf-phone" name="phone" type="tel" autocomplete="tel" aria-describedby="cf-phone-err" />
+          <p class="error" id="cf-phone-err" data-error-for="phone" hidden>Please enter a valid phone number.</p>
+        </div>
       </div>
 
       <div class="field">
@@ -113,11 +121,11 @@ const formAttrs = netlify
           rows="5"
           required
           minlength="10"
-          aria-describedby="cf-message-hint cf-message-err"></textarea>
+          aria-describedby="cf-message-hint cf-message-err">{contact.presets[contact.topics[0]] ?? ''}</textarea>
         <p class="hint" id="cf-message-hint">
           {netlify ? 'Sent straight to my inbox.' :'Sending opens your email app with this message ready to go.'}
         </p>
-        <p class="error" id="cf-message-err" data-error-for="message" hidden>A few more words, please (10 characters or more).</p>
+        <p class="error" id="cf-message-err" data-error-for="message" hidden>Please add a few details about what you have in mind.</p>
       </div>
 
       <div class="form-foot">
@@ -282,7 +290,29 @@ const formAttrs = netlify
   }
   .textarea {
     resize: vertical;
-    min-height: 8.5rem;
+    min-height: 14rem;
+  }
+  .optional {
+    font-weight: 400;
+    color: var(--color-fg-3);
+  }
+  /* Email and phone share a row (3:2), and stack on narrow screens. */
+  .field-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: start;
+    gap: 1.5rem 1rem;
+  }
+  .field-row > .field {
+    flex: 1 1 100%;
+  }
+  @media (min-width: 480px) {
+    .field-row > .field-email {
+      flex: 3 1 0;
+    }
+    .field-row > .field-phone {
+      flex: 2 1 0;
+    }
   }
   .hint {
     font-size: 0.8125rem;

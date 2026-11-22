@@ -45,6 +45,13 @@ export interface AppSite {
     email: string;
     formName: string;
     topics: string[];
+    salesTopic: string;
+    /**
+     * The message each topic starts with: an outline the sender fills in.
+     * A "Plan: " line in the sales topic's outline is filled in with the plan
+     * picked from the pricing cards.
+     */
+    presets: Record<string, string>;
   };
   legal: {
     operator: string;
@@ -174,6 +181,34 @@ export const apps: AppSite[] = [
       email: "fitandfuel26@gmail.com",
       formName: "fitfuel-contact",
       topics: ["Support", "Feedback", "Business", "Other"],
+      salesTopic: "Business",
+      presets: {
+        Support: [
+          "Hi,",
+          "I need help with Fit&Fuel.",
+          "",
+          "What happened: ",
+          "What I expected to happen: ",
+          "Phone model and Android version: ",
+        ].join("\n"),
+        Feedback: [
+          "Hi,",
+          "I have some feedback on Fit&Fuel.",
+          "",
+          "What works well: ",
+          "What could be better: ",
+          "A feature I'd like to see: ",
+        ].join("\n"),
+        Business: [
+          "Hi,",
+          "I'd like to use Fit&Fuel at my gym.",
+          "",
+          "Gym name and city: ",
+          "Number of members: ",
+          "Number of trainers: ",
+          "Plan: ",
+        ].join("\n"),
+      },
     },
     legal: {
       operator: profile.fullName,

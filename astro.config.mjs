@@ -8,6 +8,7 @@ export default defineConfig({
   devToolbar: { enabled: false },
   server: { host: '0.0.0.0', port: 4321 },
   build: { inlineStylesheets: 'always' },
+  scopedStyleStrategy: 'class',
   vite: {
     plugins: [tailwindcss()],
     build: { sourcemap: false },
